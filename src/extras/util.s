@@ -15,4 +15,5 @@ _color_stuff_2:
     txa
     cmp #00
     bne _color_stuff_2
-    jsr
+
+    rts
