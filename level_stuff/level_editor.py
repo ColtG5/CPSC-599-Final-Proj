@@ -192,13 +192,19 @@ def export_level_binary():
                         else:
                             characters_used_in_level[char].append((row_num, col))
 
-            # Write binary data for each character in the level
+            # Write binary data with item code and calculated screen memory address
             for char, positions in characters_used_in_level.items():
                 item_code = ITEM_CODES.get(char.name, 0x00)
                 for row, col in positions:
-                    f.write(bytes([item_code, row, col]))  # Write item code, row, col in binary format
+                    # Calculate VIC-20 screen memory address
+                    screen_offset = 0x1E00 + (row * 22) + col
+                    # Write item code, low byte of address, high byte of address
+                    f.write(bytes([item_code, screen_offset & 0xFF, (screen_offset >> 8) & 0xFF]))
+                    # The screen address is saved as two bytes (low byte first, high byte second) to match the 16-bit address format used by the VIC-20’s 6502 processor.
 
-        messagebox.showinfo("Export Level", f"Level {level_name} exported successfully as binary!")
+        messagebox.showinfo("Export Level", f"Level {level_name} exported successfully with VIC-20 screen addresses!")
+
+
 
 
 def populate_right_sidebar():
