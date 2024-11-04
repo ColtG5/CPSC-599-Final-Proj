@@ -40,8 +40,10 @@ starting_loop:
     jmp game_loop
 
 game_loop:
+    jsr f_clear_screen
+    jmp game_loop
     
-
+    rts
 
 
 
