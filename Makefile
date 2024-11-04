@@ -6,7 +6,7 @@ REMOTE_DIR = ~/www/
 
 all: $(ALL)
 
-game.prg: ./src/main.s ./src/extras/stub.s ./src/compression/rle_decode.s ./src/titlescreen/titlescreen.s
+game.prg: ./src/main.s
 	$(DASM) $< -o$@ -l$(<:.s=.lst)
 
 clean:
