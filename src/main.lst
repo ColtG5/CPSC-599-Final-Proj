@@ -1,0 +1,35 @@
+------- FILE src/main.s LEVEL 1 PASS 2
+      1  1017					      processor	6502
+      2  101a ????
+      3  101a ????	       1c 00	   CUSTOM_CHAR_MEM =	$1c00	; custom char table start
+      4  101a ????	       1e 00	   SCREEN_MEM =	$1e00	; screen mem start!
+      5  101a ????	       90 05	   CHARSET_POINTER =	$9005	; custom char table vic chip mem address place
+      6  101a ????	       ff d2	   CHROUT     =	$ffd2
+      7  101a ????
+      8  101a ????	       00 00	   DATA_ADDR_LOW =	$00
+      9  101a ????	       00 01	   DATA_ADDR_HIGH =	$01
+     10  101a ????
+     11  1001					      org	$1001, 0
+     12  1001
+------- FILE ./src/extras/stub.s LEVEL 2 PASS 2
+      0  1001					      include	"./src/extras/stub.s"
+      1  1001							; BASIC stub!!!
+      2  1001
+      3  1001							; defined constant: word constant, byte constant, etc
+      4  1001		       0b 10		      dc.w	nextstmt
+      5  1003		       2a 00		      dc.w	42
+      6  1005		       9e 34 31 30*	      dc.b	$9e, "4109", 0
+      7  100b				   nextstmt
+      8  100b		       01 01		      dc.w	257
+------- FILE src/main.s
+     14  100d
+     15  100d							; clear screen
+     16  100d		       a9 93		      lda	#147
+     17  100f		       20 d2 ff 	      jsr	CHROUT
+     18  1012
+     19  1012		       a9 ff		      lda	#255
+     20  1014		       8d 05 90 	      sta	CHARSET_POINTER
+     21  1017
+     22  1017
+     23  1017				   loop
+     24  1017		       4c 17 10 	      jmp	loop
