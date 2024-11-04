@@ -11,11 +11,7 @@ DATA_ADDR_HIGH = $01
     org $1001, 0
 
     include "./src/extras/stub.s"
-
-    ; clear screen
-    lda #147
-    jsr CHROUT
-
+    
     lda #255
     sta CHARSET_POINTER
 
