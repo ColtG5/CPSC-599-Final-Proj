@@ -56,7 +56,7 @@ def load_and_create_character_images():
 
 def load_custom_characters():
     try:
-        os.makedirs("./char_images", exist_ok=True)
+        os.makedirs("./custom_char_images", exist_ok=True)
         with open(char_file, "r") as f:
             lines = f.readlines()
             current_char = []
@@ -109,7 +109,7 @@ def create_and_store_image(char: Character):
         for x, bit in enumerate(row):
             pixels[x, y] = (0, 0, 0) if bit == 1 else (255, 255, 255)
 
-    filename = f"./char_images/{char.name}.png"
+    filename = f"./custom_char_images/{char.name}.png"
     img.save(filename)
 
     # Create a Tkinter image, pre-zoomed
