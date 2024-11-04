@@ -17,3 +17,7 @@ _color_stuff_2:
     bne _color_stuff_2
 
     rts
+
+f_clear_screen:
+
+    rts
