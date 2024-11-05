@@ -56,6 +56,7 @@ encoded_title_screen_data_start
     incbin "./src/compression/titlescreen-rle-encoded.bin"
 
 level_1_data_start
+    incbin "./levels/level1.bin"
 
 level_2_data_start
 
