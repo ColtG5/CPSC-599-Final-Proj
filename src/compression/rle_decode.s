@@ -9,6 +9,8 @@ value = $06
 f_rle_decoder:
     lda #2                  ; init y to 2 (skip header of 001e)
     ldy #2
+    ; lda #0
+    ; ldy #0
     sta current_byte_from_data
     ldx #0                  ; init x to 0
 _decode_loop:

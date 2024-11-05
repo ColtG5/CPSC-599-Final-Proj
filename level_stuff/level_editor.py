@@ -6,7 +6,7 @@ from PIL import Image
 root = tk.Tk()
 root.title("vic-20 level editor")
 
-char_file = "custom_chars_title_screen.txt"
+char_file = "./custom_chars/custom_chars_title_screen.txt"
 ROWS = 23
 COLS = 22
 CHAR_IMG_SIZE = 8
@@ -270,7 +270,7 @@ def import_level_old():
     level_name = simpledialog.askstring("Import Level", "Name of the level to import?")
     if level_name:
         try:
-            with open(f"./levels/{level_name}.txt", "r") as f:
+            with open(f"./text_levels/{level_name}.txt", "r") as f:
 
                 create_grid()
 
@@ -331,7 +331,7 @@ def import_level():
     level_name = simpledialog.askstring("Import Level", "Name of the level to import?")
     if level_name:
         try:
-            with open(f"./levels/{level_name}.txt", "r") as f:
+            with open(f"./text_levels/{level_name}.txt", "r") as f:
                 create_grid()
 
                 line = f.readline()
