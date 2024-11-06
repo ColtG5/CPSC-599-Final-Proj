@@ -45,6 +45,23 @@ play_music_and_wait_input:
     jmp starting_loop                 ; Return to input loop
 
 game_loop:
+
+
+
+
+    ; for testing purposes: if spacebar is hit, advance to next level
+    jsr GETIN
+    cmp #$20                    ; code for spacebar
+    bne game_loop
+
+    ; move to next level! if trying to move from level 3 to level 4, "restart" the game by going back to starting loop
+    lda what_level_tracker
+    cmp #3
+    beq starting_loop
+
+    inc what_level_tracker
+    jsr f_clear_screen
+    jsr f_draw_level
     jmp game_loop
     
     rts
