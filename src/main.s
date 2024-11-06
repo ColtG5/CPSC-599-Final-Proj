@@ -34,10 +34,14 @@ level_data_addr_high = $09
 starting_loop:
     jsr GETIN
     cmp #0
-    beq starting_loop
+    beq play_music_and_wait_input     ; Wait if no input detected
 
     jsr f_draw_level                            ; on any input, draw the first level, and start the game
     jmp game_loop
+
+play_music_and_wait_input:
+    jsr f_play_melody                  ; Play titlescreen melody
+    jmp starting_loop                 ; Return to input loop
 
 game_loop:
     jsr f_clear_screen
@@ -51,12 +55,14 @@ game_loop:
     include "./src/compression/rle_decode.s"    ; rle decoder code
     include "./src/titlescreen/titlescreen.s"   ; titlescreen
     include "./src/levels/levels.s"             ; code to draw levles
+    include "./src/music/titlescreen_music.s" ; Titlescreen music functions
+
 
 encoded_title_screen_data_start
     incbin "./src/compression/titlescreen-rle-encoded.bin"
 
 level_1_data_start
-    incbin "./levels/level1.bin"
+    incbin "./src/levels/level1.bin"
 
 level_2_data_start
 
