@@ -1,3 +1,9 @@
+"""make_level_data.py
+
+Little script that converts a level (represnted in tuples of a list here, later will be the level editor screen!!) 
+into binary data representing a form of "level data" that our assembly game will understand.
+"""
+
 spot_for_level_1_to_write = "../src/levels/level1.bin"
 spot_for_level_2_to_write = "../src/levels/level2.bin"
 spot_for_level_3_to_write = "../src/levels/level3.bin"

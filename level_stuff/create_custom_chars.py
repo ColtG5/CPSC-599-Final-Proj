@@ -1,3 +1,10 @@
+"""create_custom_chars.py
+
+A tool that lets us create custom characters by selecting what pixels are on/off. It outputs characters 
+into a '''''database''''' that stores some custom characters, that can then be copy pasted into the games 
+character table (better method in the future).
+"""
+
 from tkinter import *
 from tkinter import simpledialog, messagebox
 
