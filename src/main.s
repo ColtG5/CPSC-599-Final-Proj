@@ -26,6 +26,10 @@ portal_x = $0C                                  ; Portal X position
 portal_y = $0D                                  ; Portal Y position
 portal_placed = $0E                             ; 1 if portal is placed, 0 if not
 
+previous_cursor_x = $0F                         ; Previous cursor X position
+previous_cursor_y = $10                         ; Previous cursor Y position
+blank_tile = $11                                ; Stored blank tile from the top-left corner
+
     org $1001, 0
     include "./src/extras/stub.s"
 
@@ -37,6 +41,10 @@ portal_placed = $0E                             ; 1 if portal is placed, 0 if no
     sta what_level_tracker
     jsr f_set_color_mem_black
     jsr f_draw_titlescreen
+
+    ; Read top-left corner tile as the blank tile for erasing
+    lda SCREEN_MEM
+    sta blank_tile
 
 starting_loop:
     jsr GETIN
@@ -55,6 +63,11 @@ starting_loop:
     sta portal_y
     lda #1
     sta portal_placed
+
+    lda cursor_x                                ; Set initial previous position for erasing
+    sta previous_cursor_x
+    lda cursor_y
+    sta previous_cursor_y
     jmp game_loop
 
 play_music_and_wait_input:
@@ -90,21 +103,25 @@ f_handle_input:
 
 ; Movement Functions
 f_move_up:
+    jsr f_erase_cursor                          ; Erase cursor at old position
     dec cursor_y
     jsr f_draw_cursor
     rts
 
 f_move_left:
+    jsr f_erase_cursor                          ; Erase cursor at old position
     dec cursor_x
     jsr f_draw_cursor
     rts
 
 f_move_down:
+    jsr f_erase_cursor                          ; Erase cursor at old position
     inc cursor_y
     jsr f_draw_cursor
     rts
 
 f_move_right:
+    jsr f_erase_cursor                          ; Erase cursor at old position
     inc cursor_x
     jsr f_draw_cursor
     rts
@@ -139,12 +156,22 @@ f_end_toggle:
 
 ; Drawing Functions
 f_draw_cursor:
+    ; Erase previous position
+    jsr f_erase_cursor
+
+    ; Draw cursor at new position
     ldx cursor_y
     ldy cursor_x
     clc
     jsr PLOT
     lda #64                                      ; Custom cursor character code
     jsr CHROUT
+
+    ; Update previous cursor position
+    lda cursor_x
+    sta previous_cursor_x
+    lda cursor_y
+    sta previous_cursor_y
     rts
 
 f_plot_portal:
@@ -157,6 +184,16 @@ f_plot_portal:
     lda #66                                      ; Custom portal character code
     jsr CHROUT
 f_skip_plot_portal:
+    rts
+
+f_erase_cursor:
+    ; Use blank tile to erase previous cursor position
+    ldx previous_cursor_y
+    ldy previous_cursor_x
+    clc
+    jsr PLOT
+    lda blank_tile                               ; Load the blank tile character
+    jsr CHROUT                                   ; Write blank tile to previous cursor location
     rts
 
 ; Include supporting files as per conventions
