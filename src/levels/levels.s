@@ -1,3 +1,7 @@
+curr_char_code = $05                                    ; overwriting count zero page mem spot that was used in rle decoder
+LOAD_ADDR_LOW = $02
+LOAD_ADDR_HIGH = $03                                    ; reusing these from rle since same idea here, these represent addr we are loading data into
+
 _f_draw_level_template:                                ; function that draws the template for a level (top score, game border, etc.)
     jsr _f_draw_top_level
     jsr _f_draw_game_border
@@ -39,28 +43,6 @@ _f_draw_game_border:                                    ; draw the game border
     ; $1e57 is the top right corner of the game area
     ; $1f8c is the bottom left corner of the game area
     ; $1fa1 is the bottom right corner of the game area
-
-    ; lda #51         ; top wall character code
-    ; sta $1e43
-    ; sta $1e44
-    ; sta $1e45
-    ; sta $1e46
-    ; sta $1e47
-
-    ; lda #52         ; right wall character code
-    ; sta $1e6d
-    ; sta $1e83
-
-
-    ; lda #53         ; bottom wall character code
-    ; sta $1f8d
-    ; sta $1f8e
-    ; sta $1f8f
-    ; sta $1f90
-
-    ; lda #54         ; left wall character code
-    ; sta $1e58
-    ; sta $1e6e
 
     lda #51             ; Character code for the top wall
 draw_top_wall:
@@ -125,15 +107,10 @@ no_inc_right_high:
     cpx #14                 
     bne draw_right_wall
 
-
     rts
 
-
-
-
-
 f_draw_level:
-    jsr _f_draw_level_template
+    jsr _f_draw_level_template                  ; first, draw the static template that each level has
 
     lda what_level_tracker
     cmp #1
@@ -155,11 +132,31 @@ _check_level_2:
 
 _check_level_3:
 
-
 _level_data_addr_set:
+    ; read in the level data binary and draw it to the screen
 
+    ldy #0                          
+    ldx #0
+_read_char:
+    lda (level_data_addr_low),y
+    cmp #$
+    beq _level_data_end
 
+    sta curr_char_code
+    iny
 
+    lda (level_data_addr_low),y
+    sta LOAD_ADDR_LOW
+    iny
+    lda (level_data_addr_low),y
+    sta LOAD_ADDR_HIGH
+    iny
 
+_store_char:
+    lda curr_char_code
+    sta (LOAD_ADDR_LOW,x)
 
+    jmp _read_char    
+
+_level_data_end:
     rts
