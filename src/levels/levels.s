@@ -32,9 +32,30 @@ _f_draw_top_level:                                      ; draw the level label
     lda #21
     sta $1e29
 
-    lda #21
+    ; read value from what_level_tracker and write it to screen
+    lda what_level_tracker
+    cmp #1
+    bne _check_level_2_label
+    lda #56
+    sta $1e2a
+    jmp _found_label
+
+_check_level_2_label:
+    cmp #2
+    bne _check_level_3_label
+    lda #20
     sta $1e2a
 
+_check_level_3_label:
+    cmp #3
+    bne _check_level_4_label
+    lda #57
+    sta $1e2a
+
+_check_level_4_label:
+
+
+_found_label:
     rts
 
 _f_draw_game_border:                                    ; draw the game border
@@ -112,6 +133,7 @@ no_inc_right_high:
 f_draw_level:
     jsr _f_draw_level_template                  ; first, draw the static template that each level has
 
+_check_level_1:
     lda what_level_tracker
     cmp #1
     bne _check_level_2
