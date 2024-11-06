@@ -96,11 +96,13 @@ f_next_level:
     bne dont_start_over
     lda #1                                      ; If last level, reset to first level
     sta what_level_tracker
+    jsr f_set_color_mem_black
     jsr f_draw_titlescreen
     jmp starting_loop
 
 dont_start_over:
     inc what_level_tracker                      ; Increment to the next level
+    jsr f_set_color_mem_black
     jsr f_clear_screen
     jsr f_draw_level
     jmp game_loop
@@ -183,7 +185,7 @@ f_draw_cursor:
     ldy cursor_x
     clc
     jsr PLOT
-    lda #64                                      ; Custom cursor character code
+    lda #50                                      ; Custom cursor character code
     jsr CHROUT
 
     ; Update previous cursor position
@@ -200,7 +202,7 @@ f_plot_portal:
     ldy portal_x
     clc
     jsr PLOT
-    lda #66                                      ; Custom portal character code
+    lda #87                                      ; Custom portal character code
     jsr CHROUT
 f_skip_plot_portal:
     rts
