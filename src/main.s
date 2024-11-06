@@ -16,7 +16,7 @@ current_byte_from_data = $04
 count = $05
 value = $06
 
-what_level_tracker = $07
+what_level_tracker = $07                        ; Keeps track of the current level
 level_data_addr_low = $08
 level_data_addr_high = $09
 
@@ -82,9 +82,28 @@ game_loop:
     cmp #0
     beq game_loop                               ; Continue loop if no input
 
+    cmp #$20                                    ; Check for spacebar input to change levels
+    beq f_next_level                            ; If spacebar is pressed, go to next level
+
     sta $04                                     ; Store input in temporary register
-    jsr f_handle_input                          ; Handle input
+    jsr f_handle_input                          ; Handle other input
     jmp game_loop                               ; Repeat loop
+
+; Level Transition Function
+f_next_level:
+    lda what_level_tracker
+    cmp #3                                      ; Check if at the last level
+    bne dont_start_over
+    lda #1                                      ; If last level, reset to first level
+    sta what_level_tracker
+    jsr f_draw_titlescreen
+    jmp starting_loop
+
+dont_start_over:
+    inc what_level_tracker                      ; Increment to the next level
+    jsr f_clear_screen
+    jsr f_draw_level
+    jmp game_loop
 
 ; Input Handling Subroutine
 f_handle_input:
