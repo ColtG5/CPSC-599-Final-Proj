@@ -1,4 +1,24 @@
+_f_draw_level_template:                                ; function that draws the template for a level (top score, game border, etc.)
+    jsr _f_draw_top_score
+    jsr _f_draw_game_border
+    rts
+
+_f_draw_top_score:                                      ; draw the score numbers at the top of the screen
+    
+
+    rts
+
+_f_draw_game_border:                                    ; draw the game border
+
+    rts
+
+
+
+
+
 f_draw_level:
+    jsr _f_draw_level_template
+
     lda what_level_tracker
     cmp #1
     bne _check_level_2
