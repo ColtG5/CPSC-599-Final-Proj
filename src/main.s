@@ -61,12 +61,8 @@ game_loop:
 encoded_title_screen_data_start
     incbin "./src/titlescreen/titlescreen-rle-encoded.bin"
 
-;level_1_data_start
-;<<<<<<< music-branch-main
-;    incbin "./src/levels/level1.bin"
-;=======
-;    ; incbin "./levels/level1.bin"
-;>>>>>>> main
+level_1_data_start
+    incbin "./src/levels/level1.bin"
 
 level_2_data_start
 
