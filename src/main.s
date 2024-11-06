@@ -36,6 +36,7 @@ starting_loop:
     cmp #0
     beq play_music_and_wait_input     ; Wait if no input detected
 
+    jsr f_clear_screen
     jsr f_draw_level                            ; on any input, draw the first level, and start the game
     jmp game_loop
 
@@ -44,7 +45,6 @@ play_music_and_wait_input:
     jmp starting_loop                 ; Return to input loop
 
 game_loop:
-    jsr f_clear_screen
     jmp game_loop
     
     rts
@@ -55,7 +55,7 @@ game_loop:
     include "./src/compression/rle_decode.s"    ; rle decoder code
     include "./src/titlescreen/titlescreen.s"   ; titlescreen
     include "./src/levels/levels.s"             ; code to draw levles
-    include "./src/music/titlescreen_music.s" ; Titlescreen music functions
+    include "./src/music/titlescreen_music.s"   ; Titlescreen music functions
 
 
 encoded_title_screen_data_start
