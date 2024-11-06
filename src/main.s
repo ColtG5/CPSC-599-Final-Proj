@@ -61,6 +61,7 @@ game_loop:
     lda #1
     sta what_level_tracker
     jsr f_draw_titlescreen
+    jmp starting_loop
 
 dont_start_over:
     inc what_level_tracker
@@ -86,6 +87,10 @@ level_1_data_start
     incbin "./src/levels/level1.bin"
 
 level_2_data_start
+    incbin "./src/levels/level2.bin"
+
+level_3_data_start
+    incbin "./src/levels/level3.bin"
 
     org CUSTOM_CHAR_MEM
     include "./src/extras/character-table.s"

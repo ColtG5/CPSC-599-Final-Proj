@@ -1,5 +1,6 @@
-level_to_write = "level1.bin"
-spot_for_level_to_write = "../src/levels/level1.bin"
+spot_for_level_1_to_write = "../src/levels/level1.bin"
+spot_for_level_2_to_write = "../src/levels/level2.bin"
+spot_for_level_3_to_write = "../src/levels/level3.bin"
 
 
 def read_character_table(file_path):
@@ -37,6 +38,34 @@ def write_level_to_binary(level, characters, output_path):
 file_path = "../src/extras/character-table.s"
 characters = read_character_table(file_path)
 
-level = [("laser_receptor", "0x1e66"), ("laser_receptor", "0x1e68"), ("laser_shooter", "0x1f80"), ("laser_shooter", "0x1f82"), "0xff"]
+level1 = [("laser_receptor", "0x1e60"), ("laser_shooter", "0x1f83"), "0xff"]
+level2 = [
+    ("laser_receptor", "0x1e5d"),
+    ("laser_receptor", "0x1e68"),
+    ("laser_shooter", "0x1f80"),
+    ("laser_shooter", "0x1f82"),
+    ("reflector_1", "0x1f20"),
+    ("reflector_2", "0x1f00"),
+    "0xff",
+]
+level3 = [
+    ("laser_receptor", "0x1e5b"),
+    ("laser_receptor", "0x1e6a"),
+    ("laser_shooter", "0x1f80"),
+    ("laser_shooter", "0x1f82"),
+    ("reflector_1", "0x1f20"),
+    ("reflector_2", "0x1f00"),
+    ("portal", "0x1eca"),
+    ("portal", "0x1f05"),
+    ("wall", "0x1f54"),
+    ("wall", "0x1f55"),
+    ("wall", "0x1f56"),
+    ("wall", "0x1f3e"),
+    ("wall", "0x1f3f"),
+    ("wall", "0x1f40"),
+    "0xff",
+]
 
-write_level_to_binary(level, characters, spot_for_level_to_write)
+write_level_to_binary(level1, characters, spot_for_level_1_to_write)
+write_level_to_binary(level2, characters, spot_for_level_2_to_write)
+write_level_to_binary(level3, characters, spot_for_level_3_to_write)

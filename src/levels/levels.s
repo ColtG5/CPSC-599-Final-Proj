@@ -153,6 +153,15 @@ _check_level_2:
     sta level_data_addr_high
 
 _check_level_3:
+    lda what_level_tracker
+    cmp #3
+    bne _check_level_4
+    lda #<level_3_data_start
+    sta level_data_addr_low
+    lda #>level_3_data_start
+    sta level_data_addr_high
+
+_check_level_4:
 
 _level_data_addr_set:
     ; read in the level data binary and draw it to the screen
