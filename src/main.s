@@ -57,8 +57,12 @@ game_loop:
     ; move to next level! if trying to move from level 3 to level 4, "restart" the game by going back to starting loop
     lda what_level_tracker
     cmp #3
-    beq starting_loop
+    bne dont_start_over
+    lda #1
+    sta what_level_tracker
+    jsr f_draw_titlescreen
 
+dont_start_over:
     inc what_level_tracker
     jsr f_clear_screen
     jsr f_draw_level
