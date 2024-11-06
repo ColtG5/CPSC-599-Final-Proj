@@ -6,13 +6,14 @@ current_byte_from_data = $04
 count = $05
 value = $06
 
+; Used just for the compressed titlescreen right now, this decodes standard RLE encoded data
+; TODO: use x reg as well as per A2 feedback to make code smaller
 f_rle_decoder:
     lda #2                  ; init y to 2 (skip header of 001e)
     ldy #2
     ; lda #0
     ; ldy #0
     sta current_byte_from_data
-    ldx #0                  ; init x to 0
 _decode_loop:
     ; load the count from the encoded data
     ldy current_byte_from_data
@@ -47,7 +48,7 @@ _store_loop:
 _no_high_inc:
     dec count               ; dec count
     beq _decode_loop         ; if count is 0, done w this value, go do another
-    jmp _store_loop          ; if count is not 0, store another value
+    bne _store_loop          ; if count is not 0, store another value
 
 _rle_end:
     rts

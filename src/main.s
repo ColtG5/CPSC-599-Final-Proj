@@ -1,7 +1,10 @@
     processor 6502
 
 CUSTOM_CHAR_MEM = $1c00                         ; custom char table start
-SCREEN_MEM = $1e00                              ; screen mem start
+SCREEN_MEM_1 = $1e00                              ; screen mem start
+SCREEN_MEM_2 = $1f00                              ; more screen mem!
+COLOUR_MEM_1 = $9600                          ; colour mem start
+COLOUR_MEM_2 = $9700                         ; more colour mem!
 CHARSET_POINTER = $9005                         ; custom char table vic chip mem address place
 GETIN = $ffe4
 PLOT = $fff0
@@ -43,7 +46,7 @@ blank_tile = $11                                ; Stored blank tile from the top
     jsr f_draw_titlescreen
 
     ; Read top-left corner tile as the blank tile for erasing
-    lda SCREEN_MEM
+    lda SCREEN_MEM_1
     sta blank_tile
 
 starting_loop:
