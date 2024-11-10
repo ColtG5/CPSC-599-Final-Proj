@@ -1,3 +1,10 @@
+"""create_custom_chars.py
+
+A tool that lets us create custom characters by selecting what pixels are on/off. It outputs characters 
+into a '''''database''''' that stores some custom characters, that can then be copy pasted into the games 
+character table (better method in the future).
+"""
+
 from tkinter import *
 from tkinter import simpledialog, messagebox
 
@@ -24,8 +31,8 @@ def clicked(btn, row, col):
 
 #     if char_name:
 #         with open("custom_chars.txt", "a") as f:
-            
-            
+
+
 #             # f.write(f"{char_name}\n")
 #             # for row in button_states:
 #             #     f.write("\tdc.b %" + "".join(str(x) for x in row) + "\n")
@@ -70,9 +77,8 @@ def export_character():
                 for row in button_states:
                     f.write("\tdc.b %" + "".join(str(x) for x in row) + "\n")
                 f.write("\n")
-            
-            messagebox.showinfo("Export Character", f"Character {char_name} created and saved successfully!")
 
+            messagebox.showinfo("Export Character", f"Character {char_name} created and saved successfully!")
 
 
 def import_character():
@@ -80,7 +86,7 @@ def import_character():
     if not char_name:
         return
     char_name = char_name.lower()
-    
+
     try:
         with open(filename, "r") as f:
             lines = f.readlines()

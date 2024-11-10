@@ -6,6 +6,10 @@ REMOTE_DIR = ~/www/
 
 all: $(ALL)
 
+
+music.prg: ./src/titlescreen_music.s ./src/extras/stub.s
+	$(DASM) $< -o$@ -l$(<:.s=.lst)
+
 game.prg: ./src/main.s
 	$(DASM) $< -o$@ -l$(<:.s=.lst)
 

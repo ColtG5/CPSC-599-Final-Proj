@@ -1,3 +1,9 @@
+"""level_editor.py
+
+GUI that lets you edito each individual chatacter on the vic-20 screen. VERY useful for making the titlescreen. Will be fixed 
+later to also make creating each of the levels and their level data very easy.
+"""
+
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 import os

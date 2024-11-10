@@ -48,23 +48,24 @@ blank_tile           = $11                    ; Blank tile for erasing
     ; Initialize character set and display titlescreen
     lda #255
     sta CHARSET_POINTER
+
+    ; Initialize variables and start titlescreen
     lda #1
     sta what_level_tracker
     jsr f_set_color_mem_black
     jsr f_draw_titlescreen
 
-    ; Store the top-left corner tile as blank for erasing
     lda SCREEN_MEM_1
     sta blank_tile
 
 starting_loop:
     jsr GETIN
     cmp #0
-    beq play_music_and_wait_input             ; Wait if no input detected
+    beq play_music_and_wait_input               ; Wait if no input detected
 
     jsr f_clear_screen
-    jsr f_draw_level                          ; Draw the first level and start game
-    lda #8                                    ; Initial cursor and portal positions
+    jsr f_draw_level                            ; Draw first level on input and start the game
+    lda #8                                      ; Initialize cursor and portal positions
     sta cursor_x
     lda #5
     sta cursor_y
@@ -103,10 +104,13 @@ game_loop:
 ; Level Transition Function
 f_next_level:
     lda what_level_tracker
+
     cmp #MAX_LEVEL                            ; Check if at the last level
     bne _increment_level
     lda #1                                    ; Reset to the first level if at max
+
     sta what_level_tracker
+    jsr f_set_color_mem_black
     jsr f_draw_titlescreen
     jmp starting_loop
 

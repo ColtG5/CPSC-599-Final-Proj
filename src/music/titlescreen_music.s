@@ -2,7 +2,7 @@
 
 
 f_play_melody:
-    lda #15
+    lda #1
     sta $900E                           ; Set volume to maximum
 
 _play_note_loop:
