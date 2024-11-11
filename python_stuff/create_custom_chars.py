@@ -8,7 +8,7 @@ character table (better method in the future).
 from tkinter import *
 from tkinter import simpledialog, messagebox
 
-filename = "custom_chars_title_screen.txt"
+char_database = "./custom_char_charsets/custom_chars.txt"
 
 root = Tk()
 root.title("vic-20 char creator")
@@ -31,7 +31,7 @@ def export_character():
 
     if char_name:
         try:
-            with open(filename, "r") as f:
+            with open(char_database, "r") as f:
                 lines = f.readlines()
 
             char_start_idx = None
@@ -53,13 +53,13 @@ def export_character():
                 lines.extend(char_data_lines)
                 lines.append("\n")
 
-            with open(filename, "w") as f:
+            with open(char_database, "w") as f:
                 f.writelines(lines)
 
             messagebox.showinfo("Export Character", f"Character {char_name} saved successfully!")
 
         except FileNotFoundError:
-            with open(filename, "w") as f:
+            with open(char_database, "w") as f:
                 f.write(f"{char_name}\n")
                 for row in button_states:
                     f.write("\tdc.b %" + "".join(str(x) for x in row) + "\n")
@@ -75,7 +75,7 @@ def import_character():
     char_name = char_name.lower()
 
     try:
-        with open(filename, "r") as f:
+        with open(char_database, "r") as f:
             lines = f.readlines()
 
             found = False

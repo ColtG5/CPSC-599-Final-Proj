@@ -1,9 +1,3 @@
-"""level_editor.py
-
-GUI that lets you edito each individual chatacter on the vic-20 screen. VERY useful for making the titlescreen. Will be fixed 
-later to also make creating each of the levels and their level data very easy.
-"""
-
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 import os
@@ -278,68 +272,10 @@ def export_level_old():
 #                             """
 #                     )
 
-
 #         messagebox.showinfo("Export Level", f"Level {level_name} exported successfully!")
-def export_level_drawable():
-    level_name = simpledialog.askstring("Export Level", "Name for the level? (will overwrite existing files!)")
-    if level_name:
-        with open(f"./text_levels/{level_name}.txt", "w") as f:
-
-            f.write("level_char_table:\n")
-
-            # dict storing name of each character used in level, as well as: what spot they are in character table + what coords require that character
-            # characters_used_in_level: dict[str, tuple[int, list[tuple[int, int]]]] = dict()
-            characters_used_in_level: dict[Character, list[tuple[int, int]]] = dict()
-            for row_num, row in enumerate(level_grid):
-                # print(row)
-                for col, char in enumerate(row):
-                    if isinstance(char, Character):
-                        char: Character
-                        if char.name == "0_Empty":
-                            continue
-
-                        if char not in characters_used_in_level.keys():
-                            characters_used_in_level[char] = [(row_num, col)]
-                        else:
-                            characters_used_in_level[char].append((row_num, col))
-
-            # print(characters_used_in_level)
-
-            # write binary data for each character to create char table
-            for char in characters_used_in_level.keys():
-                f.write(f"{char.name}:\n")
-                for row in char.data:
-                    f.write("\tdc.b %" + "".join(str(x) for x in row) + "\n")
-                f.write("\n")
-
-            # print(list(characters_used_in_level.keys()))
-
-            # asm code that will actually display the level
-            f.write("level_drawing_code:\n")
-            # for ewach char wer need to draw
-            for char in characters_used_in_level.keys():
-                # this works right!!!!!!?????????!!!!!
-                num_in_table = list(characters_used_in_level.keys()).index(char)
-                f.write(f"\n{char.name}_{num_in_table}:\n")
-                f.write(f"\tlda #{num_in_table + OFFSET_FOR_CHARS_IN_TABLE}\n")
-                f.write(f"\tsta {ZERO_PAGE_LOC_FOR_CHARS_FROM_TABLE}\n")
-
-                # and for each spot on screen that needs that char, move the cursor there and CHROUT it
-                for row, col in characters_used_in_level[char]:
-                    f.write(
-                        f"""
-    ldx #{row}
-    ldy #{col}
-    jsr PLOT
-    lda {ZERO_PAGE_LOC_FOR_CHARS_FROM_TABLE}
-    jsr CHROUT
-                            """
-                    )
-
-        messagebox.showinfo("Export Level", f"Level {level_name} exported successfully!")
-
-
-def export_level_data():
+        
+        
+def export_level_level_data():
     level_name = simpledialog.askstring("Export Level Data", "Name for the level? (will overwrite existing files!)")
     if level_name:
         with open(f"./text_levels/{level_name}.bin", "w") as f:
@@ -348,7 +284,68 @@ def export_level_data():
             pass
 
 
-def import_drawable_level():
+def import_level_old():
+    level_name = simpledialog.askstring("Import Level", "Name of the level to import?")
+    if level_name:
+        try:
+            with open(f"./text_levels/{level_name}.txt", "r") as f:
+
+                create_grid()
+
+                # read for level_char_table: at top of file
+                line = f.readline()
+                if not line.strip() == "level_char_table:":
+                    messagebox.showerror("Error", "Invalid level file!")
+                    return
+
+                while True:
+                    line = f.readline()
+                    if line.strip() == "level_drawing_code:":
+                        break
+
+                current_char: Character = None
+                coord_x = -1
+                coord_y = -1
+
+                # keep reading lines until we get a char, x, and y, then put that into level grid, reset coords, go again, until all of that char are done, then reset char, then go AGAIN
+                for line in f.readlines():
+                    line = line.strip()
+
+                    if line == "":
+                        continue
+
+                    if current_char is not None and coord_x != -1 and coord_y != -1:
+                        level_grid[coord_x][coord_y] = current_char
+                        update_grid_cell(coord_x, coord_y)
+                        coord_x = -1
+                        coord_y = -1
+                        continue
+
+                    if line.endswith(":"):
+                        while not line.endswith("_"):
+                            line = line[:-1]
+                        char_name = line[:-1]
+                        # print(char_name)
+                        # print(characters.keys())
+                        current_char = characters[char_name]
+                        # print(current_char.data)
+                        continue
+
+                    if line.startswith("ldx #"):
+                        coord_x = int(line.split("#")[-1])
+                        # print(coord_x)
+                        continue
+
+                    if line.startswith("ldy #"):
+                        coord_y = int(line.split("#")[-1])
+                        # print(f"cur_char: {current_char}, x: {coord_x}, y: {coord_y}")
+                        continue
+
+        except FileNotFoundError:
+            messagebox.showerror("Error", "Level not found!")
+
+
+def import_level():
     level_name = simpledialog.askstring("Import Level", "Name of the level to import?")
     if level_name:
         try:
@@ -359,7 +356,7 @@ def import_drawable_level():
                 if line.strip() != "level_char_table:":
                     messagebox.showerror("Error", "Invalid level file!")
                     return
-
+                
                 while True:
                     line = f.readline()
                     if line.strip() == "level_drawing_code:":
@@ -383,7 +380,7 @@ def import_drawable_level():
                     #     coord_y = -1
                     #     print(f"Placed {current_char} at {coord_x}, {coord_y}")
                     #     continue
-
+                    
                     if line.endswith(":"):
                         while not line.endswith("_"):
                             line = line[:-1]
@@ -408,7 +405,7 @@ def import_drawable_level():
 
                         # Make sure current_char is set before placing
                         # print(f"Address: {screen_mem_address:#04x}, char: {current_char}, x: {coord_x}, y: {coord_y}")
-
+                        
                         level_grid[coord_x][coord_y] = current_char
                         update_grid_cell(coord_x, coord_y)
                         # print(f"Placed {current_char} at {coord_x}, {coord_y}")
@@ -424,15 +421,15 @@ def populate_right_sidebar():
     for widget in sidebar2.winfo_children():
         widget.destroy()
 
-    export_button_drawable = tk.Button(sidebar2, text="Export level (old)", command=export_level_drawable)
-    export_button_data = tk.Button(sidebar2, text="Export level data", command=export_level_data)
-    import_button = tk.Button(sidebar2, text="Import level", command=import_drawable_level)
-    # import_old_button = tk.Button(sidebar2, text="Import level (old)", command=import_level_old)
+    export_button_old = tk.Button(sidebar2, text="Export level (old)", command=export_level_old)
+    export_button_level_data = tk.Button(sidebar2, text="Export level data", command=export_level_level_data)
+    import_button = tk.Button(sidebar2, text="Import level", command=import_level)
+    import_old_button = tk.Button(sidebar2, text="Import level (old)", command=import_level_old)
 
-    export_button_drawable.pack(fill=tk.X, padx=5, pady=5)
-    export_button_data.pack(fill=tk.X, padx=5, pady=5)
+    export_button_old.pack(fill=tk.X, padx=5, pady=5)
+    export_button_level_data.pack(fill=tk.X, padx=5, pady=5)
     import_button.pack(fill=tk.X, padx=5, pady=5)
-    # import_old_button.pack(fill=tk.X, padx=5, pady=5)
+    import_old_button.pack(fill=tk.X, padx=5, pady=5)
 
 
 if __name__ == "__main__":
