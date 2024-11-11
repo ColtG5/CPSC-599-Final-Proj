@@ -38,6 +38,12 @@ class Character:
         return self.name
 
 
+class UnrecognizedCharacterError(Exception):
+    def __init__(self, character_name):
+        self.character_name = character_name
+        super().__init__(f"Character {character_name} not found in characters dictionary.")
+
+
 characters = {}  # Stores Character objects
 char_images = {}  # Stores Tkinter PhotoImage objects (zoomed)
 selected_character = None
@@ -210,6 +216,10 @@ def import_screen():
             for row in range(ROWS):
                 for col in range(COLS):
                     char_name = screen_data["grid"][row][col]
+                    # If the char_name from the level data isn't in the characters dict, throw an error!!
+                    if not char_name in characters:
+                        raise UnrecognizedCharacterError(char_name)
+
                     level_grid[row][col] = characters.get(char_name, empty_character)
                     update_grid_cell(row, col)
 
@@ -219,6 +229,8 @@ def import_screen():
 
     except FileNotFoundError:
         messagebox.showerror("File Not Found", f"File {file_path}.json does not exist.")
+    except UnrecognizedCharacterError as e:
+        messagebox.showerror("Import Failed", f"Import failed: {e}.")
     except Exception as e:
         messagebox.showerror("Import Failed", f"An error occurred: {e}")
 
