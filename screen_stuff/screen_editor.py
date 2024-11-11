@@ -2,9 +2,10 @@ import tkinter as tk
 from tkinter import simpledialog, messagebox
 import os
 from PIL import Image
+import json
 
 root = tk.Tk()
-root.title("vic-20 level editor")
+root.title("vic-20 screen editor")
 
 custom_char_table_file = "./character_tables/char_table.s"
 char_images_folder = "./custom_char_images"
@@ -24,6 +25,7 @@ ITEM_CODES = {
     "portal": 0x06,
 }
 
+
 class Character:
     def __init__(self, name, data):
         self.name = name
@@ -35,11 +37,13 @@ class Character:
     def __str__(self):
         return self.name
 
+
 characters = {}  # Stores Character objects
 char_images = {}  # Stores Tkinter PhotoImage objects (zoomed)
 selected_character = None
 level_grid = [[None for _ in range(COLS)] for _ in range(ROWS)]  # Stores Character objects for the level
 level_buttons = [[None for _ in range(COLS)] for _ in range(ROWS)]  # Stores Tkinter buttons
+
 
 # Load and create character images
 def load_and_create_character_images():
@@ -73,6 +77,7 @@ def load_and_create_character_images():
     except FileNotFoundError:
         messagebox.showerror("Error", f"No {custom_char_table_file} found!")
 
+
 # Create PNG and load the zoomed image for each character
 def create_and_store_image(char: Character):
     img_size = (CHAR_IMG_SIZE, CHAR_IMG_SIZE)
@@ -88,6 +93,7 @@ def create_and_store_image(char: Character):
     tk_image = tk.PhotoImage(file=filename).zoom(ZOOM_FACTOR)
     char_images[char.name] = tk_image
 
+
 # Update the sidebar with character buttons
 def update_sidebar():
     for widget in sidebar.winfo_children():
@@ -102,6 +108,7 @@ def update_sidebar():
     for col in range(3):
         sidebar.grid_columnconfigure(col, weight=1)
 
+
 # Select a character from the sidebar
 def select_character(char: Character):
     global selected_character
@@ -114,11 +121,13 @@ def select_character(char: Character):
     if isinstance(event_widget, tk.Button):
         event_widget.configure(bg="lightblue")
 
+
 # Place the selected character on the grid
 def place_character(row, col):
     if selected_character:
         level_grid[row][col] = selected_character
         update_grid_cell(row, col)
+
 
 # Update the image of a grid cell when clicked
 def update_grid_cell(row, col):
@@ -128,6 +137,7 @@ def update_grid_cell(row, col):
     button = level_buttons[row][col]
     button.config(image=char_image)
     button.image = char_image
+
 
 # Create the grid for the level
 def create_grid():
@@ -140,35 +150,95 @@ def create_grid():
             btn.grid(row=r, column=c)
             level_buttons[r][c] = btn
 
+
+# Overwrite everywhere in the grid with the empty character
+def clear_screen():
+    for row in range(ROWS):
+        for col in range(COLS):
+            level_grid[row][col] = empty_character
+            update_grid_cell(row, col)
+
+
 # Export function, updated to use empty_character as needed
 def export_screen_drawing():
     pass
+
 
 # Export binary level data
 def export_level_data():
     pass
 
-# Export the grid data into file, that can be imported back in by the import_screen function
-def export_screen():
-    pass
 
-# Import function, updated to initialize cells as empty_character when needed
+# Export the grid data into a file that can be imported back into the program
+def export_screen():
+    try:
+        # Create export data structure
+        screen_data = {"grid": [[char.name if char else "empty_character" for char in row] for row in level_grid]}
+
+        # Ensure the screens folder exists
+        os.makedirs(screens_folder, exist_ok=True)
+
+        # Ask for file name
+        file_name = simpledialog.askstring("Export Screen", "Enter a file name for this screen:")
+        if file_name:
+            file_path = os.path.join(screens_folder, f"{file_name}.json")
+
+            # Write data to JSON file
+            with open(file_path, "w") as file:
+                json.dump(screen_data, file, indent=4)
+            messagebox.showinfo("Export Successful", f"Screen saved to {file_path}")
+        else:
+            messagebox.showwarning("Export Canceled", "No file name was provided.")
+
+    except Exception as e:
+        messagebox.showerror("Export Failed", f"An error occurred: {e}")
+
+
+# Import the screen data from a file into the level grid
 def import_screen():
-    pass
+    try:
+        # Open file dialog to select JSON file to import
+        file_path = simpledialog.askstring("Import Screen", "Enter the file name to import (without extension):")
+        if file_path:
+            full_path = os.path.join(screens_folder, f"{file_path}.json")
+
+            # Load the data from JSON file
+            with open(full_path, "r") as file:
+                screen_data = json.load(file)
+
+            # Update level grid with imported characters
+            for row in range(ROWS):
+                for col in range(COLS):
+                    char_name = screen_data["grid"][row][col]
+                    level_grid[row][col] = characters.get(char_name, empty_character)
+                    update_grid_cell(row, col)
+
+            messagebox.showinfo("Import Successful", f"Screen imported from {full_path}")
+        else:
+            messagebox.showwarning("Import Canceled", "No file name was provided.")
+
+    except FileNotFoundError:
+        messagebox.showerror("File Not Found", f"File {file_path}.json does not exist.")
+    except Exception as e:
+        messagebox.showerror("Import Failed", f"An error occurred: {e}")
+
 
 def populate_right_sidebar():
     for widget in sidebar2.winfo_children():
         widget.destroy()
 
+    clear_button = tk.Button(sidebar2, text="Clear Screen", command=clear_screen)
     export_button_drawing = tk.Button(sidebar2, text="Export screen to draw", command=export_screen_drawing)
     export_button_data = tk.Button(sidebar2, text="Export screen for level data", command=export_level_data)
     export_button_screen = tk.Button(sidebar2, text="Export screen", command=export_screen)
     import_button = tk.Button(sidebar2, text="Import screen", command=import_screen)
 
-    export_button_drawing.pack(fill=tk.X, padx=5, pady=5)
-    export_button_data.pack(fill=tk.X, padx=5, pady=5)
-    export_button_screen.pack(fill=tk.X, padx=5, pady=5)
-    import_button.pack(fill=tk.X, padx=5, pady=5)
+    clear_button.pack(fill=tk.X, padx=5, pady=5)
+    export_button_drawing.pack(fill=tk.X, padx=5, pady=5, side=tk.BOTTOM)
+    export_button_data.pack(fill=tk.X, padx=5, pady=5, side=tk.BOTTOM)
+    export_button_screen.pack(fill=tk.X, padx=5, pady=5, side=tk.BOTTOM)
+    import_button.pack(fill=tk.X, padx=5, pady=5, side=tk.BOTTOM)
+
 
 if __name__ == "__main__":
     sidebar = tk.Frame(root, bg="lightgrey")
