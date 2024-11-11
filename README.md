@@ -1,8 +1,6 @@
 # CPSC-599-Final-Proj
 ## Final project for CPSC 599 F24 | Goob: Mechanic Mayday
 
-<br/>
-
 #### For WIP Demo Submission:
 A few notes...
 - All of the code that actually is used to compile the game is in `src`, any other folders contain complimentary programs/data/etc.

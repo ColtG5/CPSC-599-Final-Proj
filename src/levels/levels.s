@@ -1,20 +1,18 @@
 DYNAMIC_LEVEL_NUM_SCREEN_MEM_ADDR = $1e2a
-NUM_OF_COLUMNS = #22
-NUM_OF_SIDE_WALLS = #14
-
-curr_char_code = $05                                    ; overwriting count zero page mem spot that was used in rle decoder
-LOAD_ADDR_LOW = $02
-LOAD_ADDR_HIGH = $03                                    ; reusing these from rle since same idea here, these represent addr we are loading data into
+ROW_LENGTH = 22
+NUM_OF_SIDE_WALLS = 11
 
 
 ; function that draws the template for a level (top score, game border, etc.)
-_f_draw_level_template:
-    jsr _f_draw_top_level
-    jsr _f_draw_game_border
+    subroutine
+f_draw_level_template:
+    jsr f_draw_top_level
+    jsr f_draw_game_border
     rts
 
 ; function that draws the top level label indicator
-_f_draw_top_level:
+    subroutine
+f_draw_top_level:
     ; need to write "LEVEL: " and the level number
 
     ; below code just writes "LEVEL: " to the top right area (magic number hell)
@@ -44,30 +42,31 @@ _f_draw_top_level:
     ; than terribly hardcoding it...
     lda what_level_tracker                      ; simple int storing what level we are on
     cmp #1
-    bne _check_level_2_label
+    bne .check_level_2
     lda #56                                     ; Character code for "1"
     sta DYNAMIC_LEVEL_NUM_SCREEN_MEM_ADDR
-    jmp _found_label
+    jmp .found
 
-_check_level_2_label:
+.check_level_2:
     cmp #2
-    bne _check_level_3_label
+    bne .check_level_3
     lda #20                                     ; Character code for "2"
     sta DYNAMIC_LEVEL_NUM_SCREEN_MEM_ADDR
 
-_check_level_3_label:
+.check_level_3:
     cmp #3
-    bne _check_level_4_label
+    bne .check_level_4
     lda #57                                     ; Character code for "3"
     sta DYNAMIC_LEVEL_NUM_SCREEN_MEM_ADDR
 
-_check_level_4_label:
+.check_level_4:
 
 
-_found_label:
+.found:
     rts
 
-_f_draw_game_border:                                    ; draw the game border
+    subroutine
+f_draw_game_border:                                    ; draw the game border
     ; draw the border around the game area
     ; TODO: right now this is a VERY harcoded manual drawing of the level border. In the future,
     ; we will look at switching this to compressed RLE code that we decompress on the fly. This hardcoded
@@ -79,111 +78,119 @@ _f_draw_game_border:                                    ; draw the game border
     ; $1fa1 is the bottom right corner of the game area
 
     lda #51             ; Character code for the top wall
-_draw_top_wall:
+.draw_top_wall:
     sta $1e43,x         ; Write top wall starting from $1e43
     inx
     cpx #20          
-    bne _draw_top_wall
+    bne .draw_top_wall
 
     lda #53             ; Character code for the bottom wall
     ldx #0              ; Reset X register for bottom wall
-_draw_bottom_wall:
+.draw_bottom_wall:
     sta $1f8d,x         ; Write bottom wall starting from $1f8d
     inx
     cpx #20
-    bne _draw_bottom_wall
+    bne .draw_bottom_wall
 
-    lda #54             ; Character code for the left wall
-    ldx #0
-    lda #<$1e58         ; store the 16-bit address of the start of the left wall
+.draw_left_wall:
+    lda #54                  ; Character code for left wall
+    ldx #0                   ; Row counter
+    lda #<$1e58              ; Low byte of starting address
     sta LOAD_ADDR_LOW
-    lda #>$1e58
+    lda #>$1e58              ; High byte of starting address
     sta LOAD_ADDR_HIGH
-_draw_left_wall:
-    lda #54                 
+
+.draw_left_wall_loop:
+    lda #54
     ldy #0
-    sta (LOAD_ADDR_LOW),y  
+    sta (LOAD_ADDR_LOW),y   ; Write left wall character to address
 
-    clc
-    lda LOAD_ADDR_LOW       ; increment the address to the next row (22 columns, so add by 22)
-    adc NUM_OF_COLUMNS
-    sta LOAD_ADDR_LOW
-    bcc no_inc_left_high    ; carry means we need to increment the high byte of the address!
-    inc LOAD_ADDR_HIGH
-no_inc_left_high:
-    inx                     
-    cpx NUM_OF_SIDE_WALLS   ; 14 rows of the left wall
-    bne _draw_left_wall
-
-
-    ; Drawing right wall is exact same logic as left wall (all this code can definitely be reduced. Just did this solution very hastily)
-    lda #52                 
-    ldx #0                  
-    lda #<$1e6d             
-    sta LOAD_ADDR_LOW
-    lda #>$1e6d             
-    sta LOAD_ADDR_HIGH
-_draw_right_wall:
-    lda #52                 
-    ldy #0                  
-    sta (LOAD_ADDR_LOW),y  
-
-    clc
+    ; Move to the next row address by adding ROW_LENGTH to LOAD_ADDR
     lda LOAD_ADDR_LOW
-    adc NUM_OF_COLUMNS
+    clc
+    adc #ROW_LENGTH
     sta LOAD_ADDR_LOW
-    bcc _no_inc_right_high   
-    inc LOAD_ADDR_HIGH
-_no_inc_right_high:
-    inx                     
-    cpx NUM_OF_SIDE_WALLS                 
-    bne _draw_right_wall
+    lda LOAD_ADDR_HIGH
+    adc #0                   ; Add carry if needed
+    sta LOAD_ADDR_HIGH
+
+    inx
+    cpx NUM_OF_SIDE_WALLS    ; Check if we've reached the desired number of rows
+    bne .draw_left_wall_loop
 
     rts
 
-;
-f_draw_level:
-    jsr _f_draw_level_template                  ; first, draw the static template that each level has
+.draw_right_wall:
+    lda #52                  ; Character code for right wall
+    ldx #0                   ; Row counter
+    lda #<$1e6d              ; Low byte of starting address
+    sta LOAD_ADDR_LOW
+    lda #>$1e6d              ; High byte of starting address
+    sta LOAD_ADDR_HIGH
 
-_check_level_1:
+.draw_right_wall_loop:
+    lda #52
+    ldy #0
+    sta (LOAD_ADDR_LOW),y   ; Write right wall character to address
+
+    ; Move to the next row address by adding ROW_LENGTH to LOAD_ADDR
+    lda LOAD_ADDR_LOW
+    clc
+    adc #ROW_LENGTH
+    sta LOAD_ADDR_LOW
+    lda LOAD_ADDR_HIGH
+    adc #0
+    sta LOAD_ADDR_HIGH
+
+    inx
+    cpx NUM_OF_SIDE_WALLS    ; Check if we've reached the desired number of rows
+    bne .draw_right_wall_loop
+
+    rts
+
+    subroutine
+f_draw_level:
+    jsr f_draw_level_template                  ; first, draw the static template that each level has
+
+.check_level_1:
     lda what_level_tracker
     cmp #1
-    bne _check_level_2
+    bne .check_level_2
     lda #<level_1_data_start
     sta level_data_addr_low
     lda #>level_1_data_start
     sta level_data_addr_high
-    jmp _level_data_addr_set
+    jmp .level_data_addr_set
 
-_check_level_2:
+.check_level_2:
     lda what_level_tracker
     cmp #2
-    bne _check_level_3
+    bne .check_level_3
     lda #<level_2_data_start
     sta level_data_addr_low
     lda #>level_2_data_start
     sta level_data_addr_high
 
-_check_level_3:
+.check_level_3:
     lda what_level_tracker
     cmp #3
-    bne _check_level_4
+    bne .check_level_4
     lda #<level_3_data_start
     sta level_data_addr_low
     lda #>level_3_data_start
     sta level_data_addr_high
 
-_check_level_4:
+.check_level_4:
 
-_level_data_addr_set:
+.level_data_addr_set:
     ; read in the level data binary and draw it to the screen
 
     ldy #0                          
     ldx #0
-_read_char:
+.read_char:
     lda (level_data_addr_low),y
     cmp #$
-    beq _level_data_end
+    beq .level_data_end
 
     sta curr_char_code
     iny
@@ -195,11 +202,11 @@ _read_char:
     sta LOAD_ADDR_HIGH
     iny
 
-_store_char:
+.store_char:
     lda curr_char_code
     sta (LOAD_ADDR_LOW,x)
 
-    jmp _read_char    
+    jmp .read_char    
 
-_level_data_end:
+.level_data_end:
     rts

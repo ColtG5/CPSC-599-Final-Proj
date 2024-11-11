@@ -41,6 +41,7 @@ portal_placed        = $0E                    ; 1 if portal is placed, 0 if not
 previous_cursor_x    = $0F                    ; Previous cursor X position
 previous_cursor_y    = $10                    ; Previous cursor Y position
 blank_tile           = $11                    ; Blank tile for erasing
+curr_char_code       = $12                    ; Current character code
 
     org $1001, 0
     include "./src/extras/stub.s"
@@ -58,10 +59,10 @@ blank_tile           = $11                    ; Blank tile for erasing
     lda SCREEN_MEM_1
     sta blank_tile
 
-starting_loop:
+.starting_loop:
     jsr GETIN
     cmp #0
-    beq play_music_and_wait_input               ; Wait if no input detected
+    beq .play_music_and_wait_input               ; Wait if no input detected
 
     jsr f_clear_screen
     jsr f_draw_level                            ; Draw first level on input and start the game
@@ -80,49 +81,49 @@ starting_loop:
     sta previous_cursor_x
     lda cursor_y
     sta previous_cursor_y
-    jmp game_loop
+    jmp .game_loop
 
-play_music_and_wait_input:
+.play_music_and_wait_input:
     jsr f_play_melody                         ; Play titlescreen melody
-    jmp starting_loop                         ; Return to input loop
+    jmp .starting_loop                         ; Return to input loop
 
 ; Main Game Loop
-game_loop:
+.game_loop:
     jsr f_plot_portal                         ; Draw portal at current position
 
     jsr GETIN                                 ; Get player input
     cmp #0
-    beq game_loop                             ; Continue loop if no input
+    beq .game_loop                             ; Continue loop if no input
 
     cmp #KEY_SPACE                            ; Check for spacebar input for level change
-    beq f_next_level                          ; If spacebar pressed, go to next level
+    beq .next_level                          ; If spacebar pressed, go to next level
 
     sta current_byte_from_data                ; Store input temporarily
-    jsr f_handle_input                        ; Handle other inputs
-    jmp game_loop                             ; Repeat loop
+    jsr .f_handle_input                        ; Handle other inputs
+    jmp .game_loop                             ; Repeat loop
 
 ; Level Transition Function
-f_next_level:
+.next_level:
     lda what_level_tracker
 
     cmp #MAX_LEVEL                            ; Check if at the last level
-    bne _increment_level
+    bne .increment_level
     lda #1                                    ; Reset to the first level if at max
 
     sta what_level_tracker
     jsr f_set_color_mem_black
     jsr f_draw_titlescreen
-    jmp starting_loop
+    jmp .starting_loop
 
-_increment_level:
+.increment_level:
     inc what_level_tracker                    ; Move to next level
     jsr f_set_color_mem_black
     jsr f_clear_screen
     jsr f_draw_level
-    jmp game_loop
+    jmp .game_loop
 
 ; Input Handling Subroutine
-f_handle_input:
+.f_handle_input:
     lda current_byte_from_data
     cmp #KEY_W                                ; W key for up
     beq f_move_up

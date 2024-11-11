@@ -8,13 +8,15 @@ value = $06
 
 ; Used just for the compressed titlescreen right now, this decodes standard RLE encoded data
 ; TODO: use x reg as well as per A2 feedback to make code smaller
-f_rle_decoder:
+
+    subroutine
+f_rle_decoder
     lda #2                  ; init y to 2 (skip header of 001e)
     ldy #2
     ; lda #0
     ; ldy #0
     sta current_byte_from_data
-_decode_loop:
+.decode_loop:
     ; load the count from the encoded data
     ldy current_byte_from_data
 
@@ -30,9 +32,9 @@ _decode_loop:
     sty current_byte_from_data
 
     ; store the value to screen mem!!!
-_store_loop:
+.store_loop:
     lda count               ; load the count
-    beq _rle_end             ; count of 0 means we done entirely, exit condition here ! !
+    beq .rle_end             ; count of 0 means we done entirely, exit condition here ! !
 
     lda value               ; load the value
 
@@ -42,13 +44,13 @@ _store_loop:
     ldy #0
     sta (LOAD_ADDR_LOW),y   ; freaky store
     inc LOAD_ADDR_LOW       ; increment the low byte of the address
-    bne _no_high_inc         ; if it doesn't overflow, skip the high byte increment
+    bne .no_high_inc         ; if it doesn't overflow, skip the high byte increment
     inc LOAD_ADDR_HIGH      ; increment the high byte of the address if low byte overflowed
 
-_no_high_inc:
+.no_high_inc:
     dec count               ; dec count
-    beq _decode_loop         ; if count is 0, done w this value, go do another
-    bne _store_loop          ; if count is not 0, store another value
+    beq .decode_loop         ; if count is 0, done w this value, go do another
+    bne .store_loop          ; if count is not 0, store another value
 
-_rle_end:
+.rle_end:
     rts
