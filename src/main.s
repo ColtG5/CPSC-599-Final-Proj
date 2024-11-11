@@ -1,52 +1,11 @@
     processor 6502
-
-; Memory Locations and Constants
-CUSTOM_CHAR_MEM      = $1C00                  ; Custom character table start
-SCREEN_MEM_1         = $1E00                  ; Screen memory start
-SCREEN_MEM_2         = $1F00                  ; Additional screen memory
-COLOUR_MEM_1         = $9600                  ; Color memory start
-COLOUR_MEM_2         = $9700                  ; Additional color memory
-CHARSET_POINTER      = $9005                  ; Custom char table VIC chip address
-GETIN                = $FFE4                  ; Get input routine
-PLOT                 = $FFF0                  ; Plot character at X, Y coordinates
-CHROUT               = $FFD2                  ; Output character
-
-; Control Codes
-KEY_W                = 87                     ; W key for moving up
-KEY_A                = 65                     ; A key for moving left
-KEY_S                = 83                     ; S key for moving down
-KEY_D                = 68                     ; D key for moving right
-KEY_E                = 69                     ; E key to toggle portal
-KEY_SPACE            = $20                    ; Spacebar for level transition
-CURSOR_CHAR          = 50                     ; Character code for cursor
-PORTAL_CHAR          = 87                     ; Character code for portal
-MAX_LEVEL            = 3                      ; Maximum level count
-
-; Zero-page Variables
-DATA_ADDR_LOW        = $00                    ; Address for loading data (low byte)
-DATA_ADDR_HIGH       = $01                    ; Address for loading data (high byte)
-LOAD_ADDR_LOW        = $02
-LOAD_ADDR_HIGH       = $03
-current_byte_from_data = $04
-count                = $05
-value                = $06
-what_level_tracker   = $07                    ; Current level tracker
-level_data_addr_low  = $08                    ; Low byte of level data address
-level_data_addr_high = $09                    ; High byte of level data address
-cursor_x             = $0A                    ; Cursor X position
-cursor_y             = $0B                    ; Cursor Y position
-portal_x             = $0C                    ; Portal X position
-portal_y             = $0D                    ; Portal Y position
-portal_placed        = $0E                    ; 1 if portal is placed, 0 if not
-previous_cursor_x    = $0F                    ; Previous cursor X position
-previous_cursor_y    = $10                    ; Previous cursor Y position
-blank_tile           = $11                    ; Blank tile for erasing
-curr_char_code       = $12                    ; Current character code
-
     org $1001, 0
-    include "./src/extras/stub.s"
+    incdir "./src"
+    include "./setup/zero_page.s"
+    include "./setup/stub.s"
+    include "./setup/constants.s"
 
-    ; Initialize character set and display titlescreen
+    ; use custom character set
     lda #255
     sta CHARSET_POINTER
 
@@ -233,23 +192,23 @@ f_erase_cursor:
     rts
 
 ; Include supporting files as per conventions
-    include "./src/extras/util.s"                  ; Utility functions
-    include "./src/compression/rle_decode.s"       ; RLE decoder for titlescreen
-    include "./src/titlescreen/titlescreen.s"      ; Titlescreen logic
-    include "./src/levels/levels.s"                ; Level drawing functions
-    include "./src/music/titlescreen_music.s"      ; Titlescreen music functions
+    include "./extras/util.s"                  ; Utility functions
+    include "./compression/rle_decode.s"       ; RLE decoder for titlescreen
+    include "./titlescreen/titlescreen.s"      ; Titlescreen logic
+    include "./levels/levels.s"                ; Level drawing functions
+    include "./music/titlescreen_music.s"      ; Titlescreen music functions
 
 encoded_title_screen_data_start:
-    incbin "./src/titlescreen/titlescreen-rle-encoded.bin"
+    incbin "./titlescreen/titlescreen_rle_encoded.bin"
 
 level_1_data_start:
-    incbin "./src/levels/level1.bin"
+    incbin "./levels/level1.bin"
 
 level_2_data_start:
-    incbin "./src/levels/level2.bin"
+    incbin "./levels/level2.bin"
 
 level_3_data_start:
-    incbin "./src/levels/level3.bin"
+    incbin "./levels/level3.bin"
 
     org CUSTOM_CHAR_MEM
-    include "./src/extras/character-table.s"
+    include "./extras/character_table.s"
