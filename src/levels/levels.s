@@ -1,6 +1,6 @@
 DYNAMIC_LEVEL_NUM_SCREEN_MEM_ADDR = $1e2a
 ROW_LENGTH = 22
-NUM_OF_SIDE_WALLS = 11
+NUM_OF_SIDE_WALLS = 14
 
 
 ; function that draws the template for a level (top score, game border, etc.)
@@ -78,6 +78,7 @@ f_draw_game_border:                                    ; draw the game border
     ; $1fa1 is the bottom right corner of the game area
 
     lda #51             ; Character code for the top wall
+    ldx #0
 .draw_top_wall:
     sta $1e43,x         ; Write top wall starting from $1e43
     inx
@@ -85,7 +86,7 @@ f_draw_game_border:                                    ; draw the game border
     bne .draw_top_wall
 
     lda #53             ; Character code for the bottom wall
-    ldx #0              ; Reset X register for bottom wall
+    ldx #0
 .draw_bottom_wall:
     sta $1f8d,x         ; Write bottom wall starting from $1f8d
     inx
@@ -115,10 +116,8 @@ f_draw_game_border:                                    ; draw the game border
     sta LOAD_ADDR_HIGH
 
     inx
-    cpx NUM_OF_SIDE_WALLS    ; Check if we've reached the desired number of rows
+    cpx #NUM_OF_SIDE_WALLS    ; Check if we've reached the desired number of rows
     bne .draw_left_wall_loop
-
-    rts
 
 .draw_right_wall:
     lda #52                  ; Character code for right wall
@@ -143,7 +142,7 @@ f_draw_game_border:                                    ; draw the game border
     sta LOAD_ADDR_HIGH
 
     inx
-    cpx NUM_OF_SIDE_WALLS    ; Check if we've reached the desired number of rows
+    cpx #NUM_OF_SIDE_WALLS    ; Check if we've reached the desired number of rows
     bne .draw_right_wall_loop
 
     rts
