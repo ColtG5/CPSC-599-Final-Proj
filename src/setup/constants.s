@@ -10,6 +10,7 @@ CHARSET_POINTER      = $9005                  ; Custom char table VIC chip addre
 GETIN                = $FFE4                  ; Get input routine
 PLOT                 = $FFF0                  ; Plot character at X, Y coordinates
 CHROUT               = $FFD2                  ; Output character
+DYNAMIC_LEVEL_NUM    = $1e2a
 
 ; -------------- Other Constants ---------------
 KEY_W                = 87                     ; W key for moving up
@@ -21,3 +22,5 @@ KEY_SPACE            = $20                    ; Spacebar
 CURSOR_CHAR          = 50                     ; Character code for cursor
 PORTAL_CHAR          = 87                     ; Character code for portal
 MAX_LEVEL            = 3                      ; Maximum level count
+ROW_LENGTH           = 22                     ; Number of characters in a row
+NUM_OF_SIDE_WALLS    = 14                     ; Vertical count of the side walls

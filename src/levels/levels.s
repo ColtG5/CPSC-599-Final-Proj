@@ -1,8 +1,3 @@
-DYNAMIC_LEVEL_NUM_SCREEN_MEM_ADDR = $1e2a
-ROW_LENGTH = 22
-NUM_OF_SIDE_WALLS = 14
-
-
 ; function that draws the template for a level (top score, game border, etc.)
     subroutine
 f_draw_level_template:
@@ -44,20 +39,20 @@ f_draw_top_level:
     cmp #1
     bne .check_level_2
     lda #56                                     ; Character code for "1"
-    sta DYNAMIC_LEVEL_NUM_SCREEN_MEM_ADDR
+    sta DYNAMIC_LEVEL_NUM
     jmp .found
 
 .check_level_2:
     cmp #2
     bne .check_level_3
     lda #20                                     ; Character code for "2"
-    sta DYNAMIC_LEVEL_NUM_SCREEN_MEM_ADDR
+    sta DYNAMIC_LEVEL_NUM
 
 .check_level_3:
     cmp #3
     bne .check_level_4
     lda #57                                     ; Character code for "3"
-    sta DYNAMIC_LEVEL_NUM_SCREEN_MEM_ADDR
+    sta DYNAMIC_LEVEL_NUM
 
 .check_level_4:
 

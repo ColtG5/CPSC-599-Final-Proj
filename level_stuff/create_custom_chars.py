@@ -26,19 +26,6 @@ def clicked(btn, row, col):
         button_states[row][col] = 0
 
 
-# def export_character():
-#     char_name = simpledialog.askstring("Character Name", "Name for the character?")
-
-#     if char_name:
-#         with open("custom_chars.txt", "a") as f:
-
-
-#             # f.write(f"{char_name}\n")
-#             # for row in button_states:
-#             #     f.write("\tdc.b %" + "".join(str(x) for x in row) + "\n")
-#             # f.write("\n")
-
-
 def export_character():
     char_name = simpledialog.askstring("Character Name", "Name for the character?")
 

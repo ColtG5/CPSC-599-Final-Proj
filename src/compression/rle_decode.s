@@ -1,11 +1,3 @@
-DATA_ADDR_LOW = $00
-DATA_ADDR_HIGH = $01
-LOAD_ADDR_LOW = $02
-LOAD_ADDR_HIGH = $03
-current_byte_from_data = $04
-count = $05
-value = $06
-
 ; Used just for the compressed titlescreen right now, this decodes standard RLE encoded data
 ; TODO: use x reg as well as per A2 feedback to make code smaller
 
