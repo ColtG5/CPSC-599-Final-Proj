@@ -177,15 +177,44 @@ def export_screen_drawing():
             return
 
         with open(file_path, "w") as asm_file:
-            asm_file.write(
-                "CUSTOM_CHAR_MEM = $1c00\n"
-                "SCREEN_MEM = $1e00\n\n"
-                "\tprocessor 6502\n"
-                "\torg $1001, 0\n\n"
-                '\tinclude "./setup/stub.s"\n\n'
-                "\tlda #255\n"
-                "\tsta CHARSET_POINTER"
-                "\t; use outputted code from level_editor.py to draw the title screen\n\n"
+            asm_file.write("""
+CHARSET_POINTER = $9005
+CUSTOM_CHAR_MEM = $1c00
+SCREEN_MEM = $1e00
+COLOUR_MEM_1 = $9600
+COLOUR_MEM_2 = $9700
+CHROUT = $ffd2
+ADDRESS_LOW = $00
+ADDRESS_HIGH = $01
+
+	processor 6502
+	org $1001, 0
+	include "stub.s"
+
+	lda #147
+	jsr CHROUT
+
+	lda #255
+	sta CHARSET_POINTER	; use outputted code from level_editor.py to draw the title screen
+
+	; set colour mem to all black
+    ldx #0
+.color_stuff_1:
+    lda #0                          ; foreground black
+    sta COLOUR_MEM_1,x
+    inx
+    txa
+    bne .color_stuff_1
+
+.color_stuff_2:
+    lda #0
+    sta COLOUR_MEM_2,x
+    inx
+    txa
+    bne .color_stuff_2
+    
+    
+"""
             )
 
             for row in range(ROWS):
@@ -193,7 +222,7 @@ def export_screen_drawing():
                     character = level_grid[row][col] or empty_character
                     if character is not None and character != empty_character:
                         screen_address = 0x1E00 + row * COLS + col
-                        asm_file.write(f"\tlda #{str(hex(ITEM_CODES.get(character.name, 0x00)))[2:]}\n")
+                        asm_file.write(f"\tlda #{character}_code\n")
                         asm_file.write(f"\tsta ${str(hex(screen_address))[2:]}\n")
 
             asm_file.write("\nloop:\n\tjmp loop\n\n")

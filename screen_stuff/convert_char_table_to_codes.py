@@ -12,7 +12,7 @@ def generate_table_with_char_codes(input_file, output_file):
         modified_lines = []
         label_counter = 0
         for line in lines:
-            if line.strip():  # skips empty lines
+            if line.strip():  # dont wanna process empty lines below
                 if line[0].isdigit() or line[0].isalpha():  # label starts, need to change this line
                     # Construct a new label with the format `name_code = index`
                     label = line.split()[0]
@@ -22,6 +22,8 @@ def generate_table_with_char_codes(input_file, output_file):
                 else:
                     # Just add the line without modification
                     modified_lines.append(line)
+            else:
+                modified_lines.append(line)
 
         # Write the modified content to the output file
         with open(output_file, "w") as file:
