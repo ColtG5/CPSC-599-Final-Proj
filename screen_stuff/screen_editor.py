@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import simpledialog, messagebox
+from tkinter import simpledialog, filedialog, messagebox
 import os
 from PIL import Image
 import json
@@ -10,6 +10,7 @@ root.title("vic-20 screen editor")
 custom_char_table_file = "./character_tables/char_table.s"
 char_images_folder = "./custom_char_images"
 screens_folder = "./screens"
+draw_screens_folder = "../extra_prgs/"
 
 ROWS = 23
 COLS = 22
@@ -167,7 +168,42 @@ def clear_screen():
 
 # Export function, updated to use empty_character as needed
 def export_screen_drawing():
-    pass
+    try:
+        file_path = filedialog.asksaveasfilename(
+            title="Export Screen Drawing", defaultextension=".s", filetypes=[("Assembly files", "*.s"), ("All files", "*.*")], initialdir=draw_screens_folder
+        )
+        if not file_path:
+            messagebox.showwarning("Export Canceled", "No file path provided.")
+            return
+
+        with open(file_path, "w") as asm_file:
+            asm_file.write(
+                "CUSTOM_CHAR_MEM = $1c00\n"
+                "SCREEN_MEM = $1e00\n\n"
+                "\tprocessor 6502\n"
+                "\torg $1001, 0\n\n"
+                '\tinclude "./setup/stub.s"\n\n'
+                "\tlda #255\n"
+                "\tsta CHARSET_POINTER"
+                "\t; use outputted code from level_editor.py to draw the title screen\n\n"
+            )
+
+            for row in range(ROWS):
+                for col in range(COLS):
+                    character = level_grid[row][col] or empty_character
+                    if character is not None and character != empty_character:
+                        screen_address = 0x1E00 + row * COLS + col
+                        asm_file.write(f"\tlda #{str(hex(ITEM_CODES.get(character.name, 0x00)))[2:]}\n")
+                        asm_file.write(f"\tsta ${str(hex(screen_address))[2:]}\n")
+
+            asm_file.write("\nloop:\n\tjmp loop\n\n")
+            asm_file.write("\torg CUSTOM_CHAR_MEM\n")
+            asm_file.write('\tinclude "local_character_table.s"\n')
+
+        messagebox.showinfo("Export Successful", f"Assembly code saved to {file_path}")
+
+    except Exception as e:
+        messagebox.showerror("Export Failed", f"An error occurred: {e}")
 
 
 # Export binary level data
@@ -178,18 +214,12 @@ def export_level_data():
 # Export the grid data into a file that can be imported back into the program
 def export_screen():
     try:
-        # Create export data structure
         screen_data = {"grid": [[char.name if char else "empty_character" for char in row] for row in level_grid]}
 
-        # Ensure the screens folder exists
         os.makedirs(screens_folder, exist_ok=True)
+        file_path = filedialog.asksaveasfilename(initialdir=screens_folder, defaultextension=".json", filetypes=[("JSON files", "*.json")])
 
-        # Ask for file name
-        file_name = simpledialog.askstring("Export Screen", "Enter a file name for this screen:")
-        if file_name:
-            file_path = os.path.join(screens_folder, f"{file_name}.json")
-
-            # Write data to JSON file
+        if file_path:
             with open(file_path, "w") as file:
                 json.dump(screen_data, file, indent=4)
             messagebox.showinfo("Export Successful", f"Screen saved to {file_path}")
@@ -203,32 +233,26 @@ def export_screen():
 # Import the screen data from a file into the level grid
 def import_screen():
     try:
-        # Open file dialog to select JSON file to import
-        file_path = simpledialog.askstring("Import Screen", "Enter the file name to import (without extension):")
-        if file_path:
-            full_path = os.path.join(screens_folder, f"{file_path}.json")
+        file_path = filedialog.askopenfilename(initialdir=screens_folder, filetypes=[("JSON files", "*.json")])
 
-            # Load the data from JSON file
-            with open(full_path, "r") as file:
+        if file_path:
+            with open(file_path, "r") as file:
                 screen_data = json.load(file)
 
-            # Update level grid with imported characters
             for row in range(ROWS):
                 for col in range(COLS):
                     char_name = screen_data["grid"][row][col]
-                    # If the char_name from the level data isn't in the characters dict, throw an error!!
+                    # If the char_name from the level data isn't in the characters dict, throw an error
                     if not char_name in characters:
                         raise UnrecognizedCharacterError(char_name)
 
                     level_grid[row][col] = characters.get(char_name, empty_character)
                     update_grid_cell(row, col)
-
-            messagebox.showinfo("Import Successful", f"Screen imported from {full_path}")
         else:
-            messagebox.showwarning("Import Canceled", "No file name was provided.")
+            messagebox.showwarning("Import Canceled", "No file was selected.")
 
     except FileNotFoundError:
-        messagebox.showerror("File Not Found", f"File {file_path}.json does not exist.")
+        messagebox.showerror("File Not Found", f"File does not exist.")
     except UnrecognizedCharacterError as e:
         messagebox.showerror("Import Failed", f"Import failed: {e}.")
     except Exception as e:
