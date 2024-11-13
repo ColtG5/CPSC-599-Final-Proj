@@ -1,8 +1,9 @@
-header_size = 2 # 001e
+input_file = "level-template"
 
+header_size = 2 # 001e
 data = []
 
-with open("title_screen_y.bin", "rb") as file:
+with open(input_file + ".bin", "rb") as file:
     while byte := file.read(1):
         data.append(byte[0])
 
@@ -25,5 +26,5 @@ while i < len(data):
     
 encoded_data.extend([0]) # count of 0 to signify end
 
-with open("titlescreen-rle-encoded.bin", "wb") as file:
+with open(input_file + "-rle-encoded.bin", "wb") as file:
     file.write(encoded_data)

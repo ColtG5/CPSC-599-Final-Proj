@@ -13,7 +13,7 @@ def generate_table_with_char_codes(input_file, output_file):
         label_counter = 0
         for line in lines:
             if line.strip():  # dont wanna process empty lines below
-                if line[0].isdigit() or line[0].isalpha():  # label starts, need to change this line
+                if not line.startswith("\t"): # give a code to every line that isnt blank space and isnt tabbed
                     # Construct a new label with the format `name_code = index`
                     label = line.split()[0]
                     modified_label = f"{label}_code = {label_counter}\n"

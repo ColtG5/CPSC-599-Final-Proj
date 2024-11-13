@@ -1,7 +1,7 @@
 header_size = 2  # 001e
 
 encoded_data = []
-with open("titlescreen-rle-encoded.bin", "rb") as file:
+with open("level_template.bin", "rb") as file:
     while byte := file.read(1):
         encoded_data.append(byte[0])
 
