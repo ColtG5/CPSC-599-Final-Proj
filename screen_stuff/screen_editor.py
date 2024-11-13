@@ -79,6 +79,13 @@ def load_and_create_character_images():
 
                 elif line and not line.startswith("dc.b"):
                     char_name = line
+                 
+            # last character gets skipped by above logic! grab it here 
+            if current_char and char_name:
+                characters[char_name] = Character(char_name, current_char)
+                create_and_store_image(characters[char_name])
+                if char_name == "empty_character":
+                    empty_character = characters[char_name]
 
             update_sidebar()
     except FileNotFoundError:
