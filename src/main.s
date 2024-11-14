@@ -159,7 +159,7 @@ f_draw_cursor:
     ldy cursor_x
     clc
     jsr PLOT
-    lda #CURSOR_CHAR                           ; Custom cursor character code
+    lda #cursor_code                           ; Custom cursor character code
     jsr CHROUT
 
     ; Update previous cursor position
@@ -176,7 +176,7 @@ f_plot_portal:
     ldy portal_x
     clc
     jsr PLOT
-    lda #PORTAL_CHAR                           ; Custom portal character code
+    lda #portal_code                           ; Custom portal character code
     jsr CHROUT
 _skip_plot_portal:
     rts
@@ -191,7 +191,7 @@ f_erase_cursor:
     jsr CHROUT                                 ; Write blank tile to previous cursor position
     rts
 
-; Include supporting files as per conventions
+; Include supporting files
     include "./extras/util.s"                  ; Utility functions
     include "./compression/rle_decode.s"       ; RLE decoder for titlescreen
     include "./titlescreen/titlescreen.s"      ; Titlescreen logic
