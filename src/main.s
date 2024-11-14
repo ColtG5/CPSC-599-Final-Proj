@@ -24,7 +24,7 @@
     beq .play_music_and_wait_input               ; Wait if no input detected
 
     jsr f_clear_screen
-    jsr f_draw_level                            ; Draw first level on input and start the game
+    jsr f_draw_next_level                            ; Draw first level on input and start the game
     lda #8                                      ; Initialize cursor and portal positions
     sta cursor_x
     lda #5
@@ -78,7 +78,7 @@
     inc what_level_tracker                    ; Move to next level
     jsr f_set_color_mem_black
     jsr f_clear_screen
-    jsr f_draw_level
+    jsr f_draw_next_level
     jmp .game_loop
 
 ; Input Handling Subroutine
@@ -200,6 +200,9 @@ f_erase_cursor:
 
 encoded_title_screen_data_start:
     incbin "./titlescreen/titlescreen_rle_encoded.bin"
+
+level_template_data_start:
+    incbin "./levels/level_template_rle_encoded.bin"
 
 level_1_data_start:
     incbin "./levels/level1.bin"

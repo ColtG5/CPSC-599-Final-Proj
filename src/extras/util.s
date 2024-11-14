@@ -20,15 +20,15 @@ f_set_color_mem_black:
 
     subroutine
 f_clear_screen:
-.clear_screen_mem_1:         ; write a blank character to all of screen mem (used to be blank charcters, but we changed the character code for blank character)
-    lda #40                 ; goob_16 character is secretly a blank character (and its character code 40)
+.clear_screen_mem_1:
+    lda #empty_character_code
     sta SCREEN_MEM_1,x
     inx
     txa
     bne .clear_screen_mem_1
 
 .clear_screen_mem_2:
-    lda #40
+    lda #empty_character_code
     sta SCREEN_MEM_2,x
     inx
     txa

@@ -1,4 +1,4 @@
-input_file = "level-template"
+input_file = "titlescreen"
 
 header_size = 2 # 001e
 data = []

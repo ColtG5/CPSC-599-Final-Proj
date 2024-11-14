@@ -3,6 +3,12 @@
 
     subroutine
 f_rle_decoder
+    ; reset zero page addresses we use
+    lda #0
+    sta current_byte_from_data
+    sta count
+    sta value
+
     lda #2                  ; init y to 2 (skip header of 001e)
     ldy #2
     ; lda #0
