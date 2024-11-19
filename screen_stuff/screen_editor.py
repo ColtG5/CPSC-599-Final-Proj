@@ -10,21 +10,13 @@ root.title("vic-20 screen editor")
 custom_char_table_file = "./character_tables/char_table.s"
 char_images_folder = "./custom_char_images"
 screens_folder = "./screens"
+level_bins_folder = "./level_bins"
 draw_screens_folder = "../extra_prgs/"
 
 ROWS = 23
 COLS = 22
 CHAR_IMG_SIZE = 8
 ZOOM_FACTOR = 4
-
-ITEM_CODES = {
-    "Wall": 0x01,
-    "laser_shooter": 0x02,
-    "laser_receptor": 0x03,
-    "reflector_1": 0x04,
-    "reflector_2": 0x05,
-    "portal": 0x06,
-}
 
 
 class Character:
@@ -79,8 +71,8 @@ def load_and_create_character_images():
 
                 elif line and not line.startswith("dc.b"):
                     char_name = line
-                 
-            # last character gets skipped by above logic! grab it here 
+
+            # last character gets skipped by above logic! grab it here
             if current_char and char_name:
                 characters[char_name] = Character(char_name, current_char)
                 create_and_store_image(characters[char_name])
@@ -184,7 +176,8 @@ def export_screen_drawing():
             return
 
         with open(file_path, "w") as asm_file:
-            asm_file.write("""
+            asm_file.write(
+                """
 CHARSET_POINTER = $9005
 CUSTOM_CHAR_MEM = $1c00
 SCREEN_MEM = $1e00
@@ -244,7 +237,75 @@ ADDRESS_HIGH = $01
 
 # Export binary level data
 def export_level_data():
-    pass
+    try:
+        save_file_path = filedialog.asksaveasfilename(
+            title="Export Level Data", defaultextension=".bin", filetypes=[("Binary files", "*.bin"), ("All files", "*.*")], initialdir=level_bins_folder
+        )
+        if not save_file_path:
+            messagebox.showwarning("Export Canceled", "No file path provided.")
+            return
+
+        # index of character into character list is its code to write in binary form
+        character_list = []
+
+        with open(custom_char_table_file, "r") as file:
+            for line in file:
+                line = line.strip()
+                if not line.startswith("dc.b") and line:
+                    character_name = line
+                    character_list.append(character_name)
+
+        level_stuff = []
+        # go through the grid, and store "character": x,y
+        # walls are a special case. for wall characters, store wall character, [x, y, x, y, ...] for however many walls there are (3 walls means 3 pairs of x,y coords)
+
+        binary_data = bytearray()
+        wall_characters = {}
+
+        print(character_list)
+
+        # binary encoded data form: char_code, x, y
+        # end level data with 0xFF
+        for row in range(ROWS):
+            for col in range(COLS):
+                character = level_grid[row][col] or empty_character
+                if character != empty_character:
+                    character_name = character.name
+
+                    if character_name.startswith("wall"):
+                        if character_name not in wall_characters:
+                            wall_characters[character_name] = []
+                        wall_characters[character_name].append((col, row))
+                    else:
+                        # Non-wall characters: encode as (char_code, x, y)
+                        char_code = character_list.index(character_name)
+                        # the coordinate shoydl be x,y so two bytes
+                        coord_x = col.to_bytes(1, "little")
+                        coord_y = row.to_bytes(1, "little")
+                        binary_data.append(char_code)
+                        binary_data.extend(coord_x)
+                        binary_data.extend(coord_y)
+
+        # Add wall data at the end
+        if wall_characters:
+            for wall_char, positions in wall_characters.items():
+                char_code = character_list.index(wall_char)
+                binary_data.append(char_code)
+                for col, row in positions:
+                    coord_x = col.to_bytes(1, "little")
+                    coord_y = row.to_bytes(1, "little")
+                    binary_data.extend(coord_x)
+                    binary_data.extend(coord_y)
+
+        # End the level data with 0xFF
+        binary_data.append(0xFF)
+
+        with open(save_file_path, "wb") as bin_file:
+            bin_file.write(binary_data)
+        messagebox.showinfo("Export Successful", f"Level data saved to {save_file_path}")
+
+    except Exception as e:
+        messagebox.showerror("Export Failed", f"An error occurred: {e}")
 
 
 # Export the grid data into a file that can be imported back into the program
