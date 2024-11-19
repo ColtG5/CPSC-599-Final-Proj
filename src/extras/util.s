@@ -35,3 +35,10 @@ f_clear_screen:
     bne .clear_screen_mem_2
 
     rts
+
+; Check collision between cursor and anything in the level
+    subroutine
+f_check_collision:
+    
+    
+    rts

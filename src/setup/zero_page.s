@@ -14,11 +14,11 @@ level_data_addr_low         ds.b 1      ; low byte of level data address
 level_data_addr_high        ds.b 1      ; high byte of level data address
 cursor_x                    ds.b 1      ; cursor X position
 cursor_y                    ds.b 1      ; cursor Y position
-portal_x                    ds.b 1      ; portal X position
-portal_y                    ds.b 1      ; portal Y position
-portal_placed               ds.b 1      ; 1 if portal is placed, 0 if not
-previous_cursor_x           ds.b 1      ; previous cursor X position
-previous_cursor_y           ds.b 1      ; previous cursor Y position
-blank_tile                  ds.b 1      ; blank tile for erasing
-curr_char_code              ds.b 1      ; current character code
+; portal_x                    ds.b 1      ; portal X position
+; portal_y                    ds.b 1      ; portal Y position
+; portal_placed               ds.b 1      ; 1 if portal is placed, 0 if not
+; previous_cursor_x           ds.b 1      ; previous cursor X position
+; previous_cursor_y           ds.b 1      ; previous cursor Y position
+; blank_tile                  ds.b 1      ; blank tile for erasing
+curr_char_code              ds.b 1      ; current character code, used in level.s for reading in char codes from level data bin
     seg

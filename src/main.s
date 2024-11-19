@@ -81,115 +81,115 @@
     jsr f_draw_next_level
     jmp .game_loop
 
-; Input Handling Subroutine
-.f_handle_input:
-    lda current_byte_from_data
-    cmp #KEY_W                                ; W key for up
-    beq f_move_up
-    cmp #KEY_A                                ; A key for left
-    beq f_move_left
-    cmp #KEY_S                                ; S key for down
-    beq f_move_down
-    cmp #KEY_D                                ; D key for right
-    beq f_move_right
-    cmp #KEY_E                                ; E key to pick/place portal
-    beq f_toggle_portal
-    rts
+; ; Input Handling Subroutine
+; .f_handle_input:
+;     lda current_byte_from_data
+;     cmp #KEY_W                                ; W key for up
+;     beq f_move_up
+;     cmp #KEY_A                                ; A key for left
+;     beq f_move_left
+;     cmp #KEY_S                                ; S key for down
+;     beq f_move_down
+;     cmp #KEY_D                                ; D key for right
+;     beq f_move_right
+;     cmp #KEY_E                                ; E key to pick/place portal
+;     beq f_toggle_portal
+;     rts
 
-; Movement Functions
-f_move_up:
-    jsr f_erase_cursor                        ; Erase cursor at previous position
-    dec cursor_y
-    jsr f_draw_cursor
-    rts
+; ; Movement Functions
+; f_move_up:
+;     jsr f_erase_cursor                        ; Erase cursor at previous position
+;     dec cursor_y
+;     jsr f_draw_cursor
+;     rts
 
-f_move_left:
-    jsr f_erase_cursor                        ; Erase cursor at previous position
-    dec cursor_x
-    jsr f_draw_cursor
-    rts
+; f_move_left:
+;     jsr f_erase_cursor                        ; Erase cursor at previous position
+;     dec cursor_x
+;     jsr f_draw_cursor
+;     rts
 
-f_move_down:
-    jsr f_erase_cursor                        ; Erase cursor at previous position
-    inc cursor_y
-    jsr f_draw_cursor
-    rts
+; f_move_down:
+;     jsr f_erase_cursor                        ; Erase cursor at previous position
+;     inc cursor_y
+;     jsr f_draw_cursor
+;     rts
 
-f_move_right:
-    jsr f_erase_cursor                        ; Erase cursor at previous position
-    inc cursor_x
-    jsr f_draw_cursor
-    rts
+; f_move_right:
+;     jsr f_erase_cursor                        ; Erase cursor at previous position
+;     inc cursor_x
+;     jsr f_draw_cursor
+;     rts
 
-; Portal Placement Toggle Function
-f_toggle_portal:
-    lda portal_placed
-    beq _place_portal                          ; Place portal if not already placed
-    jsr f_pickup_portal                        ; Otherwise, pick it up
-    rts
+; ; Portal Placement Toggle Function
+; f_toggle_portal:
+;     lda portal_placed
+;     beq _place_portal                          ; Place portal if not already placed
+;     jsr f_pickup_portal                        ; Otherwise, pick it up
+;     rts
 
-_place_portal:
-    lda cursor_x
-    sta portal_x
-    lda cursor_y
-    sta portal_y
-    lda #1
-    sta portal_placed
-    rts
+; _place_portal:
+;     lda cursor_x
+;     sta portal_x
+;     lda cursor_y
+;     sta portal_y
+;     lda #1
+;     sta portal_placed
+;     rts
 
-f_pickup_portal:
-    lda portal_x
-    cmp cursor_x
-    bne _end_toggle
-    lda portal_y
-    cmp cursor_y
-    bne _end_toggle
-    lda #0
-    sta portal_placed                          ; Unset portal if picked up
-_end_toggle:
-    rts
+; f_pickup_portal:
+;     lda portal_x
+;     cmp cursor_x
+;     bne _end_toggle
+;     lda portal_y
+;     cmp cursor_y
+;     bne _end_toggle
+;     lda #0
+;     sta portal_placed                          ; Unset portal if picked up
+; _end_toggle:
+;     rts
 
-; Drawing Functions
-f_draw_cursor:
-    ; Erase previous position
-    jsr f_erase_cursor
+; ; Drawing Functions
+; f_draw_cursor:
+;     ; Erase previous position
+;     jsr f_erase_cursor
 
-    ; Draw cursor at new position
-    ldx cursor_y
-    ldy cursor_x
-    clc
-    jsr PLOT
-    lda #cursor_code                           ; Custom cursor character code
-    jsr CHROUT
+;     ; Draw cursor at new position
+;     ldx cursor_y
+;     ldy cursor_x
+;     clc
+;     jsr PLOT
+;     lda #cursor_code                           ; Custom cursor character code
+;     jsr CHROUT
 
-    ; Update previous cursor position
-    lda cursor_x
-    sta previous_cursor_x
-    lda cursor_y
-    sta previous_cursor_y
-    rts
+;     ; Update previous cursor position
+;     lda cursor_x
+;     sta previous_cursor_x
+;     lda cursor_y
+;     sta previous_cursor_y
+;     rts
 
-f_plot_portal:
-    lda portal_placed
-    beq _skip_plot_portal                      ; Skip if portal not placed
-    ldx portal_y
-    ldy portal_x
-    clc
-    jsr PLOT
-    lda #portal_code                           ; Custom portal character code
-    jsr CHROUT
-_skip_plot_portal:
-    rts
+; f_plot_portal:
+;     lda portal_placed
+;     beq _skip_plot_portal                      ; Skip if portal not placed
+;     ldx portal_y
+;     ldy portal_x
+;     clc
+;     jsr PLOT
+;     lda #portal_code                           ; Custom portal character code
+;     jsr CHROUT
+; _skip_plot_portal:
+;     rts
 
-f_erase_cursor:
-    ; Erase previous cursor position with blank tile
-    ldx previous_cursor_y
-    ldy previous_cursor_x
-    clc
-    jsr PLOT
-    lda blank_tile                             ; Load the blank tile character
-    jsr CHROUT                                 ; Write blank tile to previous cursor position
-    rts
+; f_erase_cursor:
+;     ; Erase previous cursor position with blank tile
+;     ldx previous_cursor_y
+;     ldy previous_cursor_x
+;     clc
+;     jsr PLOT
+;     lda blank_tile                             ; Load the blank tile character
+;     jsr CHROUT                                 ; Write blank tile to previous cursor position
+;     rts
 
 ; Include supporting files
     include "./extras/util.s"                  ; Utility functions
