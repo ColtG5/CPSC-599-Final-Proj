@@ -42,10 +42,35 @@ f_draw_level_template:
 f_draw_level_data:
     ; put the correct num in the top right for level indicator
 
-
-
     ; draw the dynamic level data from the appropriate level bin
 
+    ; Construct the dynamic label name for the level data
+    lda #<level_, what_level_tracker, _data_start
+    sta DATA_ADDR_LOW        ; Store low byte of level data address
+    lda #>level_, what_level_tracker, _data_start
+    sta DATA_ADDR_HIGH       ; Store high byte of level data address
+
+    ldy #0                   ; Initialize index
+.loop_draw_level_data:
+    lda (DATA_ADDR_LOW),y    ; Read byte from level data
+    beq .end_of_data         ; Stop if end of data (0 byte)
+
+    sta TMP_CHAR_CODE        ; Temporarily store character code
+    iny                      ; Increment index
+
+    lda (DATA_ADDR_LOW),y    ; Read X coordinate
+    sta TMP_X
+    iny
+
+    lda (DATA_ADDR_LOW),y    ; Read Y coordinate
+    sta TMP_Y
+    iny
+
+    jsr f_draw_char          ; Draw the character at (TMP_X, TMP_Y)
+    jmp .loop_draw_level_data
+
+.end_of_data:
+    rts
 
     rts
 

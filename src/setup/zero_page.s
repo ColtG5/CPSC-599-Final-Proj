@@ -21,4 +21,7 @@ cursor_y                    ds.b 1      ; cursor Y position
 ; previous_cursor_y           ds.b 1      ; previous cursor Y position
 ; blank_tile                  ds.b 1      ; blank tile for erasing
 curr_char_code              ds.b 1      ; current character code, used in level.s for reading in char codes from level data bin
+TMP_X                       ds.b 1      ; temporary X coordinate
+TMP_Y                       ds.b 1      ; temporary Y coordinate
+TMP_CHAR_CODE               ds.b 1      ; temporary character code
     seg

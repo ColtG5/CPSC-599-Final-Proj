@@ -25,16 +25,16 @@
 
     jsr f_clear_screen
     jsr f_draw_next_level                            ; Draw first level on input and start the game
-    lda #8                                      ; Initialize cursor and portal positions
-    sta cursor_x
-    lda #5
-    sta cursor_y
-    lda #8
-    sta portal_x
-    lda #8
-    sta portal_y
-    lda #1
-    sta portal_placed
+    ; lda #8                                      ; Initialize cursor and portal positions
+    ; sta cursor_x
+    ; lda #5
+    ; sta cursor_y
+    ; lda #8
+    ; sta portal_x
+    ; lda #8
+    ; sta portal_y
+    ; lda #1
+    ; sta portal_placed
 
     lda cursor_x                              ; Store initial cursor position
     sta previous_cursor_x
