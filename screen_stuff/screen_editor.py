@@ -272,30 +272,38 @@ def export_level_data():
                 if character != empty_character:
                     character_name = character.name
 
-                    if character_name.startswith("wall"):
-                        if character_name not in wall_characters:
-                            wall_characters[character_name] = []
-                        wall_characters[character_name].append((col, row))
-                    else:
-                        # Non-wall characters: encode as (char_code, x, y)
-                        char_code = character_list.index(character_name)
-                        # the coordinate shoydl be x,y so two bytes
-                        coord_x = col.to_bytes(1, "little")
-                        coord_y = row.to_bytes(1, "little")
-                        binary_data.append(char_code)
-                        binary_data.extend(coord_x)
-                        binary_data.extend(coord_y)
-
-        # Add wall data at the end
-        if wall_characters:
-            for wall_char, positions in wall_characters.items():
-                char_code = character_list.index(wall_char)
-                binary_data.append(char_code)
-                for col, row in positions:
+                    # if character_name.startswith("wall"):
+                    #     if character_name not in wall_characters:
+                    #         wall_characters[character_name] = []
+                    #     wall_characters[character_name].append((col, row))
+                    # else:
+                    #     # Non-wall characters: encode as (char_code, x, y)
+                    #     char_code = character_list.index(character_name)
+                    #     # the coordinate shoydl be x,y so two bytes
+                    #     coord_x = col.to_bytes(1, "little")
+                    #     coord_y = row.to_bytes(1, "little")
+                    #     binary_data.append(char_code)
+                    #     binary_data.extend(coord_x)
+                    #     binary_data.extend(coord_y)
+                    
+                    char_code = character_list.index(character_name)
+                    # the coordinate shoydl be x,y so two bytes
                     coord_x = col.to_bytes(1, "little")
                     coord_y = row.to_bytes(1, "little")
+                    binary_data.append(char_code)
                     binary_data.extend(coord_x)
                     binary_data.extend(coord_y)
+
+        # # Add wall data at the end
+        # if wall_characters:
+        #     for wall_char, positions in wall_characters.items():
+        #         char_code = character_list.index(wall_char)
+        #         binary_data.append(char_code)
+        #         for col, row in positions:
+        #             coord_x = col.to_bytes(1, "little")
+        #             coord_y = row.to_bytes(1, "little")
+        #             binary_data.extend(coord_x)
+        #             binary_data.extend(coord_y)
 
         # End the level data with 0xFF
         binary_data.append(0xFF)
