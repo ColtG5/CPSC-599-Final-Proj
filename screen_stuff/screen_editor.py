@@ -262,7 +262,7 @@ def export_level_data():
         binary_data = bytearray()
         wall_characters = {}
 
-        print(character_list)
+        # print(character_list)
 
         # binary encoded data form: char_code, x, y
         # end level data with 0xFF

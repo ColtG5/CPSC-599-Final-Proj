@@ -66,11 +66,22 @@ f_draw_level_data:
     sta TMP_Y
     iny
 
-    jsr f_draw_char          ; Draw the character at (TMP_X, TMP_Y)
+    jsr f_draw_char_to_screen_mem          ; Draw the character at (TMP_X, TMP_Y)
     jmp .loop_draw_level_data
 
 .end_of_data:
     rts
+
+    subroutine
+f_draw_char_to_screen_mem:
+    ; get the screen mem addr for the char, and draw it 
+    ldx TMP_X
+    ldy TMP_Y
+    jsr f_convert_xy_to_screen_mem_addr
+
+    lda TMP_CHAR_CODE
+    ldy #0
+    sta (SCREEN_MEM_ADDR_COORD),y     ; Draw the character to screen mem
 
     rts
 

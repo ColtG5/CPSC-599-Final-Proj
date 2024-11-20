@@ -24,4 +24,5 @@ curr_char_code              ds.b 1      ; current character code, used in level.
 TMP_X                       ds.b 1      ; temporary X coordinate
 TMP_Y                       ds.b 1      ; temporary Y coordinate
 TMP_CHAR_CODE               ds.b 1      ; temporary character code
+x_y_to_screen_mem_output    ds.b 2      ; output of f_convert_xy_to_screen_mem_addr
     seg
