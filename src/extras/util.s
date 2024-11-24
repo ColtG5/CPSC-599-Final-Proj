@@ -73,14 +73,17 @@ f_convert_xy_to_screen_mem_addr:
 	; load x with how many times we want to repeatedly add 22 to acc
 	sta func_arg_1_z
 	jsr f_multiply_by_22
-	lda func_output_1_z
+	
+    ; Add the low byte of the result to the screen memory address
+    lda func_output_low_z    ; Load the low byte of the multiplication result
+    clc                      ; Clear carry for addition
+    adc screen_mem_addr_coord_z
+    sta screen_mem_addr_coord_z
 
-	clc
-	adc screen_mem_addr_coord_z
-	sta screen_mem_addr_coord_z
-	lda #0
-	adc screen_mem_addr_coord_z+1
-	sta screen_mem_addr_coord_z+1
+    ; Add the high byte of the result to the high byte of the screen memory address
+    lda func_output_high_z   ; Load the high byte of the multiplication result
+    adc screen_mem_addr_coord_z+1
+    sta screen_mem_addr_coord_z+1
 
 	rts
 
@@ -110,15 +113,23 @@ f_convert_xy_to_screen_mem_addr:
 ;    func_output_1_z: result of the multiplication
 	subroutine
 f_multiply_by_22:
-	lda #0
-	ldx func_arg_1_z
+    lda #0                   ; Clear A for the result
+    sta func_output_low_z    ; Initialize low byte to 0
+    sta func_output_high_z   ; Initialize high byte to 0
+
+    ldx func_arg_1_z         ; Load the multiplier into X
+    lda #0                   ; Clear A to use for addition
 	jmp .mul_loop_test
+
 .mul_loop:
-	clc
-	adc #NUM_OF_COLUMNS
-	dex
-.mul_loop_test
-	cpx #0
-	bne .mul_loop
-	sta func_output_1_z
-	rts
+    clc                      ; Clear carry for addition
+    adc #22                  ; Add 22 (multiplicand) to A
+    bcc .no_carry            ; If no carry, skip overflow handling
+    inc func_output_high_z   ; Increment high byte on carry
+.no_carry:
+    dex                      ; Decrement X (loop counter)
+.mul_loop_test:
+	cpx #0                   ; Check if X > 0
+    bne .mul_loop            ; Repeat if X > 0
+    sta func_output_low_z    ; Store final low byte result
+    rts                      ; Return from subroutine

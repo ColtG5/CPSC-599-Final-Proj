@@ -21,6 +21,7 @@ tmp_x_z                       ds.b 1      ; temporary X coordinate
 tmp_y_z                       ds.b 1      ; temporary Y coordinate
 tmp_char_code_z               ds.b 1      ; temporary character code
 func_arg_1_z                  ds.b 1      ; function argument 1
-func_output_1_z               ds.b 1      ; function output 1
+func_output_low_z             ds.b 1      ; function output 1 (low byte)
+func_output_high_z            ds.b 1      ; function output 2 (high byte)
 x_y_to_screen_mem_output_z    ds.b 2      ; output of f_convert_xy_to_screen_mem_addr
     seg
