@@ -195,7 +195,7 @@ ADDRESS_HIGH = $01
 	jsr CHROUT
 
 	lda #255
-	sta CHARSET_POINTER	; use outputted code from level_editor.py to draw the title screen
+	sta CHARSET_POINTER
 
 	; set colour mem to all black
     ldx #0

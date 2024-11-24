@@ -11,12 +11,9 @@
 
     ; Initialize variables and start titlescreen
     lda #1
-    sta what_level_tracker
+    sta what_level_tracker_z
     jsr f_set_color_mem_black
     jsr f_draw_titlescreen
-
-    lda SCREEN_MEM_1
-    sta blank_tile
 
 .starting_loop:
     jsr GETIN
@@ -25,21 +22,7 @@
 
     jsr f_clear_screen
     jsr f_draw_next_level                            ; Draw first level on input and start the game
-    ; lda #8                                      ; Initialize cursor and portal positions
-    ; sta cursor_x
-    ; lda #5
-    ; sta cursor_y
-    ; lda #8
-    ; sta portal_x
-    ; lda #8
-    ; sta portal_y
-    ; lda #1
-    ; sta portal_placed
 
-    lda cursor_x                              ; Store initial cursor position
-    sta previous_cursor_x
-    lda cursor_y
-    sta previous_cursor_y
     jmp .game_loop
 
 .play_music_and_wait_input:
@@ -48,7 +31,7 @@
 
 ; Main Game Loop
 .game_loop:
-    jsr f_plot_portal                         ; Draw portal at current position
+    ; jsr f_plot_portal                         ; Draw portal at current position
 
     jsr GETIN                                 ; Get player input
     cmp #0
@@ -57,25 +40,25 @@
     cmp #KEY_SPACE                            ; Check for spacebar input for level change
     beq .next_level                          ; If spacebar pressed, go to next level
 
-    sta current_byte_from_data                ; Store input temporarily
-    jsr .f_handle_input                        ; Handle other inputs
+    sta current_byte_from_data_z                ; Store input temporarily
+    ; jsr .f_handle_input                        ; Handle other inputs
     jmp .game_loop                             ; Repeat loop
 
 ; Level Transition Function
 .next_level:
-    lda what_level_tracker
+    lda what_level_tracker_z
 
     cmp #MAX_LEVEL                            ; Check if at the last level
     bne .increment_level
-    lda #1                                    ; Reset to the first level if at max
 
-    sta what_level_tracker
+    lda #1                                    ; Reset to the first level if at max
+    sta what_level_tracker_z
     jsr f_set_color_mem_black
     jsr f_draw_titlescreen
     jmp .starting_loop
 
 .increment_level:
-    inc what_level_tracker                    ; Move to next level
+    inc what_level_tracker_z                    ; Move to next level
     jsr f_set_color_mem_black
     jsr f_clear_screen
     jsr f_draw_next_level
@@ -83,7 +66,7 @@
 
 ; ; Input Handling Subroutine
 ; .f_handle_input:
-;     lda current_byte_from_data
+;     lda current_byte_from_data_z
 ;     cmp #KEY_W                                ; W key for up
 ;     beq f_move_up
 ;     cmp #KEY_A                                ; A key for left
@@ -99,96 +82,26 @@
 ; ; Movement Functions
 ; f_move_up:
 ;     jsr f_erase_cursor                        ; Erase cursor at previous position
-;     dec cursor_y
+;     dec cursor_y_z
 ;     jsr f_draw_cursor
 ;     rts
 
 ; f_move_left:
 ;     jsr f_erase_cursor                        ; Erase cursor at previous position
-;     dec cursor_x
+;     dec cursor_x_z
 ;     jsr f_draw_cursor
 ;     rts
 
 ; f_move_down:
 ;     jsr f_erase_cursor                        ; Erase cursor at previous position
-;     inc cursor_y
+;     inc cursor_y_z
 ;     jsr f_draw_cursor
 ;     rts
 
 ; f_move_right:
 ;     jsr f_erase_cursor                        ; Erase cursor at previous position
-;     inc cursor_x
+;     inc cursor_x_z
 ;     jsr f_draw_cursor
-;     rts
-
-; ; Portal Placement Toggle Function
-; f_toggle_portal:
-;     lda portal_placed
-;     beq _place_portal                          ; Place portal if not already placed
-;     jsr f_pickup_portal                        ; Otherwise, pick it up
-;     rts
-
-; _place_portal:
-;     lda cursor_x
-;     sta portal_x
-;     lda cursor_y
-;     sta portal_y
-;     lda #1
-;     sta portal_placed
-;     rts
-
-; f_pickup_portal:
-;     lda portal_x
-;     cmp cursor_x
-;     bne _end_toggle
-;     lda portal_y
-;     cmp cursor_y
-;     bne _end_toggle
-;     lda #0
-;     sta portal_placed                          ; Unset portal if picked up
-; _end_toggle:
-;     rts
-
-; ; Drawing Functions
-; f_draw_cursor:
-;     ; Erase previous position
-;     jsr f_erase_cursor
-
-;     ; Draw cursor at new position
-;     ldx cursor_y
-;     ldy cursor_x
-;     clc
-;     jsr PLOT
-;     lda #cursor_code                           ; Custom cursor character code
-;     jsr CHROUT
-
-;     ; Update previous cursor position
-;     lda cursor_x
-;     sta previous_cursor_x
-;     lda cursor_y
-;     sta previous_cursor_y
-;     rts
-
-; f_plot_portal:
-;     lda portal_placed
-;     beq _skip_plot_portal                      ; Skip if portal not placed
-;     ldx portal_y
-;     ldy portal_x
-;     clc
-;     jsr PLOT
-;     lda #portal_code                           ; Custom portal character code
-;     jsr CHROUT
-; _skip_plot_portal:
-;     rts
-
-; f_erase_cursor:
-;     ; Erase previous cursor position with blank tile
-;     ldx previous_cursor_y
-;     ldy previous_cursor_x
-;     clc
-;     jsr PLOT
-;     lda blank_tile                             ; Load the blank tile character
-;     jsr CHROUT                                 ; Write blank tile to previous cursor position
 ;     rts
 
 ; Include supporting files
@@ -197,6 +110,12 @@
     include "./titlescreen/titlescreen.s"      ; Titlescreen logic
     include "./levels/levels.s"                ; Level drawing functions
     include "./music/titlescreen_music.s"      ; Titlescreen music functions
+
+level_pointers:
+    dc.w $0000
+    dc.w level_1_data_start
+    dc.w level_2_data_start
+    dc.w level_3_data_start
 
 encoded_title_screen_data_start:
     incbin "./titlescreen/titlescreen_rle_encoded.bin"

@@ -21,15 +21,15 @@ f_draw_next_level:
 f_draw_level_template:
 .set_data_addrs:                            ; set addrs for where the binary data exists in our prog
     lda #<level_template_data_start
-    sta DATA_ADDR_LOW
+    sta data_addr_low_z
     lda #>level_template_data_start
-    sta DATA_ADDR_HIGH
+    sta data_addr_high_z
 
 .set_load_addrs:                            ; set adds for where the data will load into (first 2 bytes of encoded data are the load address)
     lda level_template_data_start
-    sta LOAD_ADDR_LOW
-    lda level_template_data_start + 1
-    sta LOAD_ADDR_HIGH
+    sta load_addr_low_z
+    lda level_template_data_start+1
+    sta load_addr_high_z
 
     jsr f_rle_decoder                       ; decode the level template data and write it to screen mem
 
@@ -44,25 +44,29 @@ f_draw_level_data:
 
     ; draw the dynamic level data from the appropriate level bin
 
-    ; Construct the dynamic label name for the level data
-    lda #<level_, what_level_tracker, _data_start
-    sta DATA_ADDR_LOW        ; Store low byte of level data address
-    lda #>level_, what_level_tracker, _data_start
-    sta DATA_ADDR_HIGH       ; Store high byte of level data address
+    lda what_level_tracker_z
+    asl                      ; level_tracker * 2 (level pointers are 2 bytes big)
+    tax                      ; store in x to offset with below
+
+    lda level_pointers,x     ; get the correct level data start addr
+    sta data_addr_low_z        ; Store low byte of level data address
+    lda level_pointers+1,x   ; get the correct level data start addr
+    sta data_addr_high_z       ; Store high byte of level data address
 
     ldy #0                   ; Initialize index
 .loop_draw_level_data:
-    lda (DATA_ADDR_LOW),y    ; Read byte from level data
+    lda (data_addr_low_z),y    ; Read byte from level data
+    cmp #$FF                    ; Check if end of data 
     beq .end_of_data         ; Stop if end of data (0 byte)
 
     sta TMP_CHAR_CODE        ; Temporarily store character code
     iny                      ; Increment index
 
-    lda (DATA_ADDR_LOW),y    ; Read X coordinate
+    lda (data_addr_low_z),y    ; Read X coordinate
     sta TMP_X
     iny
 
-    lda (DATA_ADDR_LOW),y    ; Read Y coordinate
+    lda (data_addr_low_z),y    ; Read Y coordinate
     sta TMP_Y
     iny
 
@@ -81,7 +85,7 @@ f_draw_char_to_screen_mem:
 
     lda TMP_CHAR_CODE
     ldy #0
-    sta (SCREEN_MEM_ADDR_COORD),y     ; Draw the character to screen mem
+    sta (screen_mem_addr_coord_z),y     ; Draw the character to screen mem
 
     rts
 
@@ -125,10 +129,10 @@ f_draw_char_to_screen_mem:
 ;     lda #21                                     ; Character code for "0"
 ;     sta $1e29
 
-;     ; now, read value from what_level_tracker, and write it to screen
+;     ; now, read value from what_level_tracker_z, and write it to screen
 ;     ; TODO: rethink assembly approach and/or learn DASM better to get a better approach to this rather 
 ;     ; than terribly hardcoding it...
-;     lda what_level_tracker                      ; simple int storing what level we are on
+;     lda what_level_tracker_z                      ; simple int storing what level we are on
 ;     cmp #1
 ;     bne .check_level_2
 ;     lda #56                                     ; Character code for "1"
@@ -185,23 +189,23 @@ f_draw_char_to_screen_mem:
 ;     lda #54                  ; Character code for left wall
 ;     ldx #0                   ; Row counter
 ;     lda #<$1e58              ; Low byte of starting address
-;     sta LOAD_ADDR_LOW
+;     sta load_addr_low_z
 ;     lda #>$1e58              ; High byte of starting address
-;     sta LOAD_ADDR_HIGH
+;     sta load_addr_high_z
 
 ; .draw_left_wall_loop:
 ;     lda #54
 ;     ldy #0
-;     sta (LOAD_ADDR_LOW),y   ; Write left wall character to address
+;     sta (load_addr_low_z),y   ; Write left wall character to address
 
 ;     ; Move to the next row address by adding ROW_LENGTH to LOAD_ADDR
-;     lda LOAD_ADDR_LOW
+;     lda load_addr_low_z
 ;     clc
 ;     adc #ROW_LENGTH
-;     sta LOAD_ADDR_LOW
-;     lda LOAD_ADDR_HIGH
+;     sta load_addr_low_z
+;     lda load_addr_high_z
 ;     adc #0                   ; Add carry if needed
-;     sta LOAD_ADDR_HIGH
+;     sta load_addr_high_z
 
 ;     inx
 ;     cpx #NUM_OF_SIDE_WALLS    ; Check if we've reached the desired number of rows
@@ -211,23 +215,23 @@ f_draw_char_to_screen_mem:
 ;     lda #52                  ; Character code for right wall
 ;     ldx #0                   ; Row counter
 ;     lda #<$1e6d              ; Low byte of starting address
-;     sta LOAD_ADDR_LOW
+;     sta load_addr_low_z
 ;     lda #>$1e6d              ; High byte of starting address
-;     sta LOAD_ADDR_HIGH
+;     sta load_addr_high_z
 
 ; .draw_right_wall_loop:
 ;     lda #52
 ;     ldy #0
-;     sta (LOAD_ADDR_LOW),y   ; Write right wall character to address
+;     sta (load_addr_low_z),y   ; Write right wall character to address
 
 ;     ; Move to the next row address by adding ROW_LENGTH to LOAD_ADDR
-;     lda LOAD_ADDR_LOW
+;     lda load_addr_low_z
 ;     clc
 ;     adc #ROW_LENGTH
-;     sta LOAD_ADDR_LOW
-;     lda LOAD_ADDR_HIGH
+;     sta load_addr_low_z
+;     lda load_addr_high_z
 ;     adc #0
-;     sta LOAD_ADDR_HIGH
+;     sta load_addr_high_z
 
 ;     inx
 ;     cpx #NUM_OF_SIDE_WALLS    ; Check if we've reached the desired number of rows
@@ -240,32 +244,32 @@ f_draw_char_to_screen_mem:
 ;     jsr f_draw_level_template                  ; first, draw the static template that each level has
 
 ; .check_level_1:
-;     lda what_level_tracker
+;     lda what_level_tracker_z
 ;     cmp #1
 ;     bne .check_level_2
 ;     lda #<level_1_data_start
-;     sta level_data_addr_low
+;     sta level_data_addr_low_z
 ;     lda #>level_1_data_start
-;     sta level_data_addr_high
+;     sta level_data_addr_high_z
 ;     jmp .level_data_addr_set
 
 ; .check_level_2:
-;     lda what_level_tracker
+;     lda what_level_tracker_z
 ;     cmp #2
 ;     bne .check_level_3
 ;     lda #<level_2_data_start
-;     sta level_data_addr_low
+;     sta level_data_addr_low_z
 ;     lda #>level_2_data_start
-;     sta level_data_addr_high
+;     sta level_data_addr_high_z
 
 ; .check_level_3:
-;     lda what_level_tracker
+;     lda what_level_tracker_z
 ;     cmp #3
 ;     bne .check_level_4
 ;     lda #<level_3_data_start
-;     sta level_data_addr_low
+;     sta level_data_addr_low_z
 ;     lda #>level_3_data_start
-;     sta level_data_addr_high
+;     sta level_data_addr_high_z
 
 ; .check_level_4:
 
@@ -275,23 +279,23 @@ f_draw_char_to_screen_mem:
 ;     ldy #0                          
 ;     ldx #0
 ; .read_char:
-;     lda (level_data_addr_low),y
+;     lda (level_data_addr_low_z),y
 ;     cmp #$
 ;     beq .level_data_end
 
-;     sta curr_char_code
+;     sta curr_char_code_z
 ;     iny
 
-;     lda (level_data_addr_low),y
-;     sta LOAD_ADDR_LOW
+;     lda (level_data_addr_low_z),y
+;     sta load_addr_low_z
 ;     iny
-;     lda (level_data_addr_low),y
-;     sta LOAD_ADDR_HIGH
+;     lda (level_data_addr_low_z),y
+;     sta load_addr_high_z
 ;     iny
 
 ; .store_char:
-;     lda curr_char_code
-;     sta (LOAD_ADDR_LOW,x)
+;     lda curr_char_code_z
+;     sta (load_addr_low_z,x)
 
 ;     jmp .read_char    
 
