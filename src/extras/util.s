@@ -45,44 +45,80 @@ f_check_collision:
 
 
 ; Converts an (x, y) coordinate to the corresponding screen memory address.
-; Input: X = x-coordinate, Y = y-coordinate (relative to the game area)
-; Output: Screen memory address is stored in screen_mem_addr_coord_z (low byte, high byte).
+; Input:
+;    tmp_x_z: X coordinate
+;    tmp_y_z: Y coordinate
+; Output: 
+;    screen_mem_addr_coord_z (low byte, high byte).
     subroutine
 f_convert_xy_to_screen_mem_addr:
-    lda #0
-    sta x_y_to_screen_mem_output
-    sta x_y_to_screen_mem_output+1
+	; set the screen_mem_addr_coord_z to 0,0, and then build it up from there
+	lda #<GAME_AREA_START
+	sta screen_mem_addr_coord_z
+	lda #>GAME_AREA_START
+	sta screen_mem_addr_coord_z+1
 
-    ; ; Calculate row offset
-    ; tya                         ; Load Y (row) into A
-    ; clc                         ; Clear carry for addition
-    ; adc #3                      ; Offset by 3 to account for top rows
-    ; sta TMP_Y                   ; Store adjusted Y temporarily
+	; add the columns to the output
+	lda tmp_x_z
+	clc
+	adc screen_mem_addr_coord_z
+	sta screen_mem_addr_coord_z
+	lda #0
+	adc screen_mem_addr_coord_z+1
+	sta screen_mem_addr_coord_z+1
 
-    ; ; Calculate column offset
-    ; txa                         ; Load X (column) into A
-    ; ; clc                         ; Clear carry for addition
-    ; ; adc #1                      ; Offset by 1 to account for leftmost column
-    ; sta TMP_X                   ; Store adjusted X temporarily
+	; add the rows to the output
+	lda tmp_y_z
+	; multiply by 22 becauyse each row has 22 colunms in it
+	; load x with how many times we want to repeatedly add 22 to acc
+	sta func_arg_1_z
+	jsr f_multiply_by_22
+	lda func_output_1_z
 
-    ; Calculate screen memory address
-    lda #<SCREEN_MEM_1
-    sta x_y_to_screen_mem_output+1
-    lda #>SCREEN_MEM_2
-    sta x_y_to_screen_mem_output
+	clc
+	adc screen_mem_addr_coord_z
+	sta screen_mem_addr_coord_z
+	lda #0
+	adc screen_mem_addr_coord_z+1
+	sta screen_mem_addr_coord_z+1
 
-    ; Calculate row offset
-    lda TMP_Y
-    clc
-    adc x_y_to_screen_mem_output+1
-    sta x_y_to_screen_mem_output+1
-
-    ; Calculate column offset
-    lda TMP_X
-    clc
-    adc x_y_to_screen_mem_output
-    sta x_y_to_screen_mem_output
-
-    rts
+	rts
 
 
+
+	; lda tmp_x_z            	; Load X coordinate
+    ; tay                    	; Transfer X to Y register (Y used as offset in screen row)
+    ; lda tmp_y_z            	; Load Y coordinate
+    ; clc                    	; Clear carry
+	; adc LEVEL_TEMP_ROWS		; Add the number of rows the level template takes up
+	; tax                    	; Transfer Y to X register (X used as offset in screen column)
+	; lda #SCREEN_MEM_1      	; Load screen memory start address
+	; sta screen_mem_addr_coord_z
+	; clc                    	; Clear carry
+	; adc tmp_y_z            	; Add Y coordinate
+	; sta screen_mem_addr_coord_z+1
+	; clc                    	; Clear carry
+	; adc tmp_x_z            	; Add X coordinate
+	; sta screen_mem_addr_coord_z
+	; rts
+
+
+; perform repeated addition for necessary multiplications
+; Input:
+;    func_arg_1_z: number of times to add
+; Output:
+;    func_output_1_z: result of the multiplication
+	subroutine
+f_multiply_by_22:
+	lda #0
+	ldx func_arg_1_z
+	jmp .mul_loop_test
+.mul_loop:
+	clc
+	adc #NUM_OF_COLUMNS
+	dex
+.mul_loop_test
+	cpx #0
+	bne .mul_loop
+	sta func_output_1_z
+	rts

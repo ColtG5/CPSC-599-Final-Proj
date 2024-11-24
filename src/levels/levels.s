@@ -20,15 +20,15 @@ f_draw_next_level:
     subroutine
 f_draw_level_template:
 .set_data_addrs:                            ; set addrs for where the binary data exists in our prog
-    lda #<level_template_data_start
+    lda #<level_template_data_start_p
     sta data_addr_low_z
-    lda #>level_template_data_start
+    lda #>level_template_data_start_p
     sta data_addr_high_z
 
 .set_load_addrs:                            ; set adds for where the data will load into (first 2 bytes of encoded data are the load address)
-    lda level_template_data_start
+    lda level_template_data_start_p
     sta load_addr_low_z
-    lda level_template_data_start+1
+    lda level_template_data_start_p+1
     sta load_addr_high_z
 
     jsr f_rle_decoder                       ; decode the level template data and write it to screen mem
@@ -48,29 +48,34 @@ f_draw_level_data:
     asl                      ; level_tracker * 2 (level pointers are 2 bytes big)
     tax                      ; store in x to offset with below
 
-    lda level_pointers,x     ; get the correct level data start addr
+    lda level_pointers_p,x     ; get the correct level data start addr
     sta data_addr_low_z        ; Store low byte of level data address
-    lda level_pointers+1,x   ; get the correct level data start addr
+    lda level_pointers_p+1,x   ; get the correct level data start addr
     sta data_addr_high_z       ; Store high byte of level data address
 
-    ldy #0                   ; Initialize index
+    ldy #0
+    sty level_data_tracker_z  ; Initialize level data tracker
 .loop_draw_level_data:
+    ldy level_data_tracker_z  ; Load level data tracker
     lda (data_addr_low_z),y    ; Read byte from level data
     cmp #$FF                    ; Check if end of data 
     beq .end_of_data         ; Stop if end of data (0 byte)
 
-    sta TMP_CHAR_CODE        ; Temporarily store character code
+    sta tmp_char_code_z        ; Temporarily store character code
     iny                      ; Increment index
 
     lda (data_addr_low_z),y    ; Read X coordinate
-    sta TMP_X
+    sta tmp_x_z
     iny
 
     lda (data_addr_low_z),y    ; Read Y coordinate
-    sta TMP_Y
+    sec
+    sbc #LEVEL_TEMP_ROWS
+    sta tmp_y_z
     iny
+    sty level_data_tracker_z  ; remember where we are in the level data
 
-    jsr f_draw_char_to_screen_mem          ; Draw the character at (TMP_X, TMP_Y)
+    jsr f_draw_char_to_screen_mem          ; Draw the character at (tmp_x_z, tmp_y_z)
     jmp .loop_draw_level_data
 
 .end_of_data:
@@ -79,11 +84,9 @@ f_draw_level_data:
     subroutine
 f_draw_char_to_screen_mem:
     ; get the screen mem addr for the char, and draw it 
-    ldx TMP_X
-    ldy TMP_Y
     jsr f_convert_xy_to_screen_mem_addr
 
-    lda TMP_CHAR_CODE
+    lda tmp_char_code_z
     ldy #0
     sta (screen_mem_addr_coord_z),y     ; Draw the character to screen mem
 
@@ -247,9 +250,9 @@ f_draw_char_to_screen_mem:
 ;     lda what_level_tracker_z
 ;     cmp #1
 ;     bne .check_level_2
-;     lda #<level_1_data_start
+;     lda #<level_1_data_start_p
 ;     sta level_data_addr_low_z
-;     lda #>level_1_data_start
+;     lda #>level_1_data_start_p
 ;     sta level_data_addr_high_z
 ;     jmp .level_data_addr_set
 
@@ -257,18 +260,18 @@ f_draw_char_to_screen_mem:
 ;     lda what_level_tracker_z
 ;     cmp #2
 ;     bne .check_level_3
-;     lda #<level_2_data_start
+;     lda #<level_2_data_start_p
 ;     sta level_data_addr_low_z
-;     lda #>level_2_data_start
+;     lda #>level_2_data_start_p
 ;     sta level_data_addr_high_z
 
 ; .check_level_3:
 ;     lda what_level_tracker_z
 ;     cmp #3
 ;     bne .check_level_4
-;     lda #<level_3_data_start
+;     lda #<level_3_data_start_p
 ;     sta level_data_addr_low_z
-;     lda #>level_3_data_start
+;     lda #>level_3_data_start_p
 ;     sta level_data_addr_high_z
 
 ; .check_level_4:

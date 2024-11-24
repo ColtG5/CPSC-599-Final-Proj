@@ -3,16 +3,16 @@
 f_draw_titlescreen:
 ; set addrs of where the data is located
 .set_data_addrs:
-    lda #<encoded_title_screen_data_start
+    lda #<encoded_title_screen_data_start_p
     sta data_addr_low_z
-    lda #>encoded_title_screen_data_start
+    lda #>encoded_title_screen_data_start_p
     sta data_addr_high_z
     
 ; set addrs of where the data will be loaded to (screen mem in our case)
 .set_load_addrs:
-    lda encoded_title_screen_data_start
+    lda encoded_title_screen_data_start_p
     sta load_addr_low_z
-    lda encoded_title_screen_data_start + 1
+    lda encoded_title_screen_data_start_p + 1
     sta load_addr_high_z
 
     ; lda #$00

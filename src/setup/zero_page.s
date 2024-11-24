@@ -13,11 +13,14 @@ value_z                       ds.b 1      ; value of the current byte from the d
 what_level_tracker_z          ds.b 1      ; current level tracker
 level_data_addr_low_z         ds.b 1      ; low byte of level data address
 level_data_addr_high_z        ds.b 1      ; high byte of level data address
+level_data_tracker_z          ds.b 1      ; tracks our current offset in the level data
 cursor_x_z                    ds.b 1      ; cursor X position
 cursor_y_z                    ds.b 1      ; cursor Y position
 curr_char_code_z              ds.b 1      ; current character code, used in level.s for reading in char codes from level data bin
-TMP_X                       ds.b 1      ; temporary X coordinate
-TMP_Y                       ds.b 1      ; temporary Y coordinate
-TMP_CHAR_CODE               ds.b 1      ; temporary character code
-x_y_to_screen_mem_output    ds.b 2      ; output of f_convert_xy_to_screen_mem_addr
+tmp_x_z                       ds.b 1      ; temporary X coordinate
+tmp_y_z                       ds.b 1      ; temporary Y coordinate
+tmp_char_code_z               ds.b 1      ; temporary character code
+func_arg_1_z                  ds.b 1      ; function argument 1
+func_output_1_z               ds.b 1      ; function output 1
+x_y_to_screen_mem_output_z    ds.b 2      ; output of f_convert_xy_to_screen_mem_addr
     seg

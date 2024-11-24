@@ -286,7 +286,7 @@ def export_level_data():
                     #     binary_data.extend(coord_x)
                     #     binary_data.extend(coord_y)
                     
-                    char_code = character_list.index(character_name)
+                    char_code = character_list.index(character_name)-1
                     # the coordinate shoydl be x,y so two bytes
                     coord_x = col.to_bytes(1, "little")
                     coord_y = row.to_bytes(1, "little")

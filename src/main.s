@@ -111,26 +111,27 @@
     include "./levels/levels.s"                ; Level drawing functions
     include "./music/titlescreen_music.s"      ; Titlescreen music functions
 
-level_pointers:
+level_pointers_p:
     dc.w $0000
-    dc.w level_1_data_start
-    dc.w level_2_data_start
-    dc.w level_3_data_start
+    dc.w level_1_data_start_p
+    dc.w level_2_data_start_p
+    dc.w level_3_data_start_p
 
-encoded_title_screen_data_start:
+encoded_title_screen_data_start_p:
     incbin "./titlescreen/titlescreen_rle_encoded.bin"
 
-level_template_data_start:
+level_template_data_start_p:
     incbin "./levels/level_template_rle_encoded.bin"
 
-level_1_data_start:
-    incbin "./levels/level1.bin"
+level_1_data_start_p:
+    incbin "./levels/level_1.bin"
+    ; incbin "./levels/test_level.bin"
 
-level_2_data_start:
-    incbin "./levels/level2.bin"
+level_2_data_start_p:
+    incbin "./levels/level_2.bin"
 
-level_3_data_start:
-    incbin "./levels/level3.bin"
+level_3_data_start_p:
+    incbin "./levels/level_3.bin"
 
     org CUSTOM_CHAR_MEM
     include "./extras/character_table.s"
