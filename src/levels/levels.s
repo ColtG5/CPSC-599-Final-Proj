@@ -69,8 +69,8 @@ f_draw_level_data:
     iny
 
     lda (data_addr_low_z),y    ; Read Y coordinate
-    sec
-    sbc #LEVEL_TEMP_ROWS
+    ; sec
+    ; sbc #LEVEL_TEMP_ROWS
     sta tmp_y_z
     iny
     sty level_data_tracker_z  ; remember where we are in the level data

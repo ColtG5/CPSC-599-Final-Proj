@@ -52,10 +52,15 @@ f_check_collision:
 ;    screen_mem_addr_coord_z (low byte, high byte).
     subroutine
 f_convert_xy_to_screen_mem_addr:
-	; set the screen_mem_addr_coord_z to 0,0, and then build it up from there
-	lda #<GAME_AREA_START
+	; ; set the screen_mem_addr_coord_z to 0,0, and then build it up from there
+	; lda #<GAME_AREA_START
+	; sta screen_mem_addr_coord_z
+	; lda #>GAME_AREA_START
+	; sta screen_mem_addr_coord_z+1
+
+	lda #<SCREEN_MEM_1
 	sta screen_mem_addr_coord_z
-	lda #>GAME_AREA_START
+	lda #>SCREEN_MEM_1
 	sta screen_mem_addr_coord_z+1
 
 	; add the columns to the output
@@ -73,7 +78,7 @@ f_convert_xy_to_screen_mem_addr:
 	; load x with how many times we want to repeatedly add 22 to acc
 	sta func_arg_1_z
 	jsr f_multiply_by_22
-	
+
     ; Add the low byte of the result to the screen memory address
     lda func_output_low_z    ; Load the low byte of the multiplication result
     clc                      ; Clear carry for addition
