@@ -36,6 +36,15 @@ f_clear_screen:
 
     rts
 
+; Input Handling Subroutine
+    subroutine
+f_handle_input:
+    jsr f_handle_cursor_movement
+
+
+    rts
+
+
 ; Check collision between cursor and anything in the level
     subroutine
 f_check_collision:
@@ -91,24 +100,6 @@ f_convert_xy_to_screen_mem_addr:
     sta screen_mem_addr_coord_z+1
 
 	rts
-
-
-
-	; lda tmp_x_z            	; Load X coordinate
-    ; tay                    	; Transfer X to Y register (Y used as offset in screen row)
-    ; lda tmp_y_z            	; Load Y coordinate
-    ; clc                    	; Clear carry
-	; adc LEVEL_TEMP_ROWS		; Add the number of rows the level template takes up
-	; tax                    	; Transfer Y to X register (X used as offset in screen column)
-	; lda #SCREEN_MEM_1      	; Load screen memory start address
-	; sta screen_mem_addr_coord_z
-	; clc                    	; Clear carry
-	; adc tmp_y_z            	; Add Y coordinate
-	; sta screen_mem_addr_coord_z+1
-	; clc                    	; Clear carry
-	; adc tmp_x_z            	; Add X coordinate
-	; sta screen_mem_addr_coord_z
-	; rts
 
 
 ; perform repeated addition for necessary multiplications
