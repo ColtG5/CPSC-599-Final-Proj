@@ -1,4 +1,4 @@
-input_file = "titlescreen"
+input_file = "level_template_game_walls"
 
 header_size = 2 # 001e
 data = []
