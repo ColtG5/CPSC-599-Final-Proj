@@ -45,11 +45,39 @@ f_handle_input:
     rts
 
 
-; Check collision between cursor and anything in the level
+; Check collision between cursor and walls (game walls + walls inside level)
+; This means check collision between the character codes of wall_code, wall_top_code,
+; wall_right_code, wall_bottom_code, and wall_left_code
+; Input:
+;    cursor_x_z: cursor x position
+;    cursor_y_z: cursor y position
+; Output:
+;    func_output_low_z: 0 if no collision, 1 if collision
     subroutine
-f_check_collision:
-    
-    
+f_check_cursor_collision_with_walls:
+    lda cursor_x_z
+    sta tmp_x_z
+    lda cursor_y_z
+    sta tmp_y_z
+    jsr f_convert_xy_to_screen_mem_addr
+    lda (screen_mem_addr_coord_z),y
+    cmp #wall_code
+    beq .collision
+    cmp #wall_top_code
+    beq .collision
+    cmp #wall_right_code
+    beq .collision
+    cmp #wall_bottom_code
+    beq .collision
+    cmp #wall_left_code
+    beq .collision
+
+    lda #0
+    sta func_output_low_z
+    rts
+.collision:
+    lda #1
+    sta func_output_low_z
     rts
 
 

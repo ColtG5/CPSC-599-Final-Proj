@@ -15,21 +15,52 @@ f_handle_cursor_movement:
 .move_cursor_up
     jsr f_erase_cursor                        ; Erase cursor at previous position
     dec cursor_y_z
+    
+    jsr f_check_cursor_collision_with_walls
+    lda func_output_low_z
+    cmp #0                          ; 0 means no collision! move cursor
+    beq .move_cursor_up_no_collision
+    inc cursor_y_z                  ; otherwise, don't move cursor
+.move_cursor_up_no_collision:
     jsr f_draw_cursor
     rts
+
 .move_cursor_left:
     jsr f_erase_cursor                        ; Erase cursor at previous position
     dec cursor_x_z
+
+    jsr f_check_cursor_collision_with_walls
+    lda func_output_low_z
+    cmp #0                          ; 0 means no collision! move cursor
+    beq .move_cursor_left_no_collision
+    inc cursor_x_z                  ; otherwise, don't move cursor
+.move_cursor_left_no_collision:
     jsr f_draw_cursor
     rts
+
 .move_cursor_down:
     jsr f_erase_cursor                        ; Erase cursor at previous position
     inc cursor_y_z
+
+    jsr f_check_cursor_collision_with_walls
+    lda func_output_low_z
+    cmp #0                          ; 0 means no collision! move cursor
+    beq .move_cursor_down_no_collision
+    dec cursor_y_z                  ; otherwise, don't move cursor
+.move_cursor_down_no_collision:
     jsr f_draw_cursor
     rts
+
 .move_cursor_right:
     jsr f_erase_cursor                        ; Erase cursor at previous position
     inc cursor_x_z
+
+    jsr f_check_cursor_collision_with_walls
+    lda func_output_low_z
+    cmp #0                          ; 0 means no collision! move cursor
+    beq .move_cursor_right_no_collision
+    dec cursor_x_z                  ; otherwise, don't move cursor
+.move_cursor_right_no_collision:
     jsr f_draw_cursor
     rts
 
