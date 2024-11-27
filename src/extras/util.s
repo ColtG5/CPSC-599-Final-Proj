@@ -47,7 +47,7 @@ f_handle_input:
 
 ; Check collision between cursor and walls (game walls + walls inside level)
 ; This means check collision between the character codes of wall_code, wall_top_code,
-; wall_right_code, wall_bottom_code, and wall_left_code
+; wall_right_code, wall_bottom_code, and wall_left_code, as well as laser shooter and receptor.
 ; Input:
 ;    cursor_x_z: cursor x position
 ;    cursor_y_z: cursor y position
@@ -70,6 +70,10 @@ f_check_cursor_collision_with_walls:
     cmp #wall_bottom_code
     beq .collision
     cmp #wall_left_code
+    beq .collision
+    cmp #laser_shooter_code
+    beq .collision
+    cmp #laser_receptor_code
     beq .collision
 
     lda #0
