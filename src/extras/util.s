@@ -91,6 +91,14 @@ f_check_cursor_collision_with_level_objects:
 
     rts
 
+; Check collision between cursor and laser beams
+    subroutine
+f_check_cursor_collision_with_lasers:
+
+
+
+    rts
+
 
 ; Converts an (x, y) coordinate to the corresponding screen memory address.
 ; Input:

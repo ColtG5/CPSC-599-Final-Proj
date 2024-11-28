@@ -22,7 +22,7 @@ f_handle_cursor_movement:
     beq .move_cursor_up_no_collision
     inc cursor_y_z                  ; otherwise, don't move cursor
 .move_cursor_up_no_collision:
-    ; finally, check collision with interactable objects
+    ; then, go check other collisions
     jmp .level_object_collision_check
 
 .move_cursor_left:
@@ -35,7 +35,7 @@ f_handle_cursor_movement:
     beq .move_cursor_left_no_collision
     inc cursor_x_z                  ; otherwise, don't move cursor
 .move_cursor_left_no_collision:
-    ; finally, check collision with interactable objects
+    ; then, go check other collisions
     jmp .level_object_collision_check
 
 .move_cursor_down:
@@ -49,7 +49,7 @@ f_handle_cursor_movement:
     beq .move_cursor_down_no_collision
     dec cursor_y_z                  ; otherwise, don't move cursor
 .move_cursor_down_no_collision:
-    ; finally, check collision with interactable objects
+    ; then, go check other collisions
     jmp .level_object_collision_check
 
 .move_cursor_right:
@@ -63,17 +63,26 @@ f_handle_cursor_movement:
     beq .move_cursor_right_no_collision
     dec cursor_x_z                  ; otherwise, don't move cursor
 .move_cursor_right_no_collision:
-    ; finally, check collision with interactable objects
+    ; then, check collision with interactable objects
     jmp .level_object_collision_check
 
-; Check collision between cursor and objects the player can pick-up and hold
+; secondlly, check collision with interactable objects
 .level_object_collision_check:
     jsr f_check_cursor_collision_with_level_objects
     lda func_output_low_z
     cmp #0                          ; 0 means we didnt collide with any interactable objects!!
-    beq .draw_cursor
+    beq .laser_collision_check      ; move to next collision check
     ; otherwise, we collided with an interactable object
     jsr f_handle_collision_with_interactable_object
+
+; finally, check collision with laser beams
+.laser_collision_check:
+    jsr f_check_cursor_collision_with_lasers
+    lda func_output_low_z
+    cmp #0                          ; 0 means we didnt collide with any laser beams!!
+    beq .draw_cursor                ; done all collision checks, finally draw cursor
+    ; otherwise, we collided with a laser beam
+    jsr f_handle_collision_with_laser
 
 .draw_cursor:
     jsr f_draw_cursor
@@ -99,6 +108,7 @@ f_reset_cursor_position:
     sta cursor_y_z
     rts
 
+; Erase the cursor at its current spot (used before moving it!)
     subroutine
 f_erase_cursor:
     lda cursor_x_z
@@ -111,6 +121,7 @@ f_erase_cursor:
     sta (screen_mem_addr_coord_z),y
     rts
 
+; Draws the cursor at its current spot
     subroutine
 f_draw_cursor:
     lda cursor_x_z
