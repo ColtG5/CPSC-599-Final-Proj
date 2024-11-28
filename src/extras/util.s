@@ -39,7 +39,8 @@ f_clear_screen:
 ; Input Handling Subroutine
     subroutine
 f_handle_input:
-    jsr f_handle_cursor_movement
+    jsr f_handle_cursor_movement            ; inputs like WASD, and their possible resulting collisions
+    jsr f_handle_cursor_interactions        ; inputs like E and handling the interaction with game objects
 
 
     rts
@@ -77,26 +78,66 @@ f_check_cursor_collision_with_walls:
     beq .collision
 
     lda #0
+    sta collision_flag_z
     sta func_output_low_z
+
     rts
 .collision:
     lda #1
+    sta collision_flag_z
     sta func_output_low_z
     rts
 
 ; Check collision between cursor and objects the player can pick-up and grab
     subroutine
 f_check_cursor_collision_with_level_objects:
+    lda cursor_x_z
+    sta tmp_x_z
+    lda cursor_y_z
+    sta tmp_y_z
+    jsr f_convert_xy_to_screen_mem_addr
+    lda (screen_mem_addr_coord_z),y
+    cmp #reflector_1_code
+    beq .collision
+    cmp #reflector_2_code
+    beq .collision
+    cmp #portal_code
+    beq .collision
 
+    lda #0
+    sta collision_flag_z
+    sta func_output_low_z
+    rts
 
+.collision:
+    lda #1
+    sta collision_flag_z
+    sta func_output_low_z
     rts
 
 ; Check collision between cursor and laser beams
     subroutine
 f_check_cursor_collision_with_lasers:
+    lda cursor_x_z
+    sta tmp_x_z
+    lda cursor_y_z
+    sta tmp_y_z
+    jsr f_convert_xy_to_screen_mem_addr
+    lda (screen_mem_addr_coord_z),y
+    cmp #laser_horizontal_code
+    beq .collision
+    cmp #laser_vertical_code
+    beq .collision
 
+    lda #0
+    sta collision_flag_z
+    sta func_output_low_z
+    rts
 
-
+.collision:
+    lda #1
+    sta collision_flag_z
+    sta func_output_low_z
     rts
 
 
@@ -175,4 +216,4 @@ f_multiply_by_22:
 	cpx #0                   ; Check if X > 0
     bne .mul_loop            ; Repeat if X > 0
     sta func_output_low_z    ; Store final low byte result
-    rts                      ; Return from subroutine
+    rts

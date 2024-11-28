@@ -35,12 +35,13 @@
     cmp #KEY_SPACE                              ; Check for spacebar input for level change
     beq .next_level                             ; If spacebar pressed, go to next level
 
-; stuff that happens every frame of the game loop!!
+; stuff that happens every "tick" of the game!!
 
     sta curr_char_pressed_z                     ; Store input from player
-    jsr f_handle_input                          ; Handle player inputs
+    jsr f_handle_input                          ; Handle player inputs (also handles collision after the player input)
 
 
+    jsr f_remember_cursor_position          ; stores cursor coords into last_cursor_x/y
     jmp .game_loop                              ; Repeat loop
 
 ; Transition to the next level
@@ -74,7 +75,8 @@
     include "./titlescreen/titlescreen.s"      ; Titlescreen logic
     include "./levels/levels.s"                ; Level drawing functions
     include "./music/titlescreen_music.s"      ; Titlescreen music functions
-    include "./cursor/cursor.s"                ; Cursor movement functions
+    include "./player/cursor.s"                ; Cursor movement functions
+    include "./player/inventory.s"             ; Player inventory functions
 
 level_pointers_p:
     dc.w $0000 ; pretend this is NOT here

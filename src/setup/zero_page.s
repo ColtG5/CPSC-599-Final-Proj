@@ -16,14 +16,21 @@ level_data_addr_high_z        ds.b 1      ; high byte of level data address
 level_data_tracker_z          ds.b 1      ; tracks our current offset in the level data
 cursor_x_z                    ds.b 1      ; cursor X position
 cursor_y_z                    ds.b 1      ; cursor Y position
+last_cursor_x_z               ds.b 1      ; last cursor X position
+last_cursor_y_z               ds.b 1      ; last cursor Y position
 curr_char_pressed_z           ds.b 1      ; current character pressed by player
 curr_char_code_z              ds.b 1      ; current character code, used in level.s for reading in char codes from level data bin
 tmp_x_z                       ds.b 1      ; temporary X coordinate
 tmp_y_z                       ds.b 1      ; temporary Y coordinate
-tmp_char_code_z               ds.b 1      ; temporary character code
+tmp_char_code_z               ds.b 1      ; temporary character code used in drawing level data
 func_arg_1_z                  ds.b 1      ; function argument 1
 func_arg_2_z                  ds.b 1      ; function argument 2
 func_output_low_z             ds.b 1      ; function output 1 (low byte)
 func_output_high_z            ds.b 1      ; function output 2 (high byte)
 x_y_to_screen_mem_output_z    ds.b 2      ; output of f_convert_xy_to_screen_mem_addr
+inventory_item_z              ds.b 1      ; inventory item character code
+covered_char_x_z              ds.b 1      ; x coord of a char being covered by the cursor (if any)
+covered_char_y_z              ds.b 1      ; y coord of a char being covered by the cursor (if any)
+covered_char_code_z           ds.b 1      ; character code of a char being covered by the cursor (if any)
+collision_flag_z              ds.b 1      ; collision flag for debugging purposes
     seg
