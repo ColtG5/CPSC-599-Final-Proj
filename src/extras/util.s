@@ -84,6 +84,13 @@ f_check_cursor_collision_with_walls:
     sta func_output_low_z
     rts
 
+; Check collision between cursor and objects the player can pick-up and grab
+    subroutine
+f_check_cursor_collision_with_level_objects:
+
+
+    rts
+
 
 ; Converts an (x, y) coordinate to the corresponding screen memory address.
 ; Input:
