@@ -2,6 +2,9 @@
 
     subroutine
 f_handle_cursor_movement:
+; before we move cursor, store what we got now into the prev cursor spots
+    jsr f_remember_cursor_position
+
     lda curr_char_pressed_z
     cmp #KEY_W
     beq .move_cursor_up
@@ -22,8 +25,8 @@ f_handle_cursor_movement:
     beq .move_cursor_up_no_collision
     inc cursor_y_z                  ; otherwise, don't move cursor
 .move_cursor_up_no_collision:
-    ; then, go check other collisions
-    jmp .level_object_collision_check
+    ; then, go check the next collisions
+    jmp .after_wall_collision_check
 
 .move_cursor_left:
     jsr f_erase_cursor                        ; Erase cursor at previous position
@@ -35,8 +38,8 @@ f_handle_cursor_movement:
     beq .move_cursor_left_no_collision
     inc cursor_x_z                  ; otherwise, don't move cursor
 .move_cursor_left_no_collision:
-    ; then, go check other collisions
-    jmp .level_object_collision_check
+    ; then, go check the next collisions
+    jmp .after_wall_collision_check
 
 .move_cursor_down:
     jsr f_erase_cursor                        ; Erase cursor at previous position
@@ -49,25 +52,24 @@ f_handle_cursor_movement:
     beq .move_cursor_down_no_collision
     dec cursor_y_z                  ; otherwise, don't move cursor
 .move_cursor_down_no_collision:
-    ; then, go check other collisions
-    jmp .level_object_collision_check
+    ; then, go check the next collisions
+    jmp .after_wall_collision_check
 
 .move_cursor_right:
     jsr f_erase_cursor                        ; Erase cursor at previous position
     inc cursor_x_z
 
-    ; first, check collision with immovable objects (cursor shouldn't move)
+; first, check collision with immovable objects (cursor shouldn't move)
     jsr f_check_cursor_collision_with_walls
     lda func_output_low_z
     cmp #0                          ; 0 means no collision! move cursor
     beq .move_cursor_right_no_collision
     dec cursor_x_z                  ; otherwise, don't move cursor
 .move_cursor_right_no_collision:
-    ; then, check collision with interactable objects
-    jmp .level_object_collision_check
+    ; then, go check the next collisions
+    jmp .after_wall_collision_check
 
-
-
+.after_wall_collision_check:
 
 ; secondly, not really a collision check, but check if we were covering a char, but now arent (so we can draw old char back into place)
 .leaving_covered_char_check:
@@ -82,25 +84,25 @@ f_handle_cursor_movement:
 
 ; thirdly, check collision with interactable objects
 .level_object_collision_check:
-    ; clear current covered char
-    lda #empty_character_code
-    sta covered_char_code_z
+    ; ; clear current covered char
+    ; lda #empty_character_code
+    ; sta covered_char_code_z
 
 
     jsr f_check_cursor_collision_with_level_objects
     lda func_output_low_z
     cmp #0                              ; 0 means we didnt collide with any interactable objects!!
-    beq .laser_collision_check      ; move to next collision check
+    beq .laser_collision_check          ; move to next collision check
     ; otherwise, we collided with an interactable object
     jsr f_handle_collision_with_interactable_object
 
 
-; finally, check collision with laser beams
+; fourthly and finally, check collision with laser beams
 .laser_collision_check:
     jsr f_check_cursor_collision_with_lasers
     lda func_output_low_z
     cmp #0                          ; 0 means we didnt collide with any laser beams!!
-    beq .draw_cursor                ; done all collision checks, finally draw cursor
+    beq f_draw_cursor                ; done all collision checks, finally draw cursor
     ; otherwise, we collided with a laser beam
     jsr f_handle_collision_with_laser
 
@@ -122,7 +124,37 @@ f_handle_cursor_interactions:
 .done:
     rts
 
-; We collided with an interactable object! Store that in the object_overlayed
+; Checks if the previous position of cursor was covering a char
+; Inputs:
+;    covered_char_x_z: this needs to be set!
+;    covered_char_y_z: this too
+;    last_cursor_x_z: also need to know where our cursor just was
+;    last_cursor_y_z:
+; Outputs:
+;    func_output_low_z: 0 if we werent covering a char, 1 if we were
+    subroutine
+f_check_if_previously_covered_char:
+; if last cursor pos is equal to the coevred char x, and thye covered char y, then we covered it last move!
+    lda last_cursor_x_z
+    sec
+    sbc covered_char_x_z
+    bne .not_covering_char
+    lda last_cursor_y_z
+    sec
+    sbc covered_char_y_z
+    bne .not_covering_char
+    lda #1
+    sta func_output_low_z
+    sta was_covering_char_z
+    rts
+
+.not_covering_char:
+    lda #0
+    sta func_output_low_z
+    sta was_covering_char_z
+    rts
+
+; We collided with an interactable object! Store that in the covered_char stuff
     subroutine
 f_handle_collision_with_interactable_object:
     lda tmp_x_z
@@ -156,7 +188,7 @@ f_remember_cursor_position:
     lda cursor_x_z
     sta last_cursor_x_z
     lda cursor_y_z
-    sta last_cursor_x_z
+    sta last_cursor_y_z
     rts
 
 ; Erase the cursor at its current spot (used before moving it!)
@@ -177,7 +209,7 @@ f_erase_cursor:
 f_clear_covered_char_in_mem:
     lda #empty_character_code
     sta covered_char_code_z
-    lda #ff
+    lda #$ff
     sta covered_char_x_z
     sta covered_char_y_z
     rts

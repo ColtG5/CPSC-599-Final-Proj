@@ -41,7 +41,6 @@
     jsr f_handle_input                          ; Handle player inputs (also handles collision after the player input)
 
 
-    jsr f_remember_cursor_position          ; stores cursor coords into last_cursor_x/y
     jmp .game_loop                              ; Repeat loop
 
 ; Transition to the next level
@@ -62,6 +61,7 @@
 .increment_level:
     inc what_level_tracker_z                    ; Move to next level
     jsr f_set_color_mem_black
+    jsr f_clear_covered_char_in_mem             ; clear covered char
     jsr f_clear_screen
     jsr f_draw_next_level
     jsr f_reset_cursor_position                 ; reset cursor pos to hardcoded spot

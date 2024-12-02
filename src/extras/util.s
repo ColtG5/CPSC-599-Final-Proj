@@ -42,7 +42,6 @@ f_handle_input:
     jsr f_handle_cursor_movement            ; inputs like WASD, and their possible resulting collisions
     jsr f_handle_cursor_interactions        ; inputs like E and handling the interaction with game objects
 
-
     rts
 
 
@@ -78,13 +77,13 @@ f_check_cursor_collision_with_walls:
     beq .collision
 
     lda #0
-    sta collision_flag_z
+    sta wall_collision_flag_z
     sta func_output_low_z
 
     rts
 .collision:
     lda #1
-    sta collision_flag_z
+    sta wall_collision_flag_z
     sta func_output_low_z
     rts
 
@@ -105,13 +104,13 @@ f_check_cursor_collision_with_level_objects:
     beq .collision
 
     lda #0
-    sta collision_flag_z
+    sta obj_collision_flag_z
     sta func_output_low_z
     rts
 
 .collision:
     lda #1
-    sta collision_flag_z
+    sta obj_collision_flag_z
     sta func_output_low_z
     rts
 
@@ -130,13 +129,13 @@ f_check_cursor_collision_with_lasers:
     beq .collision
 
     lda #0
-    sta collision_flag_z
+    sta laser_collisiong_flag_z
     sta func_output_low_z
     rts
 
 .collision:
     lda #1
-    sta collision_flag_z
+    sta laser_collisiong_flag_z
     sta func_output_low_z
     rts
 

@@ -11,11 +11,6 @@ f_draw_next_level:
     rts
 
 
-
-
-
-
-
 ; function that draws the template for a level (top score, game border, etc.)
     subroutine
 f_draw_level_template:

@@ -32,5 +32,8 @@ inventory_item_z              ds.b 1      ; inventory item character code
 covered_char_x_z              ds.b 1      ; x coord of a char being covered by the cursor (if any)
 covered_char_y_z              ds.b 1      ; y coord of a char being covered by the cursor (if any)
 covered_char_code_z           ds.b 1      ; character code of a char being covered by the cursor (if any)
-collision_flag_z              ds.b 1      ; collision flag for debugging purposes
+wall_collision_flag_z         ds.b 1      ; collision flag for debugging purposes
+obj_collision_flag_z          ds.b 1      ; collision flag for debugging purposes
+laser_collisiong_flag_z       ds.b 1      ; collision flag for debugging purposes
+was_covering_char_z           ds.b 1      ; flag for if the cursor was covering a char in its last position (we moved off of the covered char spot)
     seg
