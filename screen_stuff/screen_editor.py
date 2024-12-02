@@ -182,6 +182,8 @@ def export_screen_drawing():
 CHARSET_POINTER = $9005
 CUSTOM_CHAR_MEM = $1c00
 SCREEN_MEM = $1e00
+SCREEN_MEM_1 = $1e00
+SCREEN_MEM_2 = $1f00
 COLOUR_MEM_1 = $9600
 COLOUR_MEM_2 = $9700
 CHROUT = $ffd2
@@ -201,7 +203,7 @@ ADDRESS_HIGH = $01
 	; set colour mem to all black
     ldx #0
 .color_stuff_1:
-    lda #0                          ; foreground black
+    lda #0
     sta COLOUR_MEM_1,x
     inx
     txa
@@ -213,6 +215,21 @@ ADDRESS_HIGH = $01
     inx
     txa
     bne .color_stuff_2
+    
+    ldx #0
+.clear_screen_mem_1:
+    lda #empty_character_code
+    sta SCREEN_MEM_1,x
+    inx
+    txa
+    bne .clear_screen_mem_1
+
+.clear_screen_mem_2:
+    lda #empty_character_code
+    sta SCREEN_MEM_2,x
+    inx
+    txa
+    bne .clear_screen_mem_2
     
     
 """

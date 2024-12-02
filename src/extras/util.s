@@ -63,13 +63,13 @@ f_check_cursor_collision_with_walls:
     lda (screen_mem_addr_coord_z),y
     cmp #wall_code
     beq .collision
-    cmp #wall_top_code
+    cmp #game_wall_top_code
     beq .collision
-    cmp #wall_right_code
+    cmp #game_wall_right_code
     beq .collision
-    cmp #wall_bottom_code
+    cmp #game_wall_bottom_code
     beq .collision
-    cmp #wall_left_code
+    cmp #game_wall_left_code
     beq .collision
     cmp #laser_shooter_code
     beq .collision

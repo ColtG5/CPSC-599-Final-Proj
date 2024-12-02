@@ -1,9 +1,14 @@
-input_file = "level_template_game_walls"
+import os
+from tkinter import filedialog
 
 header_size = 2 # 001e
 data = []
 
-with open(input_file + ".bin", "rb") as file:
+input_file = filedialog.askopenfilename(
+    title=".bin file you want to rle encode", filetypes=[("Binary files", "*.bin")], initialdir=os.getcwd()
+)
+
+with open(input_file, "rb") as file:
     while byte := file.read(1):
         data.append(byte[0])
 
@@ -26,5 +31,8 @@ while i < len(data):
     
 encoded_data.extend([0]) # count of 0 to signify end
 
-with open(input_file + "-rle-encoded.bin", "wb") as file:
+input_file_name = os.path.basename(input_file)
+output_file = f"{os.path.splitext(input_file_name)[0]}-rle-encoded.bin"
+
+with open(output_file, "wb") as file:
     file.write(encoded_data)

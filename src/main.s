@@ -88,11 +88,11 @@ level_pointers_p:
     dc.w level_4_data_start_p
 
 encoded_title_screen_data_start_p:
-    incbin "./titlescreen/titlescreen_rle_encoded.bin"
+    incbin "./titlescreen/titlescreen-rle-encoded.bin"
 
 level_template_data_start_p:
     ; incbin "./levels/level_template_rle_encoded.bin"
-    incbin "./levels/level_template_game_walls-rle-encoded.bin"
+    incbin "./levels/level_template-rle-encoded.bin"
 
 level_1_data_start_p:
     incbin "./levels/level_1.bin"
