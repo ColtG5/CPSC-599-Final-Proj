@@ -1,10 +1,11 @@
     processor 6502
-    org $1001, 0
+    org $1001
     incdir "./src"
     include "./setup/zero_page.s"
     include "./setup/stub.s"
     include "./setup/constants.s"
 
+start:
     ; use custom character set
     lda #255
     sta CHARSET_POINTER

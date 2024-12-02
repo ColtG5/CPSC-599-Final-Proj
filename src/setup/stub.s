@@ -2,7 +2,7 @@
 
 ; defined constant: word constant, byte constant, etc
     dc.w nextstmt
-    dc.w 42
-    dc.b $9e, "4109", 0
+    dc.w 10
+    dc.b $9e, [start]d, 0
 nextstmt
-    dc.w 257
+    dc.w 0
