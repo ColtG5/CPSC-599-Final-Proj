@@ -298,6 +298,16 @@ laser_shooter_t_code = 29
 	dc.b %10011001
 	dc.b %00011000
 
+laser_receptor_b_code = 30
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00011000
+	dc.b %00111100
+	dc.b %11111111
+
 at_code = 128
 A_code = 129
 B_code = 130

@@ -71,9 +71,13 @@ f_check_cursor_collision_with_walls:
     beq .collision
     cmp #game_wall_left_code
     beq .collision
-    cmp #laser_shooter_code
+    cmp #laser_shooter_t_code
     beq .collision
-    cmp #laser_receptor_code
+    cmp #laser_shooter_b_code
+    beq .collision
+    cmp #laser_receptor_t_code
+    beq .collision
+    cmp #laser_receptor_b_code
     beq .collision
 
     lda #0
