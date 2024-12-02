@@ -62,9 +62,11 @@
     inc what_level_tracker_z                    ; Move to next level
     jsr f_set_color_mem_black
     jsr f_clear_covered_char_in_mem             ; clear covered char
-    jsr f_clear_screen
-    jsr f_draw_next_level
+    jsr f_clear_inventory                       ; clear inventory
+    jsr f_clear_screen                          ; clear screen
     jsr f_reset_cursor_position                 ; reset cursor pos to hardcoded spot
+
+    jsr f_draw_next_level
     jsr f_draw_cursor
     jmp .game_loop
 

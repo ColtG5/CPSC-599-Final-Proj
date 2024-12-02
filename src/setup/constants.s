@@ -27,3 +27,5 @@ NUM_OF_ROWS             = 23
 NUM_OF_COLUMNS          = 22
 ; NUM_OF_SIDE_WALLS     = 14                     ; Vertical count of the side walls
 LEVEL_TEMP_ROWS         = 3              ; Number of rows the level template takes up
+INV_VIEW_X              = 1                      ; x coord of the char in the inventory
+INV_VIEW_Y              = 1                      ; y coord of the char in the inventory

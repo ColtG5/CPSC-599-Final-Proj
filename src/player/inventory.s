@@ -23,3 +23,21 @@ f_place_char_from_inventory:
     sta inventory_item_z
 
     rts
+
+    subroutine
+f_clear_inventory:
+    lda #empty_character_code
+    sta inventory_item_z
+    rts
+
+; Draws the character code in the inventory to the top left of the screen, so player knows whats in their inv
+    subroutine
+f_draw_inventory:
+    lda inventory_item_z
+    sta tmp_char_code_z
+    lda #INV_VIEW_X
+    sta tmp_x_z
+    lda #INV_VIEW_Y
+    sta tmp_y_z
+    jsr f_draw_char_to_screen_mem
+    rts

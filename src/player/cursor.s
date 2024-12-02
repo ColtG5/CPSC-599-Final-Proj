@@ -135,6 +135,8 @@ f_handle_cursor_interactions:
     jmp .done
 
 .done:
+    ; draw state of inventory since it might've changed
+    jsr f_draw_inventory
     rts
 
 ; Checks if the previous position of cursor was covering a char
