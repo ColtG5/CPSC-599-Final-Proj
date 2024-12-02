@@ -218,7 +218,7 @@ laser_horizontal_code = 21
 	dc.b %00000000
 	dc.b %00000000
 
-laser_shooter_code = 22
+laser_shooter_b_code = 22
 	dc.b %00011000
 	dc.b %10011001
 	dc.b %10011001
@@ -268,7 +268,7 @@ reflector_2_code = 26
 	dc.b %11000000
 	dc.b %11000000
 
-laser_receptor_code = 27
+laser_receptor_t_code = 27
 	dc.b %11111111
 	dc.b %00111100
 	dc.b %00011000
@@ -287,6 +287,16 @@ cursor_code = 28
 	dc.b %10100101
 	dc.b %11000011
 	dc.b %11111111
+	
+laser_shooter_t_code = 29
+	dc.b %01111110
+	dc.b %00111100
+	dc.b %00011000
+	dc.b %01111110
+	dc.b %11011011
+	dc.b %10011001
+	dc.b %10011001
+	dc.b %00011000
 
 at_code = 128
 A_code = 129
