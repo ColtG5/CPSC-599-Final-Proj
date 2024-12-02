@@ -84,11 +84,6 @@ f_handle_cursor_movement:
 
 ; thirdly, check collision with interactable objects
 .level_object_collision_check:
-    ; ; clear current covered char
-    ; lda #empty_character_code
-    ; sta covered_char_code_z
-
-
     jsr f_check_cursor_collision_with_level_objects
     lda func_output_low_z
     cmp #0                              ; 0 means we didnt collide with any interactable objects!!
@@ -96,15 +91,18 @@ f_handle_cursor_movement:
     ; otherwise, we collided with an interactable object
     jsr f_handle_collision_with_interactable_object
 
-
 ; fourthly and finally, check collision with laser beams
 .laser_collision_check:
     jsr f_check_cursor_collision_with_lasers
     lda func_output_low_z
     cmp #0                          ; 0 means we didnt collide with any laser beams!!
-    beq f_draw_cursor                ; done all collision checks, finally draw cursor
-    ; otherwise, we collided with a laser beam
+    beq .draw_laser_and_done
+    ; otherwise, we collided with a laser beam! handle that?
     jsr f_handle_collision_with_laser
+
+.draw_laser_and_done:
+    jsr f_draw_cursor
+    rts
 
 ; Handle the cursor interacting with game objects
     subroutine
@@ -113,13 +111,28 @@ f_handle_cursor_interactions:
     cmp #KEY_E
     bne .done
 
-    ; check if we are covering an object, which means we have an object we can pick up and add to inv
+; if pressing E, that means we are either placing down an object or picking up an object. 
+; if inventory item is empty, then we are picking up an object
+    lda inventory_item_z
+    cmp #empty_character_code
+    beq .try_picking_up_object                  ; inv is empty, so try to pick up a new object!
+                                                ; otherwise, if something in inv, we can only place down an object.
+
+.try_placing_down_object:
+    ; if we are NOT covering a character, since our inv is NOT empty, and we pressed E, place char here!
+    lda covered_char_code_z
+    cmp #empty_character_code
+    bne .done
+    jsr f_place_char_from_inventory
+    jmp .done
+
+.try_picking_up_object:
+    ; if we are covering a chartacter, since our inv is empty, and we pressed E, add it to our inv!
     lda covered_char_code_z
     cmp #empty_character_code
     beq .done
-
-    ; we clicked E and are covering a char! add it to our inventory slot
     jsr f_add_char_to_inventory
+    jmp .done
 
 .done:
     rts
