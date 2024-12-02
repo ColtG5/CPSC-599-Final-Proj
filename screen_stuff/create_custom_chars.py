@@ -93,6 +93,12 @@ def import_character():
                 messagebox.showerror("Error", "Character not found!")
     except FileNotFoundError:
         messagebox.showerror("Error", "No character file found!")
+        
+def clear_grid():
+    for row in range(8):
+        for col in range(8):
+            button_states[row][col] = 0
+            buttons[row][col].config(bg="white")
 
 
 for row in range(8):
@@ -109,5 +115,8 @@ export_button.grid(columnspan=8, row=9)
 
 import_button = Button(root, text="Import Character", command=import_character)
 import_button.grid(columnspan=8, row=10)
+
+clear_button = Button(root, text="Clear", command=clear_grid)
+clear_button.grid(columnspan=8, row=11)
 
 root.mainloop()

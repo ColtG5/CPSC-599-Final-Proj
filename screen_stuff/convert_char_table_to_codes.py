@@ -11,14 +11,20 @@ def generate_table_with_char_codes(input_file, output_file):
 
         modified_lines = []
         label_counter = 0
+        internal_char_counter = 128 # character codes from internal ROM char table start at 128, or 0x80
         for line in lines:
-            if line.strip():  # dont wanna process empty lines below
+            if line.strip():  # dont wanna process empty lines below 
                 if not line.startswith("\t"): # give a code to every line that isnt blank space and isnt tabbed
                     # Construct a new label with the format `name_code = index`
                     label = line.split()[0]
-                    modified_label = f"{label}_code = {label_counter}\n"
+                    modified_label = f""
+                    if line.startswith("_"):
+                        modified_label = f"{label[1:]}_code = {internal_char_counter}\n"
+                        internal_char_counter += 1
+                    else:
+                        modified_label = f"{label}_code = {label_counter}\n"
+                        label_counter += 1
                     modified_lines.append(modified_label)
-                    label_counter += 1
                 else:
                     # Just add the line without modification
                     modified_lines.append(line)

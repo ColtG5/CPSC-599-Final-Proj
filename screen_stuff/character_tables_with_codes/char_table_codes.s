@@ -134,119 +134,119 @@ goob_1_code = 13
 	dc.b %00000000
 	dc.b %00000000
 	dc.b %00000000
-	dc.b %00000000
 	dc.b %00011100
 	dc.b %00010010
+	dc.b %00001001
 
 goob_2_code = 14
 	dc.b %00000000
 	dc.b %00000000
 	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
+	dc.b %00000001
+	dc.b %00000110
+	dc.b %00001100
+	dc.b %00011111
 	dc.b %00000001
 
 goob_3_code = 15
-	dc.b %00000001
-	dc.b %00001110
-	dc.b %00010001
-	dc.b %00100011
-	dc.b %00100110
-	dc.b %01000100
-	dc.b %10000100
+	dc.b %00001111
+	dc.b %01110110
+	dc.b %11001100
+	dc.b %10011000
+	dc.b %00010000
+	dc.b %00000000
 	dc.b %11111111
+	dc.b %10000000
 
 goob_4_code = 16
-	dc.b %11110000
-	dc.b %01001100
-	dc.b %11000011
-	dc.b %00001110
-	dc.b %00011000
-	dc.b %00110000
-	dc.b %00100000
-	dc.b %11111110
+	dc.b %11100000
+	dc.b %00111000
+	dc.b %00011100
+	dc.b %00110110
+	dc.b %01100011
+	dc.b %01000001
+	dc.b %00000001
+	dc.b %11111111
 
 goob_5_code = 17
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %10000000
-	dc.b %01000000
-	dc.b %01000000
-	dc.b %01000000
-	dc.b %00100000
-
-goob_6_code = 18
-	dc.b %00001001
 	dc.b %11001001
 	dc.b %10110001
-	dc.b %10000001
-	dc.b %01000010
-	dc.b %00111100
+	dc.b %10000010
+	dc.b %01000101
+	dc.b %00111001
+	dc.b %00000111
+	dc.b %00000110
 	dc.b %00000100
-	dc.b %00000010
+
+goob_6_code = 18
+	dc.b %00000111
+	dc.b %00011100
+	dc.b %11110000
+	dc.b %11000000
+	dc.b %10000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
 
 goob_7_code = 19
 	dc.b %00000000
-	dc.b %00000001
-	dc.b %00000010
-	dc.b %10000100
-	dc.b %01001000
-	dc.b %00110000
-	dc.b %00100000
-	dc.b %00100000
+	dc.b %00100001
+	dc.b %01000010
+	dc.b %01000010
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000011
 
 goob_8_code = 20
-	dc.b %11000000
-	dc.b %00000001
-	dc.b %00000001
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
+	dc.b %00001111
+	dc.b %00000010
+	dc.b %00000010
+	dc.b %00000010
+	dc.b %00000110
+	dc.b %00000100
+	dc.b %11001100
+	dc.b %10001000
 
 goob_9_code = 21
+	dc.b %00001000
+	dc.b %00001000
+	dc.b %00001000
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00001110
 	dc.b %00000001
-	dc.b %00000000
-	dc.b %00010000
-	dc.b %00010000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
 	dc.b %00000000
 
 goob_10_code = 22
-	dc.b %00100000
-	dc.b %10100000
-	dc.b %01100000
-	dc.b %01100000
-	dc.b %01000000
-	dc.b %01000000
-	dc.b %01000000
-	dc.b %01000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000011
+	dc.b %00011110
+	dc.b %11111110
+	dc.b %00000101
 
 goob_11_code = 23
-	dc.b %00000001
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
-	dc.b %00000000
+	dc.b %00000110
+	dc.b %00001100
+	dc.b %00011000
+	dc.b %01110111
+	dc.b %11011101
+	dc.b %01110100
+	dc.b %10001100
+	dc.b %00000100
 
 goob_12_code = 24
-	dc.b %01000000
-	dc.b %11000000
-	dc.b %10000000
-	dc.b %10000000
-	dc.b %10000000
-	dc.b %10000000
-	dc.b %10000000
-	dc.b %01100000
+	dc.b %00110000
+	dc.b %01110000
+	dc.b %11010000
+	dc.b %10010000
+	dc.b %00010000
+	dc.b %00111000
+	dc.b %01010100
+	dc.b %10010010
 
 goob_13_code = 25
 	dc.b %00000000
@@ -254,31 +254,41 @@ goob_13_code = 25
 	dc.b %00000000
 	dc.b %00000000
 	dc.b %00000000
-	dc.b %00000001
-	dc.b %00001110
-	dc.b %01111000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
 
 goob_14_code = 26
-	dc.b %00000000
-	dc.b %00000001
 	dc.b %00000010
-	dc.b %00000100
-	dc.b %00011000
-	dc.b %11101000
-	dc.b %01001000
-	dc.b %10001001
+	dc.b %00000010
+	dc.b %00000010
+	dc.b %00000001
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
 
 goob_15_code = 27
-	dc.b %11000000
-	dc.b %01000000
-	dc.b %01000000
-	dc.b %01000000
-	dc.b %01000000
-	dc.b %01000000
-	dc.b %11100000
+	dc.b %00110110
+	dc.b %01001101
 	dc.b %01010000
+	dc.b %00100000
+	dc.b %11100000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
 
-goob_17_code = 28
+goob_16_code = 28
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+	dc.b %00000000
+
+goob_17_code = 29
 	dc.b %00011111
 	dc.b %00000010
 	dc.b %00000001
@@ -288,7 +298,7 @@ goob_17_code = 28
 	dc.b %00000000
 	dc.b %00000000
 
-goob_18_code = 29
+goob_18_code = 30
 	dc.b %10001111
 	dc.b %10010000
 	dc.b %11100000
@@ -298,7 +308,7 @@ goob_18_code = 29
 	dc.b %00010010
 	dc.b %00001110
 
-goob_19_code = 30
+goob_19_code = 31
 	dc.b %00001000
 	dc.b %10001000
 	dc.b %01011100
@@ -308,7 +318,7 @@ goob_19_code = 30
 	dc.b %00000000
 	dc.b %00000000
 
-goob_20_code = 31
+goob_20_code = 32
 	dc.b %01000000
 	dc.b %00000000
 	dc.b %00000000
@@ -318,7 +328,7 @@ goob_20_code = 31
 	dc.b %00000000
 	dc.b %00000000
 
-empty_character_code = 32
+empty_character_code = 33
 	dc.b %00000000
 	dc.b %00000000
 	dc.b %00000000
@@ -328,7 +338,7 @@ empty_character_code = 32
 	dc.b %00000000
 	dc.b %00000000
 
-@P_code = 33
+@P_code = 34
 	dc.b %00000000
 	dc.b %00111000
 	dc.b %00100100
@@ -338,7 +348,7 @@ empty_character_code = 32
 	dc.b %00100000
 	dc.b %00100000
 
-@R_code = 34
+@R_code = 35
 	dc.b %00000000
 	dc.b %00111000
 	dc.b %00100100
@@ -348,7 +358,7 @@ empty_character_code = 32
 	dc.b %00100100
 	dc.b %00100100
 
-@S_code = 35
+@S_code = 36
 	dc.b %00000000
 	dc.b %00011000
 	dc.b %00100100
@@ -358,7 +368,7 @@ empty_character_code = 32
 	dc.b %00100100
 	dc.b %00011000
 
-@T_code = 36
+@T_code = 37
 	dc.b %00000000
 	dc.b %01111100
 	dc.b %00010000
@@ -368,7 +378,7 @@ empty_character_code = 32
 	dc.b %00010000
 	dc.b %00010000
 
-@L_code = 37
+@L_code = 38
 	dc.b %00000000
 	dc.b %00100000
 	dc.b %00100000
@@ -378,7 +388,7 @@ empty_character_code = 32
 	dc.b %00100000
 	dc.b %00111100
 
-@W_code = 38
+@W_code = 39
 	dc.b %00000000
 	dc.b %01000100
 	dc.b %01000100
@@ -388,7 +398,7 @@ empty_character_code = 32
 	dc.b %01010100
 	dc.b %00101000
 
-@F_code = 39
+@F_code = 40
 	dc.b %00000000
 	dc.b %00111100
 	dc.b %00100000
@@ -398,7 +408,7 @@ empty_character_code = 32
 	dc.b %00100000
 	dc.b %00100000
 
-num_zero_code = 40
+num_zero_code = 41
 	dc.b %00000000
 	dc.b %00011000
 	dc.b %00100100
@@ -408,7 +418,7 @@ num_zero_code = 40
 	dc.b %00100100
 	dc.b %00011000
 
-num_two_code = 41
+num_two_code = 42
 	dc.b %00000000
 	dc.b %00011000
 	dc.b %00100100
@@ -418,7 +428,7 @@ num_two_code = 41
 	dc.b %00100000
 	dc.b %00111100
 
-num_four_code = 42
+num_four_code = 43
 	dc.b %00000000
 	dc.b %00100100
 	dc.b %00100100
@@ -428,7 +438,7 @@ num_four_code = 42
 	dc.b %00000100
 	dc.b %00000100
 
-portal_code = 43
+portal_code = 44
 	dc.b %00011000
 	dc.b %00100100
 	dc.b %00100100
@@ -438,7 +448,7 @@ portal_code = 43
 	dc.b %00100100
 	dc.b %00011000
 
-laser_vertical_code = 44
+laser_vertical_code = 45
 	dc.b %00011000
 	dc.b %00011000
 	dc.b %00011000
@@ -448,7 +458,7 @@ laser_vertical_code = 44
 	dc.b %00011000
 	dc.b %00011000
 
-laser_horizontal_code = 45
+laser_horizontal_code = 46
 	dc.b %00000000
 	dc.b %00000000
 	dc.b %00000000
@@ -458,7 +468,7 @@ laser_horizontal_code = 45
 	dc.b %00000000
 	dc.b %00000000
 
-laser_shooter_code = 46
+laser_shooter_code = 47
 	dc.b %00011000
 	dc.b %10011001
 	dc.b %10011001
@@ -468,7 +478,7 @@ laser_shooter_code = 46
 	dc.b %00111100
 	dc.b %01111110
 
-goob_facing_left_code = 47
+goob_facing_left_code = 48
 	dc.b %00111110
 	dc.b %01000001
 	dc.b %10010101
@@ -478,7 +488,7 @@ goob_facing_left_code = 47
 	dc.b %00000101
 	dc.b %00000100
 
-goob_facing_right_code = 48
+goob_facing_right_code = 49
 	dc.b %01111100
 	dc.b %10000010
 	dc.b %10101001
@@ -488,7 +498,7 @@ goob_facing_right_code = 48
 	dc.b %10100000
 	dc.b %00100000
 
-reflector_1_code = 49
+reflector_1_code = 50
 	dc.b %11000000
 	dc.b %11000000
 	dc.b %00100000
@@ -498,7 +508,7 @@ reflector_1_code = 49
 	dc.b %00000011
 	dc.b %00000011
 
-reflector_2_code = 50
+reflector_2_code = 51
 	dc.b %00000011
 	dc.b %00000011
 	dc.b %00000100
@@ -508,7 +518,7 @@ reflector_2_code = 50
 	dc.b %11000000
 	dc.b %11000000
 
-laser_receptor_code = 51
+laser_receptor_code = 52
 	dc.b %11111111
 	dc.b %00111100
 	dc.b %00011000
@@ -518,7 +528,7 @@ laser_receptor_code = 51
 	dc.b %00000000
 	dc.b %00000000
 
-wall_code = 52
+wall_code = 53
 	dc.b %11001100
 	dc.b %11001100
 	dc.b %00110011
@@ -528,7 +538,7 @@ wall_code = 52
 	dc.b %00110011
 	dc.b %00110011
 
-wall_top_code = 53
+wall_top_code = 54
 	dc.b %00000000
 	dc.b %00000000
 	dc.b %00000000
@@ -538,7 +548,7 @@ wall_top_code = 53
 	dc.b %00000000
 	dc.b %11111111
 
-wall_right_code = 54
+wall_right_code = 55
 	dc.b %10000000
 	dc.b %10000000
 	dc.b %10000000
@@ -548,7 +558,7 @@ wall_right_code = 54
 	dc.b %10000000
 	dc.b %10000000
 
-wall_bottom_code = 55
+wall_bottom_code = 56
 	dc.b %11111111
 	dc.b %00000000
 	dc.b %00000000
@@ -558,7 +568,7 @@ wall_bottom_code = 55
 	dc.b %00000000
 	dc.b %00000000
 
-wall_left_code = 56
+wall_left_code = 57
 	dc.b %00000001
 	dc.b %00000001
 	dc.b %00000001
@@ -568,7 +578,7 @@ wall_left_code = 56
 	dc.b %00000001
 	dc.b %00000001
 
-@V_code = 57
+@V_code = 58
 	dc.b %00000000
 	dc.b %00100010
 	dc.b %00100010
@@ -578,7 +588,7 @@ wall_left_code = 56
 	dc.b %00010100
 	dc.b %00001000
 
-cursor_code = 58
+cursor_code = 59
 	dc.b %11111111
 	dc.b %11000011
 	dc.b %10100101
@@ -587,3 +597,55 @@ cursor_code = 58
 	dc.b %10100101
 	dc.b %11000011
 	dc.b %11111111
+
+@_code = 128
+	dc.b %00011100
+	dc.b %00100010
+	dc.b %01001010
+	dc.b %01010110
+	dc.b %01001100
+	dc.b %00100000
+	dc.b %00011110
+	dc.b %00000000
+
+A_code = 129
+	dc.b %00011000
+	dc.b %00100100
+	dc.b %01000010
+	dc.b %01111110
+	dc.b %01000010
+	dc.b %01000010
+	dc.b %01000010
+	dc.b %00000000
+
+
+B_code = 130
+	dc.b %01111100
+	dc.b %00100010
+	dc.b %00100010
+	dc.b %00111100
+	dc.b %00100010
+	dc.b %00100010
+	dc.b %01111100
+	dc.b %00000000
+
+C_code = 131
+	dc.b %00011100
+	dc.b %00100010
+	dc.b %01000000
+	dc.b %01000000
+	dc.b %01000000
+	dc.b %00100010
+	dc.b %00011100
+	dc.b %00000000
+
+D_code = 132
+	dc.b %01111000
+	dc.b %00100100
+	dc.b %00100010
+	dc.b %00100010
+	dc.b %00100010
+	dc.b %00100100
+	dc.b %01111000
+	dc.b %00000000
+

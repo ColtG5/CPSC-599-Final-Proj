@@ -7,12 +7,13 @@ import json
 root = tk.Tk()
 root.title("vic-20 screen editor")
 
-custom_char_table_file = "./character_tables/char_table.s"
+custom_char_table_file = "./character_tables/char_table_new.s"
 char_images_folder = "./custom_char_images"
 screens_folder = "./screens"
 level_bins_folder = "./level_bins"
 draw_screens_folder = "../extra_prgs/"
 
+COLS_IN_SIDEBAR = 5
 ROWS = 23
 COLS = 22
 CHAR_IMG_SIZE = 8
@@ -64,7 +65,7 @@ def load_and_create_character_images():
                 elif current_char and char_name:
                     characters[char_name] = Character(char_name, current_char)
                     create_and_store_image(characters[char_name])
-                    if char_name == "empty_character":
+                    if char_name == "_empty_character":
                         empty_character = characters[char_name]
                     current_char = []
                     char_name = None
@@ -76,7 +77,7 @@ def load_and_create_character_images():
             if current_char and char_name:
                 characters[char_name] = Character(char_name, current_char)
                 create_and_store_image(characters[char_name])
-                if char_name == "empty_character":
+                if char_name == "_empty_character":
                     empty_character = characters[char_name]
 
             update_sidebar()
@@ -109,9 +110,9 @@ def update_sidebar():
     for i, name in enumerate(sorted_chars):
         char = characters[name]
         char_button = tk.Button(sidebar, text=name, anchor="w", command=lambda char=char: select_character(char))
-        char_button.grid(row=i // 3, column=i % 3, sticky="ew", padx=0, pady=0)
+        char_button.grid(row=i // COLS_IN_SIDEBAR, column=i % COLS_IN_SIDEBAR, sticky="ew", padx=0, pady=0)
 
-    for col in range(3):
+    for col in range(COLS_IN_SIDEBAR):
         sidebar.grid_columnconfigure(col, weight=1)
 
 
@@ -319,7 +320,7 @@ def export_level_data():
 # Export the grid data into a file that can be imported back into the program
 def export_screen():
     try:
-        screen_data = {"grid": [[char.name if char else "empty_character" for char in row] for row in level_grid]}
+        screen_data = {"grid": [[char.name if char else empty_character.name for char in row] for row in level_grid]}
 
         os.makedirs(screens_folder, exist_ok=True)
         file_path = filedialog.asksaveasfilename(initialdir=screens_folder, defaultextension=".json", filetypes=[("JSON files", "*.json")])
