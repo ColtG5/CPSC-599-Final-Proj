@@ -10,6 +10,8 @@ def generate_table_with_char_codes(input_file, output_file):
             lines = file.readlines()
 
         modified_lines = []
+        rom_char_codes = []
+        reading_internal_chars_now = False # once flipped, will stop writing the character binary data (since thats in the ROM)
         label_counter = 0
         internal_char_counter = 128 # character codes from internal ROM char table start at 128, or 0x80
         for line in lines:
@@ -19,21 +21,27 @@ def generate_table_with_char_codes(input_file, output_file):
                     label = line.split()[0]
                     modified_label = f""
                     if line.startswith("_"):
+                        reading_internal_chars_now = True
                         modified_label = f"{label[1:]}_code = {internal_char_counter}\n"
                         internal_char_counter += 1
+                        rom_char_codes.append(modified_label)
+
                     else:
                         modified_label = f"{label}_code = {label_counter}\n"
                         label_counter += 1
-                    modified_lines.append(modified_label)
+                        modified_lines.append(modified_label)
                 else:
                     # Just add the line without modification
-                    modified_lines.append(line)
+                    if not reading_internal_chars_now:
+                        modified_lines.append(line)
             else:
-                modified_lines.append(line)
+                if not reading_internal_chars_now:
+                    modified_lines.append(line)
 
         # Write the modified content to the output file
         with open(output_file, "w") as file:
             file.writelines(modified_lines)
+            file.writelines(rom_char_codes)
 
         print(f"Table with character codes has been saved to {output_file}")
 

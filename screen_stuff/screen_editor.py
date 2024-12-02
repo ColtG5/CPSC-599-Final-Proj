@@ -223,7 +223,8 @@ ADDRESS_HIGH = $01
                     character = level_grid[row][col] or empty_character
                     if character is not None and character != empty_character:
                         screen_address = 0x1E00 + row * COLS + col
-                        asm_file.write(f"\tlda #{character}_code\n")
+                        label = character.name[1:] if character.name.startswith("_") else character.name
+                        asm_file.write(f"\tlda #{label}_code\n")
                         asm_file.write(f"\tsta ${str(hex(screen_address))[2:]}\n")
 
             asm_file.write("\nloop:\n\tjmp loop\n\n")

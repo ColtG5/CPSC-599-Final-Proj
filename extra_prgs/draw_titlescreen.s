@@ -16,7 +16,7 @@ ADDRESS_HIGH = $01
 	jsr CHROUT
 
 	lda #255
-	sta CHARSET_POINTER	; use outputted code from level_editor.py to draw the title screen
+	sta CHARSET_POINTER
 
 	; set colour mem to all black
     ldx #0
@@ -75,15 +75,15 @@ ADDRESS_HIGH = $01
 	sta $1e7e
 	lda #goob_5_code
 	sta $1e7f
-	lda #@G_code
+	lda #G_code
 	sta $1e85
-	lda #@O_code
+	lda #O_code
 	sta $1e86
-	lda #@O_code
+	lda #O_code
 	sta $1e87
-	lda #@B_code
+	lda #B_code
 	sta $1e88
-	lda #@colon_code
+	lda #colon_code
 	sta $1e89
 	lda #goob_6_code
 	sta $1e91
@@ -105,21 +105,21 @@ ADDRESS_HIGH = $01
 	sta $1eaa
 	lda #goob_15_code
 	sta $1eab
-	lda #@M_code
+	lda #M_code
 	sta $1eb1
-	lda #@E_code
+	lda #E_code
 	sta $1eb2
-	lda #@C_code
+	lda #C_code
 	sta $1eb3
-	lda #@H_code
+	lda #H_code
 	sta $1eb4
-	lda #@A_code
+	lda #A_code
 	sta $1eb5
-	lda #@N_code
+	lda #N_code
 	sta $1eb6
-	lda #@I_code
+	lda #I_code
 	sta $1eb7
-	lda #@C_code
+	lda #C_code
 	sta $1eb8
 	lda #goob_17_code
 	sta $1ebe
@@ -129,65 +129,65 @@ ADDRESS_HIGH = $01
 	sta $1ec0
 	lda #goob_20_code
 	sta $1ec1
-	lda #@M_code
+	lda #M_code
 	sta $1ec7
-	lda #@A_code
+	lda #A_code
 	sta $1ec8
-	lda #@Y_code
+	lda #Y_code
 	sta $1ec9
-	lda #@D_code
+	lda #D_code
 	sta $1eca
-	lda #@A_code
+	lda #A_code
 	sta $1ecb
-	lda #@Y_code
+	lda #Y_code
 	sta $1ecc
-	lda #@C_code
+	lda #C_code
 	sta $1f1f
-	lda #@O_code
+	lda #O_code
 	sta $1f20
-	lda #@L_code
+	lda #L_code
 	sta $1f21
-	lda #@T_code
+	lda #T_code
 	sta $1f22
-	lda #@O_code
+	lda #O_code
 	sta $1f23
-	lda #@N_code
+	lda #N_code
 	sta $1f24
-	lda #@G_code
+	lda #G_code
 	sta $1f26
-	lda #@O_code
+	lda #O_code
 	sta $1f27
-	lda #@W_code
+	lda #W_code
 	sta $1f28
-	lda #@A_code
+	lda #A_code
 	sta $1f29
-	lda #@N_code
+	lda #N_code
 	sta $1f2a
-	lda #@S_code
+	lda #S_code
 	sta $1f2b
-	lda #@F_code
+	lda #F_code
 	sta $1f35
-	lda #@A_code
+	lda #A_code
 	sta $1f36
-	lda #@M_code
+	lda #M_code
 	sta $1f37
-	lda #@G_code
+	lda #G_code
 	sta $1f39
-	lda #@H_code
+	lda #H_code
 	sta $1f3a
-	lda #@A_code
+	lda #A_code
 	sta $1f3b
-	lda #@L_code
+	lda #L_code
 	sta $1f3c
-	lda #@Y_code
+	lda #Y_code
 	sta $1f3d
-	lda #num_two_code
+	lda #num_2_code
 	sta $1f61
-	lda #num_zero_code
+	lda #num_0_code
 	sta $1f62
-	lda #num_two_code
+	lda #num_2_code
 	sta $1f63
-	lda #num_four_code
+	lda #num_4_code
 	sta $1f64
 	lda #wall_code
 	sta $1f72
