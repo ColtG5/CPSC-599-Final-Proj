@@ -263,6 +263,25 @@ def export_level_data():
         if not save_file_path:
             messagebox.showwarning("Export Canceled", "No file path provided.")
             return
+        
+        char_table_with_codes = filedialog.askopenfilename(
+            title="Select the character table with codes", filetypes=[("Assembly files", "*.s")], initialdir=os.getcwd()
+        )
+        if not char_table_with_codes:
+            messagebox.showwarning("Export Canceled", "No character table provided.")
+            return
+        
+        # read every line in char_table_with_codes, and store to a dict of: key: every line that has {char name}_code, value: the code
+        char_codes = {}
+        with open(char_table_with_codes, "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                if "_code" in line:
+                    char_name, code = line.split("=")
+                    char_codes[char_name.strip()] = code.strip()
+                    
+        # get the empty character code
+        empty_character_code = char_codes.get("empty_character", "0")
 
         # index of character into character list is its code to write in binary form
         character_list = []
@@ -279,7 +298,7 @@ def export_level_data():
         # walls are a special case. for wall characters, store wall character, [x, y, x, y, ...] for however many walls there are (3 walls means 3 pairs of x,y coords)
 
         binary_data = bytearray()
-        wall_characters = {}
+        # wall_characters = {}
 
         # print(character_list)
 
@@ -287,9 +306,9 @@ def export_level_data():
         # end level data with 0xFF
         for row in range(ROWS):
             for col in range(COLS):
-                character = level_grid[row][col] or empty_character
-                if character != empty_character:
-                    character_name = character.name
+                character: Character | None = level_grid[row][col] or empty_character
+                if character != empty_character and character is not None:
+                    character_name: str = str(character.name)
 
                     # if character_name.startswith("wall"):
                     #     if character_name not in wall_characters:
@@ -305,7 +324,15 @@ def export_level_data():
                     #     binary_data.extend(coord_x)
                     #     binary_data.extend(coord_y)
                     
-                    char_code = character_list.index(character_name)-1
+                    char_code: int
+                    character_name_as_found_in_char_tale_with_codes = character_name[1:] if character_name.startswith("_") else character_name
+                    character_name_as_found_in_char_tale_with_codes += "_code"
+                    
+                    if character_name_as_found_in_char_tale_with_codes not in char_codes:
+                        raise UnrecognizedCharacterError(character_name_as_found_in_char_tale_with_codes)
+                    
+                    char_code = int(char_codes[character_name_as_found_in_char_tale_with_codes])
+                    
                     # the coordinate shoydl be x,y so two bytes
                     coord_x = col.to_bytes(1, "little")
                     coord_y = row.to_bytes(1, "little")
