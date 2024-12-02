@@ -13,6 +13,18 @@ Conventions inside the code:
  - _z suffix means it is a zero page variable
  - _p suffix means it is a word sized pointer
 
+Running the Game:
+ 1. Configure the Makefile in the base directory:
+    1. Change the `DASM` variable to your dasm installation path
+    2. Change the `REMOTE_SERVER` variable to your ssh login for the cpsc servers. You have ssh keys set up, so this is All That Is Required!
+    3. Not really makefile related but you may have to change the permissions on your `~/www/` folder on the servers to allow it to be read or executed or both (I forget, but worth putting here)
+    4. Put all prg(s) you want to compile and upload into the `ALL` variable
+    5. Put the prg you want to run into the `START` variable
+ 2. In the base directory (in a git bash terminal on windows!), run `make -B` (-B just always enforced a make)
+ 3. To run on xvic emulator, drag created .prg into emulator.
+ 4. To run on web eumlator, run `make upload` to upload the game.prg to the cpsc servers
+ 5. Once uploaded, run `make start`. This should open a browser window that runs the `START` prg in the web emulator
+
 Workflows for different parts of development:
  1. Make custom characters:
     1. Start up venv inside of `/screen_stuff` folder
