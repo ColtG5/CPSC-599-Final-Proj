@@ -103,3 +103,38 @@ f_draw_covered_char_back_into_place:
     sta tmp_char_code_z
     jsr f_draw_char_to_screen_mem
     rts
+
+; Calculates the path that each laser will take from each laser emitter, and correctly draws that path to the screen
+    subroutine
+f_redraw_lasers:
+    ; pseudocode:
+    ; for each laser emitter:
+    ;   set starting loc, and figure out what direction the laser emits from
+    ;   (if this emitter is a laser_emitter_t, then start loc is 1 below this since it is an emitter on the top, and the direction is down)
+    ;   then, **while the laser is not hitting a wall or a reflector**, draw the laser path
+    ;       from current *head* of laser path, check the next location in the direction of the laser
+    ;       if the next location is a wall or laser emitter, break out of this loop to stop drawing the laser path, and set head to none
+    ;       if the next location is a receptor, check that we are approaching this receptor from the correct direction (a laser_receptor_t can only be approached from the bottom, etc.)
+    ;           if we are, then break loop and set a variable or smthn to say that this receptor was hit, and counts towards the level win condition
+    ;           if we aren't, then do same logic as essentially hitting a wall
+    ;       if the next location is a reflector, update the direction of the laser path and update the reflector to the new appropriate reflector sprite
+    ;       if the next location is a portal, update the head of the laser path to the other portal location. Change this portals sprite to the appropriate sprite
+    ;       if the next location is empty space, draw the laser path to this location and update the head of the laser path to this location
+
+
+
+
+    rts
+
+; Given a starting screen mem address, iterates over the next screen mem addresses looking for another laser emitter.
+; If found, it returns the x,y coords of the laser emitter. If there are no more laser emitters in the level, it returns ff,ff
+; Input:
+;    screen_mem_addr_coord_z: starting screen mem address
+; Output:
+;    func_output_low_z: x coord of the next laser emitter
+;    func_output_high_z: y coord of the next laser emitter
+    subroutine
+f_find_next_laser_emitter:
+
+
+    rts

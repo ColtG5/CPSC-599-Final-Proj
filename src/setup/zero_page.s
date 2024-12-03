@@ -36,4 +36,8 @@ wall_collision_flag_z         ds.b 1      ; collision flag for debugging purpose
 obj_collision_flag_z          ds.b 1      ; collision flag for debugging purposes
 laser_collisiong_flag_z       ds.b 1      ; collision flag for debugging purposes
 was_covering_char_z           ds.b 1      ; flag for if the cursor was covering a char in its last position (we moved off of the covered char spot)
+laser_head_x_z                ds.b 1      ; x coord of the laser head
+laser_head_y_z                ds.b 1      ; y coord of the laser head
+laser_direction_z             ds.b 1      ; direction of the laser (1 = up, 2 = right, 3 = down, 4 = left)
+
     seg

@@ -77,6 +77,7 @@ start:
     include "./compression/rle_decode.s"       ; RLE decoder for titlescreen
     include "./titlescreen/titlescreen.s"      ; Titlescreen logic
     include "./levels/levels.s"                ; Level drawing functions
+    include "./laser/laser.s"                  ; Laser functions
     include "./music/titlescreen_music.s"      ; Titlescreen music functions
     include "./player/cursor.s"                ; Cursor movement functions
     include "./player/inventory.s"             ; Player inventory functions
