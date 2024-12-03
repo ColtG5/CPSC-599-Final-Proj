@@ -2,7 +2,7 @@
 ; TODO: use x reg as well as per A2 feedback to make code smaller
 
     subroutine
-f_rle_decoder
+f_rle_decoder:
     ; reset zero page addresses we use
     lda #0
     sta current_byte_from_data_z

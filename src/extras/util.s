@@ -146,12 +146,16 @@ f_check_cursor_collision_with_lasers:
 
 ; Checks if the laser at a given coord would collide with a wall (wall == anything that would stop laser in its tracks)
 ; Input:
-;    tmp_x_z: X coordinate
-;    tmp_y_z: Y coordinate
+;    laser_head_x_z: X coordinate
+;    laser_head_y_z: Y coordinate
 ; Output:
 ;    func_output_low_z: 0 if no collision, 1 if collision
     subroutine
 f_check_laser_collision_with_walls:
+    lda laser_head_x_z
+    sta tmp_x_z
+    lda laser_head_y_z
+    sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
     lda (screen_mem_addr_coord_z),y
     cmp #wall_code
@@ -170,6 +174,10 @@ f_check_laser_collision_with_walls:
     beq .collision
     cmp #laser_shooter_b_code
     beq .collision
+    cmp #laser_vertical_code
+    beq .collision
+    cmp #laser_horizontal_code
+    beq .collision
 
     lda #0
     sta func_output_low_z
@@ -182,42 +190,58 @@ f_check_laser_collision_with_walls:
 
 ; Checks if the laser at a given coord would collide with a receptor
 ; Input:
-;    tmp_x_z: X coordinate
-;    tmp_y_z: Y coordinate
+;    laser_head_x_z: X coordinate
+;    laser_head_y_z: Y coordinate
 ; Output:
 ;    func_output_low_z: 0 if no collision, 1 if collision, 2 if collision == win!
     subroutine
-f_check_laser_collision_with_receptor:
-    jsr f_convert_xy_to_screen_mem_addr
-    lda (screen_mem_addr_coord_z),y
+f_check_laser_collision_with_receptors:
+    lda laser_head_x_z
+    sta tmp_x_z
+    lda laser_head_y_z
+    sta tmp_y_z
+    jsr f_convert_xy_to_screen_mem_addr       ; Convert x, y to screen memory address
+    lda (screen_mem_addr_coord_z),y           ; Load the character at this screen memory location
+
     ldx #1
+    ; Check if it's a top receptor
     cmp #laser_receptor_t_code
     beq .check_hit_receptor
+
     ldx #3
+    ; Check if it's a bottom receptor
     cmp #laser_receptor_b_code
     beq .check_hit_receptor
 
+    ; No collision
     lda #0
     sta func_output_low_z
     rts
 
 .check_hit_receptor:
-    lda #1                          ; will at least return that there was a collision with a receptor
-    sta func_output_low_z
-
-    txa                             ; get orientation of receptor
-    cmp laser_direction_z           ; laser direciton is 1-4 too, 1 meaning up, so 1 laser direction hits receptor with a 1 in X, which is a receptor on the top!
+    cpx laser_direction_z                   ; Top receptors must be hit from below (laser direction 1 = up). compare A with the value at the addr tmp_collision_var_z
     beq .hit_receptor
-    rts                             ; not right side of receptor was hit, dont set anything for receptor getting hit
+    lda #1                                    ; Collision wasn't from the correct direction, so its just a wall collision
+    sta func_output_low_z
+    rts
+
+.hit_receptor:
+    lda #2                                    ; Collision that counts as a win!
+    sta func_output_low_z
+    rts                                       ; Exit
 
 ; Check if the laser hit a reflector
 ; Input:
-;    tmp_x_z: X coordinate
-;    tmp_y_z: Y coordinate
+;    laser_head_x_z: X coordinate
+;    laser_head_y_z: Y coordinate
 ; Output:
 ;    func_output_low_z: 0 if no collision, 1 if collision with reflector 1, 2 if collision with reflector 2
     subroutine
-f_check_laser_collision_with_reflector:
+f_check_laser_collision_with_reflectors:
+    lda laser_head_x_z
+    sta tmp_x_z
+    lda laser_head_y_z
+    sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
     lda (screen_mem_addr_coord_z),y
     ldx #1
@@ -236,8 +260,17 @@ f_check_laser_collision_with_reflector:
     rts
 
 ; Checks if the laser collided with a portal
+; Input:
+;    laser_head_x_z: X coordinate
+;    laser_head_y_z: Y coordinate
+; Output:
+;    func_output_low_z: 0 if no collision, 1 if collision
     subroutine
-f_check_laser_collision_with_portal:
+f_check_laser_collision_with_portals:
+    lda laser_head_x_z
+    sta tmp_x_z
+    lda laser_head_y_z
+    sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
     lda (screen_mem_addr_coord_z),y
     cmp #portal_code
@@ -342,7 +375,8 @@ f_convert_screen_mem_addr_to_xy:
 ; Input:
 ;    func_arg_1_z: number of times to add
 ; Output:
-;    func_output_1_z: result of the multiplication
+;    func_output_low_z: low byte of the result
+;    func_output_high_z: high byte of the result
 	subroutine
 f_multiply_by_22:
     lda #0                   ; Clear A for the result
@@ -385,4 +419,14 @@ f_divide_by_22:
 .div_loop_test:
     bcc .div_loop            ; Repeat if A >= 22
     sta func_output_low_z    ; Store final low byte result
+    rts
+
+; Checks if the level has been won
+; Output:
+;    func_output_low_z: 0 if level won, 1 or greater 
+    subroutine
+f_check_win_condition:
+    lda receptors_not_hit_z
+    cmp #0
+
     rts

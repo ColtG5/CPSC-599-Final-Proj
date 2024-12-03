@@ -36,6 +36,17 @@ start:
     cmp #KEY_SPACE                              ; Check for spacebar input for level change
     beq .next_level                             ; If spacebar pressed, go to next level
 
+    lda receptors_not_hit_z                      ; Check if all receptors are hit
+    cmp #0
+    bne .level_not_won                             ; If all receptors are hit, the player beat the level!!!!! :D
+
+    ; handle stuff for when the player beats the level (animations, music, etc?)
+
+    jmp .next_level
+
+
+.level_not_won:
+
 ; stuff that happens every "tick" of the game!!
 
     sta curr_char_pressed_z                     ; Store input from player
