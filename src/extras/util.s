@@ -41,7 +41,9 @@ f_clear_screen:
 f_handle_input:
     jsr f_handle_cursor_movement            ; inputs like WASD, and their possible resulting collisions
     jsr f_handle_cursor_interactions        ; inputs like E and handling the interaction with game objects
+    jsr f_clear_all_lasers                  ; clear all lasers from the screen
     jsr f_redraw_lasers                     ; on any input, redraw the lasers being emitted, as the path they take may have changed
+    jsr f_draw_cursor                       ; draw the cursor at its new position
 
     rts
 
