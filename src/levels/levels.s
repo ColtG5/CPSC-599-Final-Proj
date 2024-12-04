@@ -37,6 +37,10 @@ f_draw_level_template:
 f_draw_level_data:
     ; put the correct num in the top right for level indicator
 
+    ; reset how many receptors there are in the current level (new level)
+    lda #0
+    sta num_of_receptors_in_level_z
+
     ; draw the dynamic level data from the appropriate level bin
 
     lda what_level_tracker_z
@@ -71,6 +75,20 @@ f_draw_level_data:
     sty level_data_tracker_z  ; remember where we are in the level data
 
     jsr f_draw_char_to_screen_mem          ; Draw the character at (tmp_x_z, tmp_y_z)
+
+    ; if this character was a laser receptor, increment the total number of receptors in the level
+    cmp #laser_receptor_t_code
+    beq .increment_receptors
+    cmp #laser_receptor_b_code
+    beq .increment_receptors
+
+    jmp .loop_draw_level_data
+
+.increment_receptors:
+    lda num_of_receptors_in_level_z
+    clc
+    adc #1
+    sta num_of_receptors_in_level_z
     jmp .loop_draw_level_data
 
 .end_of_data:
@@ -121,16 +139,18 @@ f_redraw_lasers:
     ;       if the next location is a portal, update the head of the laser path to the other portal location. Change this portals sprite to the appropriate sprite
     ;       if the next location is empty space, draw the laser path to this location and update the head of the laser path to this location
 
-    ; reset the win condition for the level back to the total number of receptors in the level
-    ; whenever we find a receptor being hit by a laser, we decrement this variable
-    lda num_of_receptors_in_level_z
-    sta receptors_not_hit_z
+    ; reset the number of receptors hit (used to check if we hit all receptors in the level)
+    lda #0
+    sta receptors_hit_z
 
     jsr f_reset_find_next_laser_shooter                 ; reset trackers and counters for finding laser shooters
 .loop_find_next_laser_shooter:
     jsr f_find_next_laser_shooter
     cmp #$FF
-    beq .no_more_shooters
+    bne .continue
+    jmp .no_more_shooters
+
+.continue:
 
     ; set laser shooter position to laser_head, setting it as the start of the laser
     lda tmp_x_z
@@ -146,6 +166,16 @@ f_redraw_lasers:
     jsr f_add_direction_to_laser_location
 
     ; figure out if the next location of the laser path will collide with something, or if we can continue drawing the path
+    
+.cheeky_nothing_check:
+    ; check if the next location of the laser path is empty space
+    jsr f_check_laser_collision_with_nothing_important
+    lda func_output_low_z
+    cmp #1
+    beq .laser_walls_check
+    ; otherwise, draw a laser character at this location, and continue drawing the laser path
+    jmp .draw_laser
+
 
 .laser_walls_check:
     ; check the millions of types of collisions that can happen with a laser
@@ -167,9 +197,9 @@ f_redraw_lasers:
     cmp #1                              ; if we hit a receptor (in the wrong direction), then stop drawing the laser path
     beq .receptor_hit_wrong
     ; otherwise, we hit a receptor (in the correct direction), then stop drawing the laser path, and say we have one less receptor being hit!
-    dec receptors_not_hit_z
-    cmp #0                              ; if we hit the last receptor, early exit outta here since level is done fr
-    beq .no_more_shooters               ; i mean this should be fine right? we only ever hit the last receptor on calcuating the last laser shooter line anyways right!
+    inc receptors_hit_z
+    ; cmp receptors_in_level_z                             ; if we hit the last receptor, early exit outta here since level is done fr
+    ; beq .no_more_shooters               ; i mean this should be fine right? we only ever hit the last receptor on calcuating the last laser shooter line anyways right!
     ; otherwise, check next condition that could stop our laser
     jmp .laser_reflectors_check
 
@@ -211,12 +241,30 @@ f_redraw_lasers:
     beq .draw_vertical_laser
     ; otherwise, draw a horizontal laser character
 .draw_horizontal_laser:
+    ; dont draw a horizontal laser character if there is already one at this location!
+    
+    jsr f_convert_xy_to_screen_mem_addr
+    ; lda screen_mem_addr_coord_z
+    ldy #0
+    lda (screen_mem_addr_coord_z),y
+    cmp #laser_horizontal_code
+    beq .loop_draw_laser_path_done
+
     lda #laser_horizontal_code
     sta tmp_char_code_z
     jsr f_draw_char_to_screen_mem
     jmp .loop_draw_laser_path               ; continue drawing the laser path
 
 .draw_vertical_laser:
+    ; dont draw a horizontal laser character if there is already one at this location!
+
+    jsr f_convert_xy_to_screen_mem_addr
+    ; lda screen_mem_addr_coord_z
+    ldy #0
+    lda (screen_mem_addr_coord_z),y
+    cmp #laser_vertical_code
+    beq .loop_draw_laser_path_done
+
     lda #laser_vertical_code
     sta tmp_char_code_z
     jsr f_draw_char_to_screen_mem
@@ -242,13 +290,12 @@ f_find_next_laser_shooter:
     lda (level_data_addr_low_z),y                 ; read byte from level data
     cmp #$FF                               ; check if end of data
     beq .no_more_laser_shooters             ; stop if end of data (0 byte)
+    sta curr_char_code_z                    ; store current char code
 
-    lda #3                                  ; if branch below taken, laser is shot in direction down (3)
-    sta laser_direction_z
+    ldx #3                                  ; if branch below taken, laser is shot in direction down (3)
     cmp #laser_shooter_t_code
     beq .found_laser_shooter
-    lda #1                                  ; if branch below taken, laser is shot in direction up (1)
-    sta laser_direction_z
+    ldx #1                                  ; if branch below taken, laser is shot in direction up (1)
     cmp #laser_shooter_b_code
     beq .found_laser_shooter
 
@@ -261,6 +308,7 @@ f_find_next_laser_shooter:
 
 
 .found_laser_shooter:
+    stx laser_direction_z                   ; store direction of laser shooter
     iny
     lda (data_addr_low_z),y                 ; read x coord
     sta tmp_x_z

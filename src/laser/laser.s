@@ -69,3 +69,42 @@ f_add_direction_to_laser_location:
     sbc #1
     sta laser_head_x_z
     rts
+
+; Clears all laser characters from the screen
+    subroutine
+f_clear_all_lasers:
+    ldx #0
+
+.loop_screen_mem_1:
+    lda SCREEN_MEM_1,x 
+    cmp #laser_vertical_code
+    beq .clear_laser
+    cmp #laser_horizontal_code
+    beq .clear_laser
+    jmp .next_char_1
+
+.clear_laser:
+    lda #empty_character_code
+    sta SCREEN_MEM_1,x
+
+.next_char_1:
+    inx
+    bne .loop_screen_mem_1
+
+.loop_screen_mem_2:
+    lda SCREEN_MEM_2,x 
+    cmp #laser_vertical_code
+    beq .clear_laser_2
+    cmp #laser_horizontal_code
+    beq .clear_laser_2
+    jmp .next_char_2
+
+.clear_laser_2:
+    lda #empty_character_code
+    sta SCREEN_MEM_2,x
+
+.next_char_2:
+    inx
+    bne .loop_screen_mem_2
+
+    rts

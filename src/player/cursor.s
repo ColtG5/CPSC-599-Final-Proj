@@ -82,6 +82,8 @@ f_handle_cursor_movement:
     ; also clear covered char since we aint covering one anymore
     jsr f_clear_covered_char_in_mem
 
+    jsr f_clear_all_lasers
+
 ; thirdly, check collision with interactable objects
 .level_object_collision_check:
     jsr f_check_cursor_collision_with_level_objects
@@ -124,6 +126,7 @@ f_handle_cursor_interactions:
     cmp #empty_character_code
     bne .done
     jsr f_place_char_from_inventory
+    jsr f_clear_all_lasers                          ; if we placed a level object, that may change laser path, clear the lasers!
     jmp .done
 
 .try_picking_up_object:
@@ -132,6 +135,7 @@ f_handle_cursor_interactions:
     cmp #empty_character_code
     beq .done
     jsr f_add_char_to_inventory
+    jsr f_clear_all_lasers                          ; if we picked up a level object, that may change laser path, clear the lasers!
     jmp .done
 
 .done:

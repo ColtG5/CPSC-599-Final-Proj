@@ -45,6 +45,37 @@ f_handle_input:
 
     rts
 
+; Checks if the laser didnt collide with anything
+; Input:
+;    laser_head_x_z: X coordinate
+;    laser_head_y_z: Y coordinate
+; Output:
+;    func_output_low_z: 0 if no collision, 1 if collision
+    subroutine
+f_check_laser_collision_with_nothing_important:
+    lda laser_head_x_z
+    sta tmp_x_z
+    lda laser_head_y_z
+    sta tmp_y_z
+    jsr f_convert_xy_to_screen_mem_addr
+    lda (screen_mem_addr_coord_z),y
+    cmp #empty_character_code
+    beq .no_collision
+    cmp #laser_horizontal_code
+    beq .no_collision
+    cmp #laser_vertical_code
+    beq .no_collision
+    cmp #cursor_code
+    beq .no_collision
+
+    lda #1                          ; we probably collided with something
+    sta func_output_low_z
+    rts
+
+.no_collision:
+    lda #0                          ; we collided with nothing!!!
+    sta func_output_low_z
+    rts
 
 ; Check collision between cursor and walls (game walls + walls inside level)
 ; This means check collision between the character codes of wall_code, wall_top_code,
@@ -338,36 +369,36 @@ f_convert_xy_to_screen_mem_addr:
 
 	rts
 
-; Converts a screen memory address to an (x, y) coordinate.
-; Input:
-;    screen_mem_addr_coord_z: low_byte
-;    screen_mem_addr_coord_z+1: high_byte
-; Output:
-;    tmp_x_z: X coordinate
-;    tmp_y_z: Y coordinate
-    subroutine
-f_convert_screen_mem_addr_to_xy:
-    ; subtract the base address of the screen mem from the screen_mem_addr_coord_z
-    lda screen_mem_addr_coord_z
-    sec
-    sbc #<SCREEN_MEM_1
-    sta screen_mem_addr_coord_z
-    lda screen_mem_addr_coord_z+1
-    sbc #>SCREEN_MEM_1
-    sta screen_mem_addr_coord_z+1
+; ; Converts a screen memory address to an (x, y) coordinate.
+; ; Input:
+; ;    screen_mem_addr_coord_z: low_byte
+; ;    screen_mem_addr_coord_z+1: high_byte
+; ; Output:
+; ;    tmp_x_z: X coordinate
+; ;    tmp_y_z: Y coordinate
+;     subroutine
+; f_convert_screen_mem_addr_to_xy:
+;     ; subtract the base address of the screen mem from the screen_mem_addr_coord_z
+;     lda screen_mem_addr_coord_z
+;     sec
+;     sbc #<SCREEN_MEM_1
+;     sta screen_mem_addr_coord_z
+;     lda screen_mem_addr_coord_z+1
+;     sbc #>SCREEN_MEM_1
+;     sta screen_mem_addr_coord_z+1
 
-    ; divide the result by 22 to get the row
-    ; load x with 22
-    lda #22
-    sta func_arg_1_z
-    jsr f_divide_by_22
-    sta tmp_y_z
+;     ; divide the result by 22 to get the row
+;     ; load x with 22
+;     lda #22
+;     sta func_arg_1_z
+;     jsr f_divide_by_22
+;     sta tmp_y_z
 
-    ; the remainder is the column
-    lda func_output_low_z
-    sta tmp_x_z
+;     ; the remainder is the column
+;     lda func_output_low_z
+;     sta tmp_x_z
 
-    rts
+;     rts
 
 
 
@@ -419,14 +450,4 @@ f_divide_by_22:
 .div_loop_test:
     bcc .div_loop            ; Repeat if A >= 22
     sta func_output_low_z    ; Store final low byte result
-    rts
-
-; Checks if the level has been won
-; Output:
-;    func_output_low_z: 0 if level won, 1 or greater 
-    subroutine
-f_check_win_condition:
-    lda receptors_not_hit_z
-    cmp #0
-
     rts
