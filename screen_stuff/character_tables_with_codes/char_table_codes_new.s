@@ -308,6 +308,46 @@ laser_receptor_b_code = 30
 	dc.b %00111100
 	dc.b %11111111
 
+reflector_1_hit_tr_code = 31
+	dc.b %11011000
+	dc.b %11011000
+	dc.b %00111000
+	dc.b %00011111
+	dc.b %00001111
+	dc.b %00000100
+	dc.b %00000011
+	dc.b %00000011
+
+reflector_1_hit_bl_code = 32
+	dc.b %11000000
+	dc.b %11000000
+	dc.b %00100000
+	dc.b %11110000
+	dc.b %11111000
+	dc.b %00011100
+	dc.b %00011011
+	dc.b %00011011
+
+reflector_2_hit_tl_code = 33
+	dc.b %00011011
+	dc.b %00011011
+	dc.b %00011100
+	dc.b %11111000
+	dc.b %11110000
+	dc.b %00100000
+	dc.b %11000000
+	dc.b %11000000
+
+reflector_2_hit_br_code = 34
+	dc.b %00000011
+	dc.b %00000011
+	dc.b %00000100
+	dc.b %00001111
+	dc.b %00011111
+	dc.b %00111000
+	dc.b %11011000
+	dc.b %11011000
+
 at_code = 128
 A_code = 129
 B_code = 130

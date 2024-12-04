@@ -214,7 +214,8 @@ f_redraw_lasers:
     beq .laser_portals_check
     ; otherwise, we hit a reflector, and we need to handle that!
     jsr f_handle_laser_collision_with_reflector
-    jmp .loop_draw_laser_path_done
+    jsr f_add_direction_to_laser_location               ; reflector changed direction, we are at reflector location still, add dir to loc to update laser head!
+    jmp .draw_laser
 
 .laser_portals_check:
     jsr f_check_laser_collision_with_portals            ; a collision with a portal means we need to update the head of the laser path to the other portal location
@@ -223,7 +224,7 @@ f_redraw_lasers:
     beq .draw_laser
     ; otherwise, we hit a portal, and we need to handle that!
     jsr f_handle_laser_collision_with_portal
-    jmp .loop_draw_laser_path_done
+    jmp .draw_laser
 
 ; if we made it here, then we avoided every collision check, so we can draw a regular laser character at this location!
 .draw_laser:
@@ -243,12 +244,12 @@ f_redraw_lasers:
 .draw_horizontal_laser:
     ; dont draw a horizontal laser character if there is already one at this location!
     
-    jsr f_convert_xy_to_screen_mem_addr
-    ; lda screen_mem_addr_coord_z
-    ldy #0
-    lda (screen_mem_addr_coord_z),y
-    cmp #laser_horizontal_code
-    beq .loop_draw_laser_path_done
+    ; jsr f_convert_xy_to_screen_mem_addr
+    ; ; lda screen_mem_addr_coord_z
+    ; ldy #0
+    ; lda (screen_mem_addr_coord_z),y
+    ; cmp #laser_horizontal_code
+    ; beq .loop_draw_laser_path_done
 
     lda #laser_horizontal_code
     sta tmp_char_code_z
@@ -258,12 +259,12 @@ f_redraw_lasers:
 .draw_vertical_laser:
     ; dont draw a horizontal laser character if there is already one at this location!
 
-    jsr f_convert_xy_to_screen_mem_addr
-    ; lda screen_mem_addr_coord_z
-    ldy #0
-    lda (screen_mem_addr_coord_z),y
-    cmp #laser_vertical_code
-    beq .loop_draw_laser_path_done
+    ; jsr f_convert_xy_to_screen_mem_addr
+    ; ; lda screen_mem_addr_coord_z
+    ; ldy #0
+    ; lda (screen_mem_addr_coord_z),y
+    ; cmp #laser_vertical_code
+    ; beq .loop_draw_laser_path_done
 
     lda #laser_vertical_code
     sta tmp_char_code_z

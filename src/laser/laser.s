@@ -16,7 +16,56 @@ f_handle_laser_collision_with_receptor:
 ; If the laser collides with a reflector, update reflector sprite, calculate the new direction of the laser, and update laser head to new location
     subroutine
 f_handle_laser_collision_with_reflector:
+    lda func_output_low_z
+    cmp #1
+    beq .handle_reflector_1
+    cmp #2
+    beq .handle_reflector_2
+    rts                                     ; should never happen, if we call handle, we should've collided with a refector
 
+.handle_reflector_1:    
+    lda laser_direction_z
+    ldx #reflector_1_hit_tr_code            ; reflector 1 character for hit from the top or the right
+    ldy #2                                  ; tenative new direction (right) if hit from top
+    cmp #3
+    beq .hit
+    ldy #1                                  ; tenative new direction (up) if hit from right
+    cmp #4
+    beq .hit
+    ldx #reflector_1_hit_bl_code
+    ldy #4                                  ; tenative new direction (left) if hit from bottom
+    cmp #1
+    beq .hit
+    ldy #3                                  ; tenative new direction (down) if hit from left
+    cmp #2
+    beq .hit
+
+.handle_reflector_2:
+    lda laser_direction_z
+    ldx #reflector_2_hit_tl_code            ; reflector 2 character for hit from the top or the left
+    ldy #4                                  ; tenative new direction (left) if hit from top
+    cmp #3
+    beq .hit
+    ldy #1                                  ; tenative new direction (up) if hit from left
+    cmp #4
+    beq .hit
+    ldx #reflector_2_hit_br_code
+    ldy #2                                  ; tenative new direction (right) if hit from bottom
+    cmp #1
+    beq .hit
+    ldy #3                                  ; tenative new direction (down) if hit from right
+    cmp #2
+    beq .hit
+
+.hit:
+    sty laser_direction_z                   ; set the new laser direction
+
+    lda laser_head_x_z
+    sta tmp_x_z
+    lda laser_head_y_z
+    sta tmp_y_z
+    txa
+    jsr f_draw_char_to_screen_mem           ; draw the updated reflector sprite
 
     rts
 

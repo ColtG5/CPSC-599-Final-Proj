@@ -280,8 +280,16 @@ f_check_laser_collision_with_reflectors:
     ldx #1
     cmp #reflector_1_code
     beq .collision
+    cmp #reflector_1_hit_tr_code
+    beq .collision
+    cmp #reflector_1_hit_bl_code
+    beq .collision
     ldx #2
     cmp #reflector_2_code
+    beq .collision
+    cmp #reflector_2_hit_tl_code
+    beq .collision
+    cmp #reflector_2_hit_br_code
     beq .collision
 
     ; also check if the covered char is in the way, and if so, if it is currently a reflector, record that as a collision too!
@@ -327,6 +335,20 @@ f_check_laser_collision_with_portals:
     cmp #portal_code
     beq .collision
 
+    ; also check if the covered char is in the way, and if so, if it is currently a portal, record that as a collision too!
+    lda covered_char_x_z
+    cmp laser_head_x_z
+    bne .no_collision
+    lda covered_char_y_z
+    cmp laser_head_y_z
+    bne .no_collision
+
+    ; laser head is on the loc of the covered char, check if its a portal
+    lda covered_char_code_z
+    cmp #portal_code
+    beq .collision
+
+.no_collision:
     lda #0
     sta func_output_low_z
     rts
