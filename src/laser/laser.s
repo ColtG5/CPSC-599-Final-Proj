@@ -47,14 +47,14 @@ f_handle_laser_collision_with_reflector:
     cmp #3
     beq .hit
     ldy #1                                  ; tenative new direction (up) if hit from left
-    cmp #4
+    cmp #2
     beq .hit
     ldx #reflector_2_hit_br_code
     ldy #2                                  ; tenative new direction (right) if hit from bottom
     cmp #1
     beq .hit
     ldy #3                                  ; tenative new direction (down) if hit from right
-    cmp #2
+    cmp #4
     beq .hit
 
 .hit:
@@ -65,6 +65,7 @@ f_handle_laser_collision_with_reflector:
     lda laser_head_y_z
     sta tmp_y_z
     txa
+    sta tmp_char_code_z
     jsr f_draw_char_to_screen_mem           ; draw the updated reflector sprite
 
     rts

@@ -167,14 +167,14 @@ f_redraw_lasers:
 
     ; figure out if the next location of the laser path will collide with something, or if we can continue drawing the path
     
-.cheeky_nothing_check:
-    ; check if the next location of the laser path is empty space
-    jsr f_check_laser_collision_with_nothing_important
-    lda func_output_low_z
-    cmp #1
-    beq .laser_walls_check
-    ; otherwise, draw a laser character at this location, and continue drawing the laser path
-    jmp .draw_laser
+; .cheeky_nothing_check:
+;     ; check if the next location of the laser path is empty space
+;     jsr f_check_laser_collision_with_nothing_important
+;     lda func_output_low_z
+;     cmp #1
+;     beq .laser_walls_check
+;     ; otherwise, draw a laser character at this location, and continue drawing the laser path
+;     jmp .draw_laser
 
 
 .laser_walls_check:
