@@ -67,8 +67,8 @@ f_check_laser_collision_with_nothing_important:
     beq .no_collision
     cmp #laser_vertical_code
     beq .no_collision
-    cmp #cursor_code
-    beq .no_collision
+    ; cmp #cursor_code
+    ; beq .no_collision
 
     lda #1                          ; we probably collided with something
     sta func_output_low_z
@@ -284,6 +284,24 @@ f_check_laser_collision_with_reflectors:
     cmp #reflector_2_code
     beq .collision
 
+    ; also check if the covered char is in the way, and if so, if it is currently a reflector, record that as a collision too!
+    lda covered_char_x_z
+    cmp laser_head_x_z
+    bne .no_collision
+    lda covered_char_y_z
+    cmp laser_head_y_z
+    bne .no_collision
+
+    ; laser head is on the loc of the covered char, check if its a reflector
+    lda covered_char_code_z
+    ldx #1
+    cmp #reflector_1_code
+    beq .collision
+    ldx #2
+    cmp #reflector_2_code
+    beq .collision
+
+.no_collision:
     lda #0
     sta func_output_low_z
     rts
