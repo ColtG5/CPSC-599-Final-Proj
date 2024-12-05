@@ -63,6 +63,7 @@ f_check_cursor_collision_with_walls:
     lda cursor_y_z
     sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
+    ldy #0
     lda (screen_mem_addr_coord_z),y
     cmp #wall_code
     beq .collision
@@ -102,6 +103,7 @@ f_check_cursor_collision_with_level_objects:
     lda cursor_y_z
     sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
+    ldy #0
     lda (screen_mem_addr_coord_z),y
     cmp #reflector_1_code
     beq .collision
@@ -137,6 +139,7 @@ f_check_cursor_collision_with_lasers:
     lda cursor_y_z
     sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
+    ldy #0
     lda (screen_mem_addr_coord_z),y
     cmp #laser_horizontal_code
     beq .collision
@@ -167,6 +170,7 @@ f_check_laser_collision_with_nothing_important:
     lda laser_head_y_z
     sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
+    ldy #0
     lda (screen_mem_addr_coord_z),y
     cmp #empty_character_code
     beq .no_collision
@@ -200,6 +204,7 @@ f_check_laser_collision_with_walls:
     lda laser_head_y_z
     sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
+    ldy #0
     lda (screen_mem_addr_coord_z),y
     cmp #wall_code
     beq .collision
@@ -211,8 +216,8 @@ f_check_laser_collision_with_walls:
     beq .collision
     cmp #game_wall_left_code
     beq .collision
-    cmp #cursor_code
-    beq .collision
+    ; cmp #cursor_code
+    ; beq .collision
     cmp #laser_shooter_t_code
     beq .collision
     cmp #laser_shooter_b_code
@@ -243,7 +248,8 @@ f_check_laser_collision_with_receptors:
     sta tmp_x_z
     lda laser_head_y_z
     sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr       ; Convert x, y to screen memory address
+    jsr f_convert_xy_to_screen_mem_addr         ; Convert x, y to screen memory address
+    ldy #0
     lda (screen_mem_addr_coord_z),y           ; Load the character at this screen memory location
 
     ldx #1
@@ -286,6 +292,7 @@ f_check_laser_collision_with_reflectors:
     lda laser_head_y_z
     sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
+    ldy #0
     lda (screen_mem_addr_coord_z),y
     ldx #1
     cmp #reflector_1_code
@@ -341,6 +348,7 @@ f_check_laser_collision_with_portals:
     lda laser_head_y_z
     sta tmp_y_z
     jsr f_convert_xy_to_screen_mem_addr
+    ldy #0
     lda (screen_mem_addr_coord_z),y
     cmp #portal_code
     beq .collision

@@ -36,6 +36,7 @@ f_fill_middle_band_with_goob:
     ldx #0                     ; Reset X coordinate for each row
 .loop_band_columns:
     jsr f_convert_xy_to_screen_mem_addr ; Convert X, Y to screen memory address
+    ldy #0
 
     lda #goob_facing_left_code
     sta (screen_mem_addr_coord_z),y   ; Write to screen memory

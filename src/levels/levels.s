@@ -265,6 +265,7 @@ f_redraw_lasers:
     sta tmp_addr_hi_z
 
     lda #2                                ; Red color code (adjust if necessary)
+    ldy #0
     sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
 
     jmp .loop_draw_laser_path             ; ; continue drawing the laser path
@@ -284,6 +285,7 @@ f_redraw_lasers:
     sta tmp_addr_hi_z
 
     lda #2                                ; Red color code (adjust if necessary)
+    ldy #0
     sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
 
     jmp .loop_draw_laser_path             ; continue drawing the laser path

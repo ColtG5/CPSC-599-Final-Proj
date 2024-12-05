@@ -180,6 +180,7 @@ f_handle_collision_with_interactable_object:
     sta covered_char_x_z
     lda tmp_y_z
     sta covered_char_y_z
+    ldy #0
     lda (screen_mem_addr_coord_z),y ; result in this addr should still be from the collision check we did before this, so dont need to convert x,y again
 
     ; if we are covering a char code that is a character to represent getting hit by a laser
