@@ -144,7 +144,7 @@ f_redraw_lasers:
     sta receptors_hit_z
 
     jsr f_reset_find_next_laser_shooter                 ; reset trackers and counters for finding laser shooters
-.loop_find_next_laser_shooter:
+.loop_top_find_next_laser_shooter:
     jsr f_find_next_laser_shooter
     cmp #$FF
     bne .continue
@@ -271,7 +271,7 @@ f_redraw_lasers:
 
 .loop_draw_laser_path_done:
     ; done drawing this laser path
-    jmp .loop_find_next_laser_shooter
+    jmp .loop_top_find_next_laser_shooter
 
 .no_more_shooters:
     rts
