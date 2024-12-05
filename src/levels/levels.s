@@ -267,7 +267,7 @@ f_redraw_lasers:
     lda #2                                ; Red color code (adjust if necessary)
     sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
 
-    jmp .loop_draw_laser_path             ; continue drawing the laser path
+    jmp .loop_draw_laser_path             ; ; continue drawing the laser path
 
 .draw_vertical_laser:
     lda #laser_vertical_code              ; Load vertical laser character code
@@ -289,8 +289,13 @@ f_redraw_lasers:
     jmp .loop_draw_laser_path             ; continue drawing the laser path
 
 .loop_draw_laser_path_done:
-    ; done drawing this laser path
-    jmp .loop_top_find_next_laser_shooter
+    lda receptors_hit_z                 ; Check the number of receptors hit
+    cmp num_of_receptors_in_level_z     ; Compare with total receptors in the level
+;    beq f_win_screen                    ; If all receptors are hit, jump to the win screen logic
+    bne .skip_win_screen
+    jmp f_win_screen
+.skip_win_screen:
+    jmp .loop_top_find_next_laser_shooter ; Otherwise, continue with the next laser shooter
 
 .no_more_shooters:
     rts

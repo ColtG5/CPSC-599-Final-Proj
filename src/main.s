@@ -92,7 +92,7 @@ start:
     include "./music/titlescreen_music.s"      ; Titlescreen music functions
     include "./player/cursor.s"                ; Cursor movement functions
     include "./player/inventory.s"             ; Player inventory functions
-
+    include "./levels/win.s"                   ; Winscreen functions
 level_pointers_p:
     dc.w $0000 ; pretend this is NOT here
     dc.w level_1_data_start_p

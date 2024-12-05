@@ -45,6 +45,7 @@ num_of_receptors_in_level_z         ds.b 1      ; a constant total for each leve
 receptors_hit_z                     ds.b 1      ; win condition for a level, number of receptors hit by laser (when this is equal to receptors_in_level, the level is won)
 tmp_addr_lo_z                       ds.b 1      ; Temporary storage for low byte of adjusted address
 tmp_addr_hi_z                       ds.b 1      ; Temporary storage for high byte of adjusted address
+tmp_counter_z                       ds.b 1      ; Goob printer counter
 
 
     seg
