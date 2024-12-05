@@ -46,6 +46,10 @@ receptors_hit_z                     ds.b 1      ; win condition for a level, num
 tmp_addr_lo_z                       ds.b 1      ; Temporary storage for low byte of adjusted address
 tmp_addr_hi_z                       ds.b 1      ; Temporary storage for high byte of adjusted address
 tmp_counter_z                       ds.b 1      ; Goob printer counter
-
+tmp_frame_toggle_z       = $FC  ; 1-byte toggle for animation frame
+tmp_animation_counter_z  = $FD  ; 1-byte counter for animation iterations
+; Temporary variables for timer
+tmp_timer_low_z      = $FB  ; Zero-page memory address for low byte of the timer
+tmp_timer_high_z     = $FC  ; Zero-page memory address for high byte of the timer
 
     seg

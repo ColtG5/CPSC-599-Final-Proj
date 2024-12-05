@@ -348,6 +348,26 @@ reflector_2_hit_br_code = 34
 	dc.b %11011000
 	dc.b %11011000
 
+goob_dance_frame_1_code = 35  ; Arms up
+    dc.b %00111110
+    dc.b %01010101
+    dc.b %10101010
+    dc.b %10000001
+    dc.b %10000011
+    dc.b %01111101
+    dc.b %00000101
+    dc.b %00000100
+
+goob_dance_frame_2_code = 36  ; Arms down
+    dc.b %00111110
+    dc.b %01000001
+    dc.b %10010101
+    dc.b %10001001
+    dc.b %10000101
+    dc.b %01111101
+    dc.b %00000101
+    dc.b %00000100
+
 at_code = 128
 A_code = 129
 B_code = 130
