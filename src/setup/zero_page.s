@@ -43,5 +43,8 @@ laser_head_y_z                      ds.b 1      ; y coord of the laser head
 laser_direction_z                   ds.b 1      ; direction of the laser (1 = up, 2 = right, 3 = down, 4 = left)
 num_of_receptors_in_level_z         ds.b 1      ; a constant total for each level for how many receptors there are in each level (used to reset receptors_hit_z each time we redraw the lasers)
 receptors_hit_z                     ds.b 1      ; win condition for a level, number of receptors hit by laser (when this is equal to receptors_in_level, the level is won)
+tmp_addr_lo_z                       ds.b 1      ; Temporary storage for low byte of adjusted address
+tmp_addr_hi_z                       ds.b 1      ; Temporary storage for high byte of adjusted address
+
 
     seg

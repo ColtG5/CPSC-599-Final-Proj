@@ -226,6 +226,8 @@ f_redraw_lasers:
 
 ; if we made it here, then we avoided every collision check, so we can draw a regular laser character at this location!
 .draw_laser:
+
+
     ; draw a laser chartacter at this location
     lda laser_head_x_z
     sta tmp_x_z
@@ -249,25 +251,42 @@ f_redraw_lasers:
     ; cmp #laser_horizontal_code
     ; beq .loop_draw_laser_path_done
 
-    lda #laser_horizontal_code
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    jmp .loop_draw_laser_path               ; continue drawing the laser path
+    lda #laser_horizontal_code            ; Load horizontal laser character code
+    sta tmp_char_code_z                   ; Store character code temporarily
+    jsr f_draw_char_to_screen_mem         ; Draw the character on the screen
+
+    ; Set the laser color
+    lda screen_mem_addr_coord_z           ; Load the low byte of the screen address
+    clc
+    adc #<COLOUR_MEM_1 - <SCREEN_MEM_1    ; Calculate the offset for color memory
+    sta tmp_addr_lo_z
+    lda screen_mem_addr_coord_z+1         ; Load the high byte of the screen address
+    adc #>COLOUR_MEM_1 - >SCREEN_MEM_1
+    sta tmp_addr_hi_z
+
+    lda #2                                ; Red color code (adjust if necessary)
+    sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
+
+    jmp .loop_draw_laser_path             ; continue drawing the laser path
 
 .draw_vertical_laser:
-    ; dont draw a horizontal laser character if there is already one at this location!
+    lda #laser_vertical_code              ; Load vertical laser character code
+    sta tmp_char_code_z                   ; Store character code temporarily
+    jsr f_draw_char_to_screen_mem         ; Draw the character on the screen
 
-    ; jsr f_convert_xy_to_screen_mem_addr
-    ; ; lda screen_mem_addr_coord_z
-    ; ldy #0
-    ; lda (screen_mem_addr_coord_z),y
-    ; cmp #laser_vertical_code
-    ; beq .loop_draw_laser_path_done
+    ; Set the laser color
+    lda screen_mem_addr_coord_z           ; Load the low byte of the screen address
+    clc
+    adc #<COLOUR_MEM_1 - <SCREEN_MEM_1    ; Calculate the offset for color memory
+    sta tmp_addr_lo_z
+    lda screen_mem_addr_coord_z+1         ; Load the high byte of the screen address
+    adc #>COLOUR_MEM_1 - >SCREEN_MEM_1
+    sta tmp_addr_hi_z
 
-    lda #laser_vertical_code
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    jmp .loop_draw_laser_path               ; continue drawing the laser path
+    lda #2                                ; Red color code (adjust if necessary)
+    sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
+
+    jmp .loop_draw_laser_path             ; continue drawing the laser path
 
 .loop_draw_laser_path_done:
     ; done drawing this laser path
