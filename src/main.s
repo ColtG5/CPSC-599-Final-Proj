@@ -41,6 +41,7 @@ start:
 ; stuff that happens every "tick" of the game!!
 
     jsr f_clear_all_laser_stuff                  ; Clear all lasers and reset objects that were in a "laser" state
+    jsr f_set_color_mem_black
     jsr f_handle_input                          ; Handle player inputs (also handles collision after the player input)
     jsr f_redraw_lasers
     jsr f_draw_cursor                           ; Draw cursor
@@ -92,7 +93,8 @@ start:
     include "./music/titlescreen_music.s"      ; Titlescreen music functions
     include "./player/cursor.s"                ; Cursor movement functions
     include "./player/inventory.s"             ; Player inventory functions
-    include "./levels/win.s"                   ; Winscreen functions
+    include "./levels/win.s"                   ; Winscreen functions\
+
 level_pointers_p:
     dc.w $0000 ; pretend this is NOT here
     dc.w level_1_data_start_p

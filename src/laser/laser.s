@@ -9,7 +9,26 @@ f_handle_laser_collision_with_wall:
 ; If the laser collides wiht a receptor, check if it hit the receptor from the right side. if so, set that this receptor was hit! otherwise, its like a wall
     subroutine
 f_handle_laser_collision_with_receptor:
+    ; Load the receptor's coordinates (already set in `laser_head_x_z` and `laser_head_y_z`).
+    lda laser_head_x_z              ; Get X coordinate of the receptor
+    sta tmp_x_z
+    lda laser_head_y_z              ; Get Y coordinate of the receptor
+    sta tmp_y_z
 
+    ; Convert X, Y to the screen memory address.
+    jsr f_convert_xy_to_screen_mem_addr ; Convert to screen memory address.
+
+    ; Update the receptor's color to green (color code 5).
+    lda screen_mem_addr_coord_z     ; Get the low byte of the screen address.
+    clc
+    adc #<COLOUR_MEM_1 - <SCREEN_MEM_1 ; Offset for color memory.
+    sta tmp_addr_lo_z
+    lda screen_mem_addr_coord_z+1  ; Get the high byte of the screen address.
+    adc #>COLOUR_MEM_1 - >SCREEN_MEM_1
+    sta tmp_addr_hi_z
+
+    lda #5                         ; Green color code.
+    sta (tmp_addr_lo_z),y          ; Update the receptor's color in memory.
 
     rts
 
