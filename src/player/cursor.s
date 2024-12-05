@@ -14,7 +14,7 @@ f_handle_cursor_movement:
     beq .move_cursor_down
     cmp #KEY_D
     beq .move_cursor_right
-    rts
+    jmp .after_wall_collision_check
 .move_cursor_up
     jsr f_erase_cursor                        ; Erase cursor at previous position
     dec cursor_y_z
@@ -82,7 +82,7 @@ f_handle_cursor_movement:
     ; also clear covered char since we aint covering one anymore
     jsr f_clear_covered_char_in_mem
 
-    ; jsr f_clear_all_lasers
+    ; jsr f_clear_all_laser_stuff
 
 ; thirdly, check collision with interactable objects
 .level_object_collision_check:
@@ -126,7 +126,7 @@ f_handle_cursor_interactions:
     cmp #empty_character_code
     bne .done
     jsr f_place_char_from_inventory
-    ; jsr f_clear_all_lasers                          ; if we placed a level object, that may change laser path, clear the lasers!
+    ; jsr f_clear_all_laser_stuff                          ; if we placed a level object, that may change laser path, clear the lasers!
     jmp .done
 
 .try_picking_up_object:
@@ -135,7 +135,7 @@ f_handle_cursor_interactions:
     cmp #empty_character_code
     beq .done
     jsr f_add_char_to_inventory
-    ; jsr f_clear_all_lasers                          ; if we picked up a level object, that may change laser path, clear the lasers!
+    ; jsr f_clear_all_laser_stuff                          ; if we picked up a level object, that may change laser path, clear the lasers!
     jmp .done
 
 .done:
@@ -181,6 +181,9 @@ f_handle_collision_with_interactable_object:
     lda tmp_y_z
     sta covered_char_y_z
     lda (screen_mem_addr_coord_z),y ; result in this addr should still be from the collision check we did before this, so dont need to convert x,y again
+
+    ; if we are covering a char code that is a character to represent getting hit by a laser
+
     sta covered_char_code_z
 
     rts

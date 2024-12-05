@@ -37,23 +37,22 @@ start:
     beq .next_level                             ; If spacebar pressed, go to next level
     sta curr_char_pressed_z                     ; Store input from player
 
+
+; stuff that happens every "tick" of the game!!
+
+    jsr f_clear_all_laser_stuff                  ; Clear all lasers and reset objects that were in a "laser" state
+    jsr f_handle_input                          ; Handle player inputs (also handles collision after the player input)
+    jsr f_redraw_lasers
+    jsr f_draw_cursor                           ; Draw cursor
+
+; check for level win condition
     lda receptors_hit_z                         ; Check if all receptors are hit
     cmp num_of_receptors_in_level_z
-    bne .level_not_won                             ; If all receptors are hit, the player beat the level!!!!! :D
-
-    ; handle stuff for when the player beats the level (animations, music, etc?)
+    bne .game_loop                             ; If all receptors are hit, the player beat the level!!!!! :D otherwise continue game loop
 
     jmp .next_level
 
 
-.level_not_won:
-
-; stuff that happens every "tick" of the game!!
-
-    jsr f_handle_input                          ; Handle player inputs (also handles collision after the player input)
-
-
-    jmp .game_loop                              ; Repeat loop
 
 ; Transition to the next level
 .next_level:
@@ -79,6 +78,7 @@ start:
     jsr f_reset_cursor_position                 ; reset cursor pos to hardcoded spot
 
     jsr f_draw_next_level
+    jsr f_redraw_lasers
     jsr f_draw_cursor
     jmp .game_loop
 

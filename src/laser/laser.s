@@ -120,9 +120,9 @@ f_add_direction_to_laser_location:
     sta laser_head_x_z
     rts
 
-; Clears all laser characters from the screen
+; Clears all laser characters from the screen, and reset all characters that are in their "laser form" back to default
     subroutine
-f_clear_all_lasers:
+f_clear_all_laser_stuff:
     ldx #0
 
 .loop_screen_mem_1:
@@ -131,11 +131,30 @@ f_clear_all_lasers:
     beq .clear_laser
     cmp #laser_horizontal_code
     beq .clear_laser
+    cmp #reflector_1_hit_tr_code
+    beq .reset_reflector_1
+    cmp #reflector_1_hit_bl_code
+    beq .reset_reflector_1
+    cmp #reflector_2_hit_tl_code
+    beq .reset_reflector_2
+    cmp #reflector_2_hit_br_code
+    beq .reset_reflector_2
     jmp .next_char_1
 
 .clear_laser:
     lda #empty_character_code
     sta SCREEN_MEM_1,x
+    jmp .next_char_1
+
+.reset_reflector_1:
+    lda #reflector_1_code
+    sta SCREEN_MEM_1,x
+    jmp .next_char_1
+
+.reset_reflector_2:
+    lda #reflector_2_code
+    sta SCREEN_MEM_1,x
+    jmp .next_char_1
 
 .next_char_1:
     inx
@@ -147,11 +166,30 @@ f_clear_all_lasers:
     beq .clear_laser_2
     cmp #laser_horizontal_code
     beq .clear_laser_2
+    cmp #reflector_1_hit_tr_code
+    beq .reset_reflector_1_2
+    cmp #reflector_1_hit_bl_code
+    beq .reset_reflector_1_2
+    cmp #reflector_2_hit_tl_code
+    beq .reset_reflector_2_2
+    cmp #reflector_2_hit_br_code
+    beq .reset_reflector_2_2
     jmp .next_char_2
 
 .clear_laser_2:
     lda #empty_character_code
     sta SCREEN_MEM_2,x
+    jmp .next_char_2
+
+.reset_reflector_1_2:
+    lda #reflector_1_code
+    sta SCREEN_MEM_2,x
+    jmp .next_char_2
+
+.reset_reflector_2_2:
+    lda #reflector_2_code
+    sta SCREEN_MEM_2,x
+    jmp .next_char_2
 
 .next_char_2:
     inx

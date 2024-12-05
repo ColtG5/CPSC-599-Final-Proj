@@ -198,10 +198,8 @@ f_redraw_lasers:
     beq .receptor_hit_wrong
     ; otherwise, we hit a receptor (in the correct direction), then stop drawing the laser path, and say we have one less receptor being hit!
     inc receptors_hit_z
-    ; cmp receptors_in_level_z                             ; if we hit the last receptor, early exit outta here since level is done fr
-    ; beq .no_more_shooters               ; i mean this should be fine right? we only ever hit the last receptor on calcuating the last laser shooter line anyways right!
-    ; otherwise, check next condition that could stop our laser
-    jmp .laser_reflectors_check
+    jsr f_handle_laser_collision_with_receptor      ; updates the receptor sprite
+    jmp .loop_draw_laser_path_done
 
 .receptor_hit_wrong:
     jsr f_handle_laser_collision_with_wall

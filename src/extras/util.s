@@ -41,43 +41,12 @@ f_clear_screen:
 f_handle_input:
     jsr f_handle_cursor_movement            ; inputs like WASD, and their possible resulting collisions
     jsr f_handle_cursor_interactions        ; inputs like E and handling the interaction with game objects
-    jsr f_clear_all_lasers                  ; clear all lasers from the screen
-    jsr f_redraw_lasers                     ; on any input, redraw the lasers being emitted, as the path they take may have changed
-    jsr f_draw_cursor                       ; draw the cursor at its new position
+    ; jsr f_clear_all_laser_stuff                  ; clear all lasers from the screen
+    ; jsr f_redraw_lasers                     ; on any input, redraw the lasers being emitted, as the path they take may have changed
+    ; jsr f_draw_cursor                       ; draw the cursor at its new position
 
     rts
 
-; Checks if the laser didnt collide with anything
-; Input:
-;    laser_head_x_z: X coordinate
-;    laser_head_y_z: Y coordinate
-; Output:
-;    func_output_low_z: 0 if no collision, 1 if collision
-    subroutine
-f_check_laser_collision_with_nothing_important:
-    lda laser_head_x_z
-    sta tmp_x_z
-    lda laser_head_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
-    lda (screen_mem_addr_coord_z),y
-    cmp #empty_character_code
-    beq .no_collision
-    cmp #laser_horizontal_code
-    beq .no_collision
-    cmp #laser_vertical_code
-    beq .no_collision
-    ; cmp #cursor_code
-    ; beq .no_collision
-
-    lda #1                          ; we probably collided with something
-    sta func_output_low_z
-    rts
-
-.no_collision:
-    lda #0                          ; we collided with nothing!!!
-    sta func_output_low_z
-    rts
 
 ; Check collision between cursor and walls (game walls + walls inside level)
 ; This means check collision between the character codes of wall_code, wall_top_code,
@@ -136,8 +105,16 @@ f_check_cursor_collision_with_level_objects:
     lda (screen_mem_addr_coord_z),y
     cmp #reflector_1_code
     beq .collision
+    ; cmp #reflector_1_hit_tr_code
+    ; beq .collision
+    ; cmp #reflector_1_hit_bl_code
+    ; beq .collision
     cmp #reflector_2_code
     beq .collision
+    ; cmp #reflector_2_hit_tl_code
+    ; beq .collision
+    ; cmp #reflector_2_hit_br_code
+    ; beq .collision
     cmp #portal_code
     beq .collision
 
@@ -176,6 +153,39 @@ f_check_cursor_collision_with_lasers:
     sta laser_collisiong_flag_z
     sta func_output_low_z
     rts
+
+; Checks if the laser didnt collide with anything
+; Input:
+;    laser_head_x_z: X coordinate
+;    laser_head_y_z: Y coordinate
+; Output:
+;    func_output_low_z: 0 if no collision, 1 if collision
+    subroutine
+f_check_laser_collision_with_nothing_important:
+    lda laser_head_x_z
+    sta tmp_x_z
+    lda laser_head_y_z
+    sta tmp_y_z
+    jsr f_convert_xy_to_screen_mem_addr
+    lda (screen_mem_addr_coord_z),y
+    cmp #empty_character_code
+    beq .no_collision
+    cmp #laser_horizontal_code
+    beq .no_collision
+    cmp #laser_vertical_code
+    beq .no_collision
+    ; cmp #cursor_code
+    ; beq .no_collision
+
+    lda #1                          ; we probably collided with something
+    sta func_output_low_z
+    rts
+
+.no_collision:
+    lda #0                          ; we collided with nothing!!!
+    sta func_output_low_z
+    rts
+
 
 ; Checks if the laser at a given coord would collide with a wall (wall == anything that would stop laser in its tracks)
 ; Input:
