@@ -1,139 +1,170 @@
-; File: levels/win.s
-; Contains logic for the win screen animation and transitioning to the next level.
+; f_win_screen: Display a simple win message, recolor lasers green, and wait for E press
+; Assumes lasers and other objects remain on screen.
 
 
-; Subroutine: f_win_screen
-; Displays a win animation and transitions to the next level.
+; Just recolor lasers and display text, then wait for E.
     subroutine
 f_win_screen:
-    ; Step 1: Fill the middle band with Goob characters.
-    ;jsr f_fill_middle_band_with_goob
+    ; Step 1: Recolor all lasers to green to signify victory
+    jsr f_recolor_lasers_green
 
-    ; Step 2: Highlight receptors in green.
-    jsr f_highlight_receptors
-
-    ; Step 3: Display "YOU WIN!" message.
-    ;jsr f_display_win_message
-
-    ; Step 4: Pause for a moment.
-    lda #$FF                    ; Pause duration
-    sta tmp_pause_duration_z
-    jsr f_pause
-
-    ; Step 5: Clear the screen.
-    jsr f_clear_screen_win
-
-    ; Step 6: Transition to the next level.
-    jsr f_draw_next_level
-    rts
-
-; Subroutine: f_fill_middle_band_with_goob
-; Fills a middle section of the screen (rows 10 to 14) with Goob characters.
-    subroutine
-f_fill_middle_band_with_goob:
-    ldy #10                    ; Starting row (Y coordinate)
-.loop_band_rows:
-    ldx #0                     ; Reset X coordinate for each row
-.loop_band_columns:
-    jsr f_convert_xy_to_screen_mem_addr ; Convert X, Y to screen memory address
-    ldy #0
-
-    lda #goob_facing_left_code
-    sta (screen_mem_addr_coord_z),y   ; Write to screen memory
-    lda #goob_facing_right_code
-    sta (screen_mem_addr_coord_z),y   ; Alternate Goob
-
-    inx                        ; Move to the next column
-    cpx #22                    ; Screen width (adjust as needed)
-    bne .loop_band_columns     ; Continue until end of the row
-
-    iny                        ; Move to the next row
-    cpy #15                    ; End row (adjust as needed)
-    bne .loop_band_rows        ; Repeat for rows 10 to 14
-
-    rts
-
-; Subroutine: f_highlight_receptors
-; Highlights all receptor characters in green.
-    subroutine
-f_highlight_receptors:
-    ldx #0
-.loop_highlight:
-    lda SCREEN_MEM_1,x
-    cmp #laser_receptor_t_code
-    beq .set_green
-    cmp #laser_receptor_b_code
-    beq .set_green
-    jmp .next_char
-
-.set_green:
-    lda #4                    ; Green color code
-    sta COLOUR_MEM_1,x        ; Set color memory
-    jmp .next_char
-
-.next_char:
-    inx
-    bne .loop_highlight       ; Loop until the entire screen is processed
-    rts
-
-; Subroutine: f_display_win_message
-; Displays "YOU WIN!" in the center of the screen.
-    subroutine
-f_display_win_message:
-    lda #10                   ; X position for the message
+    ; Step 2: Print "Level Complete! Press E to continue" on screen
+    lda #0
     sta tmp_x_z
-    lda #12                   ; Y position for the message
+    lda #0
     sta tmp_y_z
-    lda #<you_win_message_addr
-    sta data_addr_low_z
-    lda #>you_win_message_addr
-    sta data_addr_high_z
-    jsr f_print_message_to_screen
-    rts
-
-; Subroutine: f_clear_screen
-; Clears all characters and colors from the screen.
-    subroutine
-f_clear_screen_win:
+    ; "LEVEL COMPLETE!"
     ldx #0
-.loop_clear:
-    lda #empty_character_code
-    sta SCREEN_MEM_1,x
-    sta SCREEN_MEM_2,x
-    lda #0                    ; Black color
+    ; Set cursor to top-left corner (0,0)
+    lda #0
+    sta tmp_x_z
+    lda #0
+    sta tmp_y_z
+
+    ; Print "PRESS"
+    lda #144    ; 'P'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #146    ; 'R'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #133    ; 'E'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #147    ; 'S'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #147    ; 'S'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #160    ; ' ' (space)
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    ; Print "E"
+    lda #133    ; 'E'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #160    ; ' ' (space)
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    ; Print "TO"
+    lda #148    ; 'T'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #143    ; 'O'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #160    ; ' '
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    ; Print "CONTINUE"
+    lda #131    ; 'C'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #143    ; 'O'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #142    ; 'N'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #148    ; 'T'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #137    ; 'I'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #142    ; 'N'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #149    ; 'U'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    lda #133    ; 'E'
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    inc tmp_x_z
+
+    ; Step 3: Wait for E key press
+.wait_for_e:
+    jsr GETIN
+    cmp #KEY_E
+    bne .wait_for_e
+
+    ; E pressed, return to caller (which should move to next level)
+    rts
+
+
+; f_recolor_lasers_green:
+; Iterate over screen mem and wherever we see vertical/horizontal laser chars,
+; set their color to green (5).
+    subroutine
+f_recolor_lasers_green:
+    ldx #0
+.loop_mem_1:
+    lda SCREEN_MEM_1,x
+    cmp #laser_vertical_code
+    beq .recolor_1
+    cmp #laser_horizontal_code
+    beq .recolor_1
+    jmp .next_1
+
+.recolor_1:
+    lda #5       ; green
     sta COLOUR_MEM_1,x
-    sta COLOUR_MEM_2,x
+.next_1:
     inx
-    bne .loop_clear           ; Continue until the entire screen is cleared
-    rts
+    bne .loop_mem_1
 
-; Subroutine: f_pause
-; Simple pause subroutine.
-    subroutine
-f_pause:
-    ldy tmp_pause_duration_z
-.pause_loop:
-    dey
-    bne .pause_loop
-    rts
+    ldx #0
+.loop_mem_2:
+    lda SCREEN_MEM_2,x
+    cmp #laser_vertical_code
+    beq .recolor_2
+    cmp #laser_horizontal_code
+    beq .recolor_2
+    jmp .next_2
 
-; Subroutine: f_print_message_to_screen
-; Prints a null-terminated message at the given coordinates (tmp_x_z, tmp_y_z).
-    subroutine
-f_print_message_to_screen:
-    ldx #0                    ; Index for the message string.
-.loop_print_message:
-    lda data_addr_low_z,x     ; Load character from the message string.
-    cmp #$00                  ; Check for null terminator.
-    beq .done
-    sta tmp_char_code_z       ; Store the character code.
-    jsr f_draw_char_to_screen_mem ; Print the character.
-    inc tmp_x_z               ; Move cursor to the next position.
-    inx                       ; Increment index for the message string.
-    jmp .loop_print_message
-.done:
-    rts
+.recolor_2:
+    lda #5       ; green
+    sta COLOUR_MEM_2,x
+.next_2:
+    inx
+    bne .loop_mem_2
 
-; Data: "YOU WIN!" message
-you_win_message_addr:
-    .byte "YOU WIN!", $00      ; Null-terminated message
+    rts
