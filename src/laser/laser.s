@@ -11,20 +11,20 @@ f_handle_laser_collision_with_wall:
 ;   func_output_high_z: which receptor orientation was hit (1 through 4)
     subroutine
 f_handle_laser_collision_with_receptor:
-    ; Load the receptor's coordinates (already set in `laser_head_x_z` and `laser_head_y_z`).
-    lda laser_head_x_z              ; Get X coordinate of the receptor
-    sta tmp_x_z
-    lda laser_head_y_z              ; Get Y coordinate of the receptor
-    sta tmp_y_z
+    ; ; Load the receptor's coordinates (already set in `laser_head_x_z` and `laser_head_y_z`).
+    ; lda laser_head_x_z              ; Get X coordinate of the receptor
+    ; sta tmp_x_z
+    ; lda laser_head_y_z              ; Get Y coordinate of the receptor
+    ; sta tmp_y_z
 
-    jsr f_convert_xy_to_screen_mem_addr ; Convert to screen memory address.
+    ; jsr f_convert_xy_to_screen_mem_addr ; Convert to screen memory address.
 
     ; Change the sprite
     lda func_output_high_z
-    ldx #laser_receptor_b_hit_code
+    ldx #laser_receptor_t_hit_code
     cmp #1
     beq .draw_new_receptor
-    ldx #laser_receptor_t_hit_code
+    ldx #laser_receptor_b_hit_code
     cmp #3
     beq .draw_new_receptor
 
