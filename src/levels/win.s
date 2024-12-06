@@ -10,118 +10,15 @@ f_win_screen:
     lda #$1D
     sta $900F       ; Store the updated value, now the background is green, border unchanged
 
-
-    ; Step 2: Print "Level Complete! Press E to continue" on screen
-    lda #0
-    sta tmp_x_z
-    lda #0
-    sta tmp_y_z
-    ; "LEVEL COMPLETE!"
-    ldx #0
-    ; Set cursor to top-left corner (0,0)
-    lda #0
-    sta tmp_x_z
-    lda #0
-    sta tmp_y_z
-
-    ; Print "PRESS"
-    lda #144    ; 'P'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #146    ; 'R'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #133    ; 'E'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #147    ; 'S'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #147    ; 'S'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #160    ; ' ' (space)
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    ; Print "E"
-    lda #133    ; 'E'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #160    ; ' ' (space)
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    ; Print "TO"
-    lda #148    ; 'T'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #143    ; 'O'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #160    ; ' '
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    ; Print "CONTINUE"
-    lda #131    ; 'C'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #143    ; 'O'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #142    ; 'N'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #148    ; 'T'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #137    ; 'I'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #142    ; 'N'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #149    ; 'U'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
-
-    lda #133    ; 'E'
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-    inc tmp_x_z
+    lda #<continue_text_data_start_p
+    sta data_addr_low_z
+    lda #>continue_text_data_start_p
+    sta data_addr_high_z
+    lda continue_text_data_start_p
+    sta load_addr_low_z
+    lda continue_text_data_start_p+1
+    sta load_addr_high_z
+    jsr f_rle_decoder
 
     ; Step 3: Wait for E key press
 .wait_for_e:

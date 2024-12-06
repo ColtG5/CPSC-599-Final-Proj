@@ -134,5 +134,8 @@ level_4_data_start_p:
 level_5_data_start_p:
     incbin "./levels/level_5.bin"
 
+continue_text_data_start_p:
+    incbin "./extras/continue_text-rle-encoded.bin"
+
     org CUSTOM_CHAR_MEM
     include "./extras/character_table.s"
