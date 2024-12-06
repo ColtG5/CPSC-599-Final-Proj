@@ -348,6 +348,56 @@ reflector_2_hit_br_code = 34
 	dc.b %11011000
 	dc.b %11011000
 
+laser_receptor_t_hit_code = 35
+	dc.b %11111111
+	dc.b %00111100
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+
+laser_receptor_b_hit_code = 36
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00111100
+	dc.b %11111111
+
+reflector_1_hit_all_code = 37
+	dc.b %11011000
+	dc.b %11011000
+	dc.b %00111000
+	dc.b %11111111
+	dc.b %11111111
+	dc.b %00011100
+	dc.b %00011011
+	dc.b %00011011
+
+reflector_2_hit_all_code = 38
+	dc.b %00011011
+	dc.b %00011011
+	dc.b %00011100
+	dc.b %11111111
+	dc.b %11111111
+	dc.b %00111000
+	dc.b %11011000
+	dc.b %11011000
+
+laser_both_code = 39
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %11111111
+	dc.b %11111111
+	dc.b %00011000
+	dc.b %00011000
+	dc.b %00011000
+
 at_code = 128
 A_code = 129
 B_code = 130
