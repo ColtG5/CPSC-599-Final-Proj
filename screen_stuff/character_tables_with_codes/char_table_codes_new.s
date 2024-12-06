@@ -398,6 +398,46 @@ laser_both_code = 39
 	dc.b %00011000
 	dc.b %00011000
 
+portal_hit_up_code = 40
+	dc.b %00011000
+	dc.b %00111100
+	dc.b %00111100
+	dc.b %01011010
+	dc.b %01000010
+	dc.b %00100100
+	dc.b %00100100
+	dc.b %00011000
+
+portal_hit_right_code = 41
+	dc.b %00011000
+	dc.b %00100100
+	dc.b %00100100
+	dc.b %01001111
+	dc.b %01001111
+	dc.b %00100100
+	dc.b %00100100
+	dc.b %00011000
+
+portal_hit_down_code = 42
+	dc.b %00011000
+	dc.b %00100100
+	dc.b %00100100
+	dc.b %01000010
+	dc.b %01011010
+	dc.b %00111100
+	dc.b %00111100
+	dc.b %00011000
+
+portal_hit_left_code = 43
+	dc.b %00011000
+	dc.b %00100100
+	dc.b %00100100
+	dc.b %11110010
+	dc.b %11110010
+	dc.b %00100100
+	dc.b %00100100
+	dc.b %00011000
+
 at_code = 128
 A_code = 129
 B_code = 130
