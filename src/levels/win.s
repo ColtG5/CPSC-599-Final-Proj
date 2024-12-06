@@ -6,7 +6,7 @@
     subroutine
 f_win_screen:
     ; Step 1: Recolor all lasers to green to signify victory
-    jsr f_recolor_lasers_green
+    jsr f_recolor_stuff_green
     lda #$1D
     sta $900F       ; Store the updated value, now the background is green, border unchanged
 
@@ -133,43 +133,67 @@ f_win_screen:
     lda #24    ; Border = 0 (black), Background = 0 (black)
     sta $900F
     rts
-
-
-; f_recolor_lasers_green:
-; Iterate over screen mem and wherever we see vertical/horizontal laser chars,
-; set their color to green (5).
+ 
     subroutine
-f_recolor_lasers_green:
-    ldx #0
-.loop_mem_1:
-    lda SCREEN_MEM_1,x
+f_recolor_stuff_green:
+    ldy #0
+    lda #<SCREEN_MEM_1
+    sta load_addr_low_z
+    lda #>SCREEN_MEM_1
+    sta load_addr_high_z
+    lda #<COLOUR_MEM_1
+    sta tmp_addr_lo_z
+    lda #>COLOUR_MEM_1
+    sta tmp_addr_hi_z
+
+.loop_screen_mem_1:
+    lda (load_addr_low_z),y
     cmp #laser_vertical_code
-    beq .recolor_1
+    beq .recolor_char
     cmp #laser_horizontal_code
-    beq .recolor_1
-    jmp .next_1
+    beq .recolor_char
+    cmp #laser_both_code
+    beq .recolor_char
+    cmp #reflector_1_hit_tr_code
+    beq .recolor_char
+    cmp #reflector_1_hit_bl_code
+    beq .recolor_char
+    cmp #reflector_1_hit_all_code
+    beq .recolor_char
+    cmp #reflector_2_hit_tl_code
+    beq .recolor_char
+    cmp #reflector_2_hit_br_code
+    beq .recolor_char
+    cmp #reflector_2_hit_all_code
+    beq .recolor_char
+    cmp #portal_hit_up_code
+    beq .recolor_char
+    cmp #portal_hit_right_code
+    beq .recolor_char
+    cmp #portal_hit_down_code
+    beq .recolor_char
+    cmp #portal_hit_left_code
+    beq .recolor_char
 
-.recolor_1:
-    lda #5       ; green
-    sta COLOUR_MEM_1,x
-.next_1:
-    inx
-    bne .loop_mem_1
+    jmp .next_char_1
 
-    ldx #0
-.loop_mem_2:
-    lda SCREEN_MEM_2,x
-    cmp #laser_vertical_code
-    beq .recolor_2
-    cmp #laser_horizontal_code
-    beq .recolor_2
-    jmp .next_2
+.recolor_char:
 
-.recolor_2:
-    lda #5       ; green
-    sta COLOUR_MEM_2,x
-.next_2:
-    inx
-    bne .loop_mem_2
+    ; sty tmp_index                         ; Use Y for indexing 
+    lda #5
+    sta (tmp_addr_lo_z),y                 ; Set color to green
 
+    jmp .next_char_1
+
+.next_char_1:
+    iny
+    bne .loop_screen_mem_1
+
+    inc tmp_addr_hi_z
+    inc load_addr_high_z
+    lda #$20
+    cmp load_addr_high_z
+    bne .loop_screen_mem_1
+
+.done:
     rts
