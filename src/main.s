@@ -43,7 +43,7 @@ start:
     jsr f_clear_all_laser_stuff                  ; Clear all lasers and reset objects that were in a "laser" state
     jsr f_set_color_mem_black
     jsr f_handle_input                          ; Handle player inputs (also handles collision after the player input)
-    jsr f_redraw_lasers
+    jsr f_redraw_lasers                         ; calculate and draw the paths for each laser beam for each laser shooter
     jsr f_draw_cursor                           ; Draw cursor
 
 ; check for level win condition

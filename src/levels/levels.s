@@ -125,7 +125,7 @@ f_draw_covered_char_back_into_place:
 ; Calculates the path that each laser will take from each laser shooter, and correctly draws that path to the screen
     subroutine
 f_redraw_lasers:
-    ; pseudocode:
+    ; (original) pseudocode:
     ; for each laser shooter:
     ;   set starting loc, and figure out what direction the laser emits from
     ;   (if this shooter is a laser_shooter_t, then start loc is 1 below this since it is an shooter on the top, and the direction is down)
@@ -167,14 +167,14 @@ f_redraw_lasers:
 
     ; figure out if the next location of the laser path will collide with something, or if we can continue drawing the path
     
-; .cheeky_nothing_check:
-;     ; check if the next location of the laser path is empty space
-;     jsr f_check_laser_collision_with_nothing_important
-;     lda func_output_low_z
-;     cmp #1
-;     beq .laser_walls_check
-;     ; otherwise, draw a laser character at this location, and continue drawing the laser path
-;     jmp .draw_laser
+.cheeky_nothing_check:
+    ; check if the next location of the laser path is empty space
+    jsr f_check_laser_collision_with_nothing_important
+    lda func_output_low_z
+    cmp #1
+    beq .laser_walls_check
+    ; otherwise, draw a laser character at this location, and continue drawing the laser path
+    jmp .draw_laser
 
 
 .laser_walls_check:
@@ -212,8 +212,7 @@ f_redraw_lasers:
     beq .laser_portals_check
     ; otherwise, we hit a reflector, and we need to handle that!
     jsr f_handle_laser_collision_with_reflector
-    jsr f_add_direction_to_laser_location               ; reflector changed direction, we are at reflector location still, add dir to loc to update laser head!
-    jmp .draw_laser
+    jmp .loop_draw_laser_path
 
 .laser_portals_check:
     jsr f_check_laser_collision_with_portals            ; a collision with a portal means we need to update the head of the laser path to the other portal location
@@ -226,8 +225,6 @@ f_redraw_lasers:
 
 ; if we made it here, then we avoided every collision check, so we can draw a regular laser character at this location!
 .draw_laser:
-
-
     ; draw a laser chartacter at this location
     lda laser_head_x_z
     sta tmp_x_z
@@ -242,53 +239,31 @@ f_redraw_lasers:
     beq .draw_vertical_laser
     ; otherwise, draw a horizontal laser character
 .draw_horizontal_laser:
-    ; dont draw a horizontal laser character if there is already one at this location!
-    
-    ; jsr f_convert_xy_to_screen_mem_addr
-    ; ; lda screen_mem_addr_coord_z
-    ; ldy #0
-    ; lda (screen_mem_addr_coord_z),y
-    ; cmp #laser_horizontal_code
-    ; beq .loop_draw_laser_path_done
-
     lda #laser_horizontal_code            ; Load horizontal laser character code
-    sta tmp_char_code_z                   ; Store character code temporarily
-    jsr f_draw_char_to_screen_mem         ; Draw the character on the screen
-
-    ; Set the laser color
-    lda screen_mem_addr_coord_z           ; Load the low byte of the screen address
-    clc
-    adc #<COLOUR_MEM_1 - <SCREEN_MEM_1    ; Calculate the offset for color memory
-    sta tmp_addr_lo_z
-    lda screen_mem_addr_coord_z+1         ; Load the high byte of the screen address
-    adc #>COLOUR_MEM_1 - >SCREEN_MEM_1
-    sta tmp_addr_hi_z
-
-    lda #2                                ; Red color code (adjust if necessary)
-    ldy #0
-    sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
-
-    jmp .loop_draw_laser_path             ; ; continue drawing the laser path
+    jmp .draw_laser_now
 
 .draw_vertical_laser:
     lda #laser_vertical_code              ; Load vertical laser character code
+
+.draw_laser_now:
     sta tmp_char_code_z                   ; Store character code temporarily
-    jsr f_draw_char_to_screen_mem         ; Draw the character on the screen
+    jsr f_draw_char_to_screen_mem         ; Draw the laser to the screen
 
-    ; Set the laser color
-    lda screen_mem_addr_coord_z           ; Load the low byte of the screen address
-    clc
-    adc #<COLOUR_MEM_1 - <SCREEN_MEM_1    ; Calculate the offset for color memory
-    sta tmp_addr_lo_z
-    lda screen_mem_addr_coord_z+1         ; Load the high byte of the screen address
-    adc #>COLOUR_MEM_1 - >SCREEN_MEM_1
-    sta tmp_addr_hi_z
+    ; if the cursor is at this position, do NOT colour the laser, since cursor will draw over it anyways
+    lda cursor_x_z
+    cmp tmp_x_z
+    bne .no_cursor_here
+    lda cursor_y_z
+    cmp tmp_y_z
+    bne .no_cursor_here
+    jmp .loop_draw_laser_path
 
-    lda #2                                ; Red color code (adjust if necessary)
-    ldy #0
-    sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
-
+.no_cursor_here:
+    jsr f_colour_a_laser                ; otherwise, the laser gets its colour
     jmp .loop_draw_laser_path             ; continue drawing the laser path
+
+
+
 
 .loop_draw_laser_path_done:
     lda receptors_hit_z                 ; Check the number of receptors hit

@@ -139,6 +139,23 @@ f_add_direction_to_laser_location:
     sta laser_head_x_z
     rts
 
+; Colours the laser character at the current laser head location
+    subroutine
+f_colour_a_laser:
+    lda screen_mem_addr_coord_z           ; Load the low byte of the screen address
+    clc
+    adc #<COLOUR_MEM_1 - <SCREEN_MEM_1    ; Calculate the offset for color memory
+    sta tmp_addr_lo_z
+    lda screen_mem_addr_coord_z+1         ; Load the high byte of the screen address
+    adc #>COLOUR_MEM_1 - >SCREEN_MEM_1
+    sta tmp_addr_hi_z
+
+    lda #2                                ; Red color code
+    ldy #0
+    sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
+    rts
+
+
 ; Clears all laser characters from the screen, and reset all characters that are in their "laser form" back to default
     subroutine
 f_clear_all_laser_stuff:
