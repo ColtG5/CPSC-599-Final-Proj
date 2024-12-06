@@ -315,13 +315,15 @@ f_check_laser_collision_with_reflectors:
     ldx #1
     cmp #reflector_1_code
     beq .collision
+    ldx #2
     cmp #reflector_1_hit_tr_code
     beq .collision
     cmp #reflector_1_hit_bl_code
     beq .collision
-    ldx #2
+    ldx #3
     cmp #reflector_2_code
     beq .collision
+    ldx #4
     cmp #reflector_2_hit_tl_code
     beq .collision
     cmp #reflector_2_hit_br_code
@@ -340,7 +342,7 @@ f_check_laser_collision_with_reflectors:
     ldx #1
     cmp #reflector_1_code
     beq .collision
-    ldx #2
+    ldx #3
     cmp #reflector_2_code
     beq .collision
 

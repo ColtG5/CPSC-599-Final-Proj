@@ -43,10 +43,10 @@ f_handle_laser_collision_with_reflector:
     lda func_output_low_z
     cmp #1
     beq .handle_reflector_1
-    cmp #2
+    cmp #3
     beq .handle_reflector_2
 
-.handle_reflector_1:    
+.handle_reflector_1:
     lda laser_direction_z
     ldx #reflector_1_hit_tr_code            ; reflector 1 character for hit from the top or the right
     ldy #2                                  ; tenative new direction (right) if hit from top
@@ -81,14 +81,27 @@ f_handle_laser_collision_with_reflector:
     beq .hit
 
 .hit:
+    stx tmp_char_code_z
     sty laser_direction_z                   ; set the new laser direction
 
+    ; if reflector sprite already a laser variant, make it the full variant!
+    lda func_output_low_z
+    ldx #reflector_1_hit_all_code
+    cmp #2
+    beq .draw_full_reflector
+    ldx #reflector_2_hit_all_code
+    cmp #4
+    beq .draw_full_reflector
+    jmp .draw_reflector
+
+.draw_full_reflector:
+    stx tmp_char_code_z
+
+.draw_reflector
     lda laser_head_x_z
     sta tmp_x_z
     lda laser_head_y_z
     sta tmp_y_z
-    txa
-    sta tmp_char_code_z
     jsr f_draw_char_to_screen_mem           ; draw the updated reflector sprite
 
     rts
