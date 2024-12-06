@@ -267,6 +267,8 @@ f_redraw_lasers:
     beq .draw_laser
     ; otherwise, we hit a portal, and we need to handle that! (move the laser head to the other portal location)
     jsr f_handle_laser_collision_with_portal
+    cmp #42
+    beq .loop_draw_laser_path_done
     jmp .loop_draw_laser_path
 
 ; if we made it here, then we avoided every collision check, so we can draw a regular laser character at this location!

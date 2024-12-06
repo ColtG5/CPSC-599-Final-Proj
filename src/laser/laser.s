@@ -96,6 +96,8 @@ f_handle_laser_collision_with_reflector:
     rts
 
 ; If the laser collides with a portal, update portal sprite, and update the laser head to the new location of the portal
+; Output:
+;   func_output_low_z: wether to early exit beceause second portal isnt on the ground
     subroutine
 f_handle_laser_collision_with_portal:
     ; before moving laser head, change this portal sprite + colour it
@@ -120,6 +122,18 @@ f_handle_laser_collision_with_portal:
     lda #2                          ; red
     sta func_arg_1_z
     jsr f_colour_a_character
+
+
+    ; only process second portal if it isnt in our inventory!
+    lda inventory_item_z
+    cmp #portal_code
+    bne .process_second_portal
+    lda #42
+    sta func_output_low_z
+    rts
+
+
+.process_second_portal:
 
     ; now deal with second portal
 

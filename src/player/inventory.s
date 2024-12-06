@@ -4,6 +4,37 @@ f_add_char_to_inventory:
     lda covered_char_code_z
     sta inventory_item_z
 
+    ; if we added a portal, set its now old portal coords to ff
+    cmp #portal_code
+    bne .done
+    lda portal_1_x_z
+    cmp cursor_x_z
+    bne .clear_portal_2
+    lda portal_1_y_z
+    cmp cursor_y_z
+    bne .clear_portal_2
+
+    lda #0xff
+    sta portal_1_x_z
+    sta portal_1_y_z
+    jmp .done
+
+.clear_portal_2:
+    ; lda portal_2_x_z
+    ; cmp cursor_x_z
+    ; bne .done
+    ; lda portal_2_y_z
+    ; cmp cursor_y_z
+    ; bne .done
+
+    lda #0xff
+    sta portal_2_x_z
+    sta portal_2_y_z
+    jmp .done
+
+
+
+.done:
     jsr f_clear_covered_char_in_mem     ; after adding char to inventory, we are no longer covering it!
     rts
 
@@ -18,6 +49,34 @@ f_place_char_from_inventory:
     lda cursor_y_z
     sta covered_char_y_z
 
+    ; if we are placing a portal, put these new coords into whatevcer portal coords are currently ff
+    lda inventory_item_z
+    cmp #portal_code
+    bne .done
+    lda portal_1_x_z
+    cmp #0xff
+    beq .put_in_portal_1
+    lda portal_2_x_z
+    cmp #0xff
+    beq .put_in_portal_2
+    jmp .done
+
+.put_in_portal_1:
+    lda cursor_x_z
+    sta portal_1_x_z
+    lda cursor_y_z
+    sta portal_1_y_z
+    jmp .done
+
+.put_in_portal_2:
+    lda cursor_x_z
+    sta portal_2_x_z
+    lda cursor_y_z
+    sta portal_2_y_z
+    jmp .done
+
+
+.done:
     ; clear current inventory char
     jsr f_clear_inventory
 
