@@ -216,36 +216,6 @@ f_add_direction_to_laser_location:
     rts
 
 
-
-; .add_up:
-;     lda laser_head_y_z
-;     sec
-;     sbc #1
-;     sta laser_head_y_z
-;     rts
-
-; .add_right:
-;     lda laser_head_x_z
-;     clc
-;     adc #1
-;     sta laser_head_x_z
-;     rts
-
-; .add_down:
-;     lda laser_head_y_z
-;     clc
-;     adc #1
-;     sta laser_head_y_z
-;     rts
-
-; .add_left:
-;     lda laser_head_x_z
-;     sec
-;     sbc #1
-;     sta laser_head_x_z
-;     rts
-
-
 ; Clears all laser characters from the screen, and reset all characters that are in their "laser form" back to default
     subroutine
 f_clear_all_laser_stuff:
@@ -315,57 +285,3 @@ f_clear_all_laser_stuff:
 
 .done:
     rts
-
-; .loop_screen_mem_2:
-;     lda SCREEN_MEM_2,x 
-;     ldy #empty_character_code
-;     cmp #laser_vertical_code
-;     beq .reset_char_2
-;     cmp #laser_horizontal_code
-;     beq .reset_char_2
-;     cmp #laser_both_code
-;     beq .reset_char_2
-
-;     ldy #reflector_1_code
-;     cmp #reflector_1_hit_tr_code
-;     beq .reset_char_2
-;     cmp #reflector_1_hit_bl_code
-;     beq .reset_char_2
-;     cmp #reflector_1_hit_all_code
-;     beq .reset_char_2
-;     ldy #reflector_2_code
-;     cmp #reflector_2_hit_tl_code
-;     beq .reset_char_2
-;     cmp #reflector_2_hit_br_code
-;     beq .reset_char_2
-;     cmp #reflector_2_hit_all_code
-;     beq .reset_char_2
-
-;     ldy #laser_receptor_t_code
-;     cmp #laser_receptor_t_hit_code
-;     beq .reset_char_2
-;     ldy #laser_receptor_b_code
-;     cmp #laser_receptor_b_hit_code
-;     beq .reset_char_2
-
-;     ldy #portal_code
-;     cmp #portal_hit_up_code
-;     beq .reset_char_2
-;     cmp #portal_hit_right_code
-;     beq .reset_char_2
-;     cmp #portal_hit_down_code
-;     beq .reset_char_2
-;     cmp #portal_hit_left_code
-;     beq .reset_char_2
-
-;     jmp .next_char_2
-
-; .reset_char_2:
-;     tya
-;     sta SCREEN_MEM_2,x
-;     jmp .next_char_2
-
-; .next_char_2:
-;     inx
-;     bne .loop_screen_mem_2
-;     rts
