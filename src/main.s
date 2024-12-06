@@ -112,6 +112,7 @@ level_pointers_p:
     dc.w level_3_data_start_p
     dc.w level_4_data_start_p
     dc.w level_5_data_start_p
+    dc.w level_6_data_start_p    
 
 encoded_title_screen_data_start_p:
     incbin "./titlescreen/titlescreen-rle-encoded.bin"
@@ -134,6 +135,9 @@ level_4_data_start_p:
 level_5_data_start_p:
     incbin "./levels/level_5.bin"
 
+level_6_data_start_p:
+    incbin "./levels/level_6.bin"
+    
 continue_text_data_start_p:
     incbin "./extras/continue_text-rle-encoded.bin"
 
