@@ -262,6 +262,20 @@ f_redraw_lasers:
     lda laser_head_y_z
     sta tmp_y_z
 
+    ; if a laser character already exists here, then draw the both character!
+    lda (screen_mem_addr_coord_z),y
+    cmp #laser_horizontal_code
+    beq .draw_both_laser
+    cmp #laser_vertical_code
+    beq .draw_both_laser
+    jmp .draw_normal_laser
+
+.draw_both_laser:
+    lda #laser_both_code
+    jmp .draw_laser_now
+
+
+.draw_normal_laser:
     ; if the laser direction is 1 or 3 (vertical), then it should be a vertical laser character, and vice-versa
     lda laser_direction_z
     cmp #1

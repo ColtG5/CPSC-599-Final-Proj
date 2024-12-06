@@ -229,6 +229,8 @@ f_clear_all_laser_stuff:
     beq .reset_char
     cmp #laser_horizontal_code
     beq .reset_char
+    cmp #laser_both_code
+    beq .reset_char
 
     ldy #reflector_1_code
     cmp #reflector_1_hit_tr_code
@@ -279,6 +281,8 @@ f_clear_all_laser_stuff:
     cmp #laser_vertical_code
     beq .reset_char_2
     cmp #laser_horizontal_code
+    beq .reset_char_2
+    cmp #laser_both_code
     beq .reset_char_2
 
     ldy #reflector_1_code
