@@ -19,8 +19,7 @@ f_place_char_from_inventory:
     sta covered_char_y_z
 
     ; clear current inventory char
-    lda #empty_character_code
-    sta inventory_item_z
+    jsr f_clear_inventory
 
     rts
 

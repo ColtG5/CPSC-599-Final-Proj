@@ -3,13 +3,9 @@
 f_draw_next_level:
     ; draw level template first
     jsr f_draw_level_template
-
     ; then draw specific level data (+ level num in top right)
     jsr f_draw_level_data
-
-
     rts
-
 
 ; function that draws the template for a level (top score, game border, etc.)
     subroutine
@@ -96,10 +92,7 @@ f_draw_level_data:
     jmp .loop_draw_level_data
 
 .increment_receptors:
-    lda num_of_receptors_in_level_z
-    clc
-    adc #1
-    sta num_of_receptors_in_level_z
+    inc num_of_receptors_in_level_z
     jmp .loop_draw_level_data
 
 .store_portal:
@@ -179,7 +172,7 @@ f_redraw_lasers:
     jsr f_find_next_laser_shooter
     cmp #$FF
     bne .continue
-    jmp .no_more_shooters
+    rts
 
 .continue:
 
@@ -320,16 +313,7 @@ f_redraw_lasers:
     jmp .loop_draw_laser_path             ; continue drawing the laser path
 
 .loop_draw_laser_path_done:
-    lda receptors_hit_z                 ; Check the number of receptors hit
-    cmp num_of_receptors_in_level_z     ; Compare with total receptors in the level
-;    beq f_win_screen                    ; If all receptors are hit, jump to the win screen logic
-    bne .skip_win_screen
-    jmp f_win_screen
-.skip_win_screen:
-    jmp .loop_top_find_next_laser_shooter ; Otherwise, continue with the next laser shooter
-
-.no_more_shooters:
-    rts
+    jmp .loop_top_find_next_laser_shooter
 
 ; Loops through the level data for the current level and finds the x,y of the starting spot for a laser from a laser emitter
 ; Make sure the data_addr_low_z and data_addr_high_z are set to the correct level data address before calling this (done in reset func!)
@@ -353,7 +337,7 @@ f_find_next_laser_shooter:
     cmp #laser_shooter_b_code
     beq .found_laser_shooter
 
-    lda #0                                  ; no laser shooter found, discard next x,y, and move on to next char code
+    ; no laser shooter found, discard next x,y, and move on to next char code
     iny
     iny
     iny

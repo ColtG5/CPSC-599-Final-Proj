@@ -3,71 +3,115 @@
     subroutine
 f_handle_cursor_movement:
 ; before we move cursor, store what we got now into the prev cursor spots
-    jsr f_remember_cursor_position
+    lda cursor_x_z
+    sta last_cursor_x_z
+    lda cursor_y_z
+    sta last_cursor_y_z
+
+;     lda curr_char_pressed_z
+;     cmp #KEY_W
+;     beq .move_cursor_up
+;     cmp #KEY_A
+;     beq .move_cursor_left
+;     cmp #KEY_S
+;     beq .move_cursor_down
+;     cmp #KEY_D
+;     beq .move_cursor_right
+;     jmp .after_wall_collision_check
+; .move_cursor_up
+;     jsr f_erase_cursor                        ; Erase cursor at previous position
+;     dec cursor_y_z
+;     ; first, check collision with immovable objects (cursor shouldn't move)
+;     jsr f_check_cursor_collision_with_walls
+;     lda func_output_low_z
+;     cmp #0                          ; 0 means no collision! move cursor
+;     beq .move_cursor_up_no_collision
+;     inc cursor_y_z                  ; otherwise, don't move cursor
+; .move_cursor_up_no_collision:
+;     ; then, go check the next collisions
+;     jmp .after_wall_collision_check
+
+; .move_cursor_left:
+;     jsr f_erase_cursor                        ; Erase cursor at previous position
+;     dec cursor_x_z
+;     ; first, check collision with immovable objects (cursor shouldn't move)
+;     jsr f_check_cursor_collision_with_walls
+;     lda func_output_low_z
+;     cmp #0                          ; 0 means no collision! move cursor
+;     beq .move_cursor_left_no_collision
+;     inc cursor_x_z                  ; otherwise, don't move cursor
+; .move_cursor_left_no_collision:
+;     ; then, go check the next collisions
+;     jmp .after_wall_collision_check
+
+; .move_cursor_down:
+;     jsr f_erase_cursor                        ; Erase cursor at previous position
+;     inc cursor_y_z
+
+;     ; first, check collision with immovable objects (cursor shouldn't move)
+;     jsr f_check_cursor_collision_with_walls
+;     lda func_output_low_z
+;     cmp #0                          ; 0 means no collision! move cursor
+;     beq .move_cursor_down_no_collision
+;     dec cursor_y_z                  ; otherwise, don't move cursor
+; .move_cursor_down_no_collision:
+;     ; then, go check the next collisions
+;     jmp .after_wall_collision_check
+
+; .move_cursor_right:
+;     jsr f_erase_cursor                        ; Erase cursor at previous position
+;     inc cursor_x_z
+
+; ; first, check collision with immovable objects (cursor shouldn't move)
+;     jsr f_check_cursor_collision_with_walls
+;     lda func_output_low_z
+;     cmp #0                          ; 0 means no collision! move cursor
+;     beq .move_cursor_right_no_collision
+;     dec cursor_x_z                  ; otherwise, don't move cursor
+; .move_cursor_right_no_collision:
+;     ; then, go check the next collisions
+;     jmp .after_wall_collision_check
+
+    jsr f_erase_cursor                        ; Erase cursor at previous position
 
     lda curr_char_pressed_z
-    cmp #KEY_W
-    beq .move_cursor_up
+
+    ldx #0
+    ldy #$ff
     cmp #KEY_A
-    beq .move_cursor_left
-    cmp #KEY_S
-    beq .move_cursor_down
+    beq .move_cursor
+    ldy #1
     cmp #KEY_D
-    beq .move_cursor_right
+    beq .move_cursor
+
+    ldx #1
+    ldy #$ff
+    cmp #KEY_W
+    beq .move_cursor
+    ldy #1
+    cmp #KEY_S
+    beq .move_cursor
+    
     jmp .after_wall_collision_check
-.move_cursor_up
-    jsr f_erase_cursor                        ; Erase cursor at previous position
-    dec cursor_y_z
-    ; first, check collision with immovable objects (cursor shouldn't move)
+
+.move_cursor:
+    stx cursor_axis_temp_x_z
+    sty cursor_adc_value_z
+    tya                                     ; move the cursor, and check what we collide with in the new spot
+    clc
+    adc cursor_x_z,x
+    sta cursor_x_z,x
+
     jsr f_check_cursor_collision_with_walls
     lda func_output_low_z
-    cmp #0                          ; 0 means no collision! move cursor
-    beq .move_cursor_up_no_collision
-    inc cursor_y_z                  ; otherwise, don't move cursor
-.move_cursor_up_no_collision:
-    ; then, go check the next collisions
-    jmp .after_wall_collision_check
+    cmp #0
+    beq .after_wall_collision_check
 
-.move_cursor_left:
-    jsr f_erase_cursor                        ; Erase cursor at previous position
-    dec cursor_x_z
-    ; first, check collision with immovable objects (cursor shouldn't move)
-    jsr f_check_cursor_collision_with_walls
-    lda func_output_low_z
-    cmp #0                          ; 0 means no collision! move cursor
-    beq .move_cursor_left_no_collision
-    inc cursor_x_z                  ; otherwise, don't move cursor
-.move_cursor_left_no_collision:
-    ; then, go check the next collisions
-    jmp .after_wall_collision_check
-
-.move_cursor_down:
-    jsr f_erase_cursor                        ; Erase cursor at previous position
-    inc cursor_y_z
-
-    ; first, check collision with immovable objects (cursor shouldn't move)
-    jsr f_check_cursor_collision_with_walls
-    lda func_output_low_z
-    cmp #0                          ; 0 means no collision! move cursor
-    beq .move_cursor_down_no_collision
-    dec cursor_y_z                  ; otherwise, don't move cursor
-.move_cursor_down_no_collision:
-    ; then, go check the next collisions
-    jmp .after_wall_collision_check
-
-.move_cursor_right:
-    jsr f_erase_cursor                        ; Erase cursor at previous position
-    inc cursor_x_z
-
-; first, check collision with immovable objects (cursor shouldn't move)
-    jsr f_check_cursor_collision_with_walls
-    lda func_output_low_z
-    cmp #0                          ; 0 means no collision! move cursor
-    beq .move_cursor_right_no_collision
-    dec cursor_x_z                  ; otherwise, don't move cursor
-.move_cursor_right_no_collision:
-    ; then, go check the next collisions
-    jmp .after_wall_collision_check
+    ldx cursor_axis_temp_x_z                ; undo what we just moved the cursor by
+    lda cursor_x_z,x
+    sec
+    sbc cursor_adc_value_z
+    sta cursor_x_z,x
 
 .after_wall_collision_check:
 
@@ -89,18 +133,18 @@ f_handle_cursor_movement:
     jsr f_check_cursor_collision_with_level_objects
     lda func_output_low_z
     cmp #0                              ; 0 means we didnt collide with any interactable objects!!
-    beq .laser_collision_check          ; move to next collision check
+    beq .draw_cursor_and_done          ; move to next collision check
     ; otherwise, we collided with an interactable object
     jsr f_handle_collision_with_interactable_object
 
-; fourthly and finally, check collision with laser beams
-.laser_collision_check:
-    jsr f_check_cursor_collision_with_lasers
-    lda func_output_low_z
-    cmp #0                          ; 0 means we didnt collide with any laser beams!!
-    beq .draw_cursor_and_done
-    ; otherwise, we collided with a laser beam! handle that?
-    jsr f_handle_collision_with_laser
+; ; fourthly and finally, check collision with laser beams
+; .laser_collision_check:
+;     jsr f_check_cursor_collision_with_lasers
+;     lda func_output_low_z
+;     cmp #0                          ; 0 means we didnt collide with any laser beams!!
+;     beq .draw_cursor_and_done
+;     ; otherwise, we collided with a laser beam! handle that?
+;     jsr f_handle_collision_with_laser
 
 .draw_cursor_and_done:
     ; jsr f_draw_cursor
@@ -189,30 +233,11 @@ f_handle_collision_with_interactable_object:
 
     rts
 
-    subroutine
-f_handle_collision_with_laser:
+;     subroutine
+; f_handle_collision_with_laser:
 
-    rts
+;     rts
 
-; Reests cursor positiont to a hardcoded x,y
-    subroutine
-f_reset_cursor_position:
-    lda #10
-    sta cursor_x_z
-    sta last_cursor_x_z
-    lda #10
-    sta cursor_y_z
-    sta last_cursor_y_z
-    rts
-
-; Called at the end of game_loop, so the next cursor movement knows where the cursor came from
-    subroutine
-f_remember_cursor_position:
-    lda cursor_x_z
-    sta last_cursor_x_z
-    lda cursor_y_z
-    sta last_cursor_y_z
-    rts
 
 ; Erase the cursor at its current spot (used before moving it!)
     subroutine

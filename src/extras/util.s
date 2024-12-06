@@ -102,13 +102,11 @@ f_check_cursor_collision_with_walls:
     beq .collision
 
     lda #0
-    sta wall_collision_flag_z
     sta func_output_low_z
     rts
 
 .collision:
     lda #1
-    sta wall_collision_flag_z
     sta func_output_low_z
     rts
 
@@ -138,13 +136,11 @@ f_check_cursor_collision_with_level_objects:
     beq .collision
 
     lda #0
-    sta obj_collision_flag_z
     sta func_output_low_z
     rts
 
 .collision:
     lda #1
-    sta obj_collision_flag_z
     sta func_output_low_z
     rts
 
@@ -164,13 +160,11 @@ f_check_cursor_collision_with_lasers:
     beq .collision
 
     lda #0
-    sta laser_collisiong_flag_z
     sta func_output_low_z
     rts
 
 .collision:
     lda #1
-    sta laser_collisiong_flag_z
     sta func_output_low_z
     rts
 
@@ -244,8 +238,7 @@ f_check_laser_collision_with_walls:
     ; cmp #laser_horizontal_code
     ; beq .collision
 
-    lda #0
-    sta func_output_low_z
+    sty func_output_low_z
     rts
 
 .collision:

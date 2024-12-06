@@ -76,7 +76,12 @@ start:
     jsr f_clear_covered_char_in_mem             ; clear covered char
     jsr f_clear_inventory                       ; clear inventory
     jsr f_clear_screen                          ; clear screen
-    jsr f_reset_cursor_position                 ; reset cursor pos to hardcoded spot
+
+    lda #10
+    sta cursor_x_z
+    sta last_cursor_x_z
+    sta cursor_y_z
+    sta last_cursor_y_z                 ; reset cursor pos to hardcoded spot
 
     jsr f_draw_next_level
     jsr f_redraw_lasers
@@ -106,7 +111,6 @@ encoded_title_screen_data_start_p:
     incbin "./titlescreen/titlescreen-rle-encoded.bin"
 
 level_template_data_start_p:
-    ; incbin "./levels/level_template_rle_encoded.bin"
     incbin "./levels/level_template-rle-encoded.bin"
 
 level_1_data_start_p:

@@ -16,6 +16,8 @@ level_data_addr_high_z              ds.b 1      ; high byte of level data addres
 level_data_tracker_z                ds.b 1      ; tracks our current offset in the level data
 cursor_x_z                          ds.b 1      ; cursor X position
 cursor_y_z                          ds.b 1      ; cursor Y position
+cursor_axis_temp_x_z                ds.b 1      ; temporary x or y axis for moving cursor
+cursor_adc_value_z                  ds.b 1      ; ADC value for cursor movement
 last_cursor_x_z                     ds.b 1      ; last cursor X position
 last_cursor_y_z                     ds.b 1      ; last cursor Y position
 curr_char_pressed_z                 ds.b 1      ; current character pressed by player
