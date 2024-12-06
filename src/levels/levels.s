@@ -198,14 +198,14 @@ f_redraw_lasers:
 
     ; figure out if the next location of the laser path will collide with something, or if we can continue drawing the path
     
-.cheeky_nothing_check:
-    ; check if the next location of the laser path is empty space
-    jsr f_check_laser_collision_with_nothing_important
-    lda func_output_low_z
-    cmp #1
-    beq .laser_walls_check
-    ; otherwise, draw a laser character at this location, and continue drawing the laser path
-    jmp .draw_laser
+; .cheeky_nothing_check:
+;     ; check if the next location of the laser path is empty space
+;     jsr f_check_laser_collision_with_nothing_important
+;     lda func_output_low_z
+;     cmp #1
+;     beq .laser_walls_check
+;     ; otherwise, draw a laser character at this location, and continue drawing the laser path
+;     jmp .draw_laser
 
 
 .laser_walls_check:
@@ -262,20 +262,18 @@ f_redraw_lasers:
     lda laser_head_y_z
     sta tmp_y_z
 
-    ; if a laser character already exists here, then draw the both character!
-    lda (screen_mem_addr_coord_z),y
-    cmp #laser_horizontal_code
-    beq .draw_both_laser
-    cmp #laser_vertical_code
-    beq .draw_both_laser
-    jmp .draw_normal_laser
+;     ; if a laser character already exists here, then draw the both character!
+;     lda (screen_mem_addr_coord_z),y
+;     cmp #laser_horizontal_code
+;     beq .draw_both_laser
+;     cmp #laser_vertical_code
+;     beq .draw_both_laser
+;     jmp .draw_normal_laser
 
-.draw_both_laser:
-    lda #laser_both_code
-    jmp .draw_laser_now
+; .draw_both_laser:
+;     lda #laser_both_code
+;     jmp .draw_laser_now
 
-
-.draw_normal_laser:
     ; if the laser direction is 1 or 3 (vertical), then it should be a vertical laser character, and vice-versa
     lda laser_direction_z
     cmp #1
@@ -285,13 +283,25 @@ f_redraw_lasers:
     ; otherwise, draw a horizontal laser character
 .draw_horizontal_laser:
     lda #laser_horizontal_code            ; Load horizontal laser character code
+    sta tmp_char_code_z                   ; Store character code temporarily
+    lda (screen_mem_addr_coord_z),y         ; see what char code we got here
+    cmp #laser_vertical_code           ; if we already have a vertical laser here, then draw the both laser character
+    beq .draw_both_laser
     jmp .draw_laser_now
 
 .draw_vertical_laser:
-    lda #laser_vertical_code              ; Load vertical laser character code
+    lda #laser_vertical_code              ; Load vertical laser character code\
+    sta tmp_char_code_z                   ; Store character code temporarily
+    lda (screen_mem_addr_coord_z),y         ; see what char code we got here
+    cmp #laser_horizontal_code         ; if we already have a horizontal laser here, then draw the both laser character
+    beq .draw_both_laser
+    jmp .draw_laser_now
+
+.draw_both_laser:
+    lda #laser_both_code                  ; Load both laser character code
+    sta tmp_char_code_z                   ; Store character code temporarily
 
 .draw_laser_now:
-    sta tmp_char_code_z                   ; Store character code temporarily
     jsr f_draw_char_to_screen_mem         ; Draw the laser to the screen
 
     ; if the cursor is at this position, do NOT colour the laser, since cursor will draw over it anyways

@@ -174,38 +174,38 @@ f_check_cursor_collision_with_lasers:
     sta func_output_low_z
     rts
 
-; Checks if the laser didnt collide with anything
-; Input:
-;    laser_head_x_z: X coordinate
-;    laser_head_y_z: Y coordinate
-; Output:
-;    func_output_low_z: 0 if no collision, 1 if collision
-    subroutine
-f_check_laser_collision_with_nothing_important:
-    lda laser_head_x_z
-    sta tmp_x_z
-    lda laser_head_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
-    ldy #0
-    lda (screen_mem_addr_coord_z),y
-    cmp #empty_character_code
-    beq .no_collision
-    cmp #laser_horizontal_code
-    beq .no_collision
-    cmp #laser_vertical_code
-    beq .no_collision
-    ; cmp #cursor_code
-    ; beq .no_collision
+; ; Checks if the laser didnt collide with anything
+; ; Input:
+; ;    laser_head_x_z: X coordinate
+; ;    laser_head_y_z: Y coordinate
+; ; Output:
+; ;    func_output_low_z: 0 if no collision, 1 if collision
+;     subroutine
+; f_check_laser_collision_with_nothing_important:
+;     lda laser_head_x_z
+;     sta tmp_x_z
+;     lda laser_head_y_z
+;     sta tmp_y_z
+;     jsr f_convert_xy_to_screen_mem_addr
+;     ldy #0
+;     lda (screen_mem_addr_coord_z),y
+;     cmp #empty_character_code
+;     beq .no_collision
+;     cmp #laser_horizontal_code
+;     beq .no_collision
+;     cmp #laser_vertical_code
+;     beq .no_collision
+;     ; cmp #cursor_code
+;     ; beq .no_collision
 
-    lda #1                          ; we probably collided with something
-    sta func_output_low_z
-    rts
+;     lda #1                          ; we probably collided with something
+;     sta func_output_low_z
+;     rts
 
-.no_collision:
-    lda #0                          ; we collided with nothing!!!
-    sta func_output_low_z
-    rts
+; .no_collision:
+;     lda #0                          ; we collided with nothing!!!
+;     sta func_output_low_z
+;     rts
 
 
 ; Checks if the laser at a given coord would collide with a wall (wall == anything that would stop laser in its tracks)
@@ -239,10 +239,10 @@ f_check_laser_collision_with_walls:
     beq .collision
     cmp #laser_shooter_b_code
     beq .collision
-    cmp #laser_vertical_code
-    beq .collision
-    cmp #laser_horizontal_code
-    beq .collision
+    ; cmp #laser_vertical_code
+    ; beq .collision
+    ; cmp #laser_horizontal_code
+    ; beq .collision
 
     lda #0
     sta func_output_low_z

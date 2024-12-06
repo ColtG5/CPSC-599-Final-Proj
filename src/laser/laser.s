@@ -192,52 +192,42 @@ f_handle_laser_collision_with_portal:
     subroutine
 f_add_direction_to_laser_location:
     lda laser_direction_z
-    cmp #1
-    beq .add_up
-    cmp #2
-    beq .add_right
-    cmp #3
-    beq .add_down
-    cmp #4
-    beq .add_left
+    ldx #0
+    ldy #1
+    cmp #2                  ; checks for right
+    beq .add_dir
+    ldy #$ff
+    cmp #4                  ; checks for left
+    beq .add_dir
 
-.add_up:
-    lda laser_head_y_z
-    sec
-    sbc #1
-    sta laser_head_y_z
-    rts
+    ldx #1
+    ldy #$ff
+    cmp #1                  ; checks for up
+    beq .add_dir
+    ldy #1
+    cmp #3                  ; checks for down
+    beq .add_dir
 
-.add_right:
-    lda laser_head_x_z
+.add_dir:
+    tya
     clc
-    adc #1
-    sta laser_head_x_z
-    rts
-
-.add_down:
-    lda laser_head_y_z
-    clc
-    adc #1
-    sta laser_head_y_z
-    rts
-
-.add_left:
-    lda laser_head_x_z
-    sec
-    sbc #1
-    sta laser_head_x_z
+    adc laser_head_x_z,x        ; use x reg to offset from base addr of laser_head_x_z
+    sta laser_head_x_z,x
     rts
 
 
 ; Clears all laser characters from the screen, and reset all characters that are in their "laser form" back to default
     subroutine
 f_clear_all_laser_stuff:
-    ldx #0
+    ldy #0
+    lda #<SCREEN_MEM_1
+    sta load_addr_low_z
+    lda #>SCREEN_MEM_1
+    sta load_addr_high_z
 
 .loop_screen_mem_1:
-    lda SCREEN_MEM_1,x 
-    ldy #empty_character_code
+    lda (load_addr_low_z),y
+    ldx #empty_character_code
     cmp #laser_vertical_code
     beq .reset_char
     cmp #laser_horizontal_code
@@ -245,14 +235,14 @@ f_clear_all_laser_stuff:
     cmp #laser_both_code
     beq .reset_char
 
-    ldy #reflector_1_code
+    ldx #reflector_1_code
     cmp #reflector_1_hit_tr_code
     beq .reset_char
     cmp #reflector_1_hit_bl_code
     beq .reset_char
     cmp #reflector_1_hit_all_code
     beq .reset_char
-    ldy #reflector_2_code
+    ldx #reflector_2_code
     cmp #reflector_2_hit_tl_code
     beq .reset_char
     cmp #reflector_2_hit_br_code
@@ -260,14 +250,14 @@ f_clear_all_laser_stuff:
     cmp #reflector_2_hit_all_code
     beq .reset_char
 
-    ldy #laser_receptor_t_code
+    ldx #laser_receptor_t_code
     cmp #laser_receptor_t_hit_code
     beq .reset_char
-    ldy #laser_receptor_b_code
+    ldx #laser_receptor_b_code
     cmp #laser_receptor_b_hit_code
     beq .reset_char
 
-    ldy #portal_code
+    ldx #portal_code
     cmp #portal_hit_up_code
     beq .reset_char
     cmp #portal_hit_right_code
@@ -280,64 +270,18 @@ f_clear_all_laser_stuff:
     jmp .next_char_1
 
 .reset_char:
-    tya
-    sta SCREEN_MEM_1,x
+    txa
+    sta (load_addr_low_z),y
     jmp .next_char_1
 
 .next_char_1:
-    inx
+    iny
     bne .loop_screen_mem_1
 
-.loop_screen_mem_2:
-    lda SCREEN_MEM_2,x 
-    ldy #empty_character_code
-    cmp #laser_vertical_code
-    beq .reset_char_2
-    cmp #laser_horizontal_code
-    beq .reset_char_2
-    cmp #laser_both_code
-    beq .reset_char_2
+    inc load_addr_high_z
+    lda #$20
+    cmp load_addr_high_z
+    bne .loop_screen_mem_1
 
-    ldy #reflector_1_code
-    cmp #reflector_1_hit_tr_code
-    beq .reset_char_2
-    cmp #reflector_1_hit_bl_code
-    beq .reset_char_2
-    cmp #reflector_1_hit_all_code
-    beq .reset_char_2
-    ldy #reflector_2_code
-    cmp #reflector_2_hit_tl_code
-    beq .reset_char_2
-    cmp #reflector_2_hit_br_code
-    beq .reset_char_2
-    cmp #reflector_2_hit_all_code
-    beq .reset_char_2
-
-    ldy #laser_receptor_t_code
-    cmp #laser_receptor_t_hit_code
-    beq .reset_char_2
-    ldy #laser_receptor_b_code
-    cmp #laser_receptor_b_hit_code
-    beq .reset_char_2
-
-    ldy #portal_code
-    cmp #portal_hit_up_code
-    beq .reset_char_2
-    cmp #portal_hit_right_code
-    beq .reset_char_2
-    cmp #portal_hit_down_code
-    beq .reset_char_2
-    cmp #portal_hit_left_code
-    beq .reset_char_2
-
-    jmp .next_char_2
-
-.reset_char_2:
-    tya
-    sta SCREEN_MEM_2,x
-    jmp .next_char_2
-
-.next_char_2:
-    inx
-    bne .loop_screen_mem_2
+.done:
     rts
