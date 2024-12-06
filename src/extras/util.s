@@ -75,13 +75,8 @@ f_colour_a_character:
 ;    func_output_low_z: 0 if no collision, 1 if collision
     subroutine
 f_check_cursor_collision_with_walls:
-    lda cursor_x_z
-    sta tmp_x_z
-    lda cursor_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
-    ldy #0
-    lda (screen_mem_addr_coord_z),y
+    jsr f_put_cursor_into_temp
+    jsr f_get_char_from_screen_mem
     cmp #wall_code
     beq .collision
     cmp #game_wall_top_code
@@ -113,13 +108,8 @@ f_check_cursor_collision_with_walls:
 ; Check collision between cursor and objects the player can pick-up and grab
     subroutine
 f_check_cursor_collision_with_level_objects:
-    lda cursor_x_z
-    sta tmp_x_z
-    lda cursor_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
-    ldy #0
-    lda (screen_mem_addr_coord_z),y
+    jsr f_put_cursor_into_temp
+    jsr f_get_char_from_screen_mem
     cmp #reflector_1_code
     beq .collision
     ; cmp #reflector_1_hit_tr_code
@@ -147,13 +137,8 @@ f_check_cursor_collision_with_level_objects:
 ; Check collision between cursor and laser beams
     subroutine
 f_check_cursor_collision_with_lasers:
-    lda cursor_x_z
-    sta tmp_x_z
-    lda cursor_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
-    ldy #0
-    lda (screen_mem_addr_coord_z),y
+    jsr f_put_cursor_into_temp
+    jsr f_get_char_from_screen_mem
     cmp #laser_horizontal_code
     beq .collision
     cmp #laser_vertical_code
@@ -210,13 +195,8 @@ f_check_cursor_collision_with_lasers:
 ;    func_output_low_z: 0 if no collision, 1 if collision
     subroutine
 f_check_laser_collision_with_walls:
-    lda laser_head_x_z
-    sta tmp_x_z
-    lda laser_head_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
-    ldy #0
-    lda (screen_mem_addr_coord_z),y
+    jsr f_put_laser_into_temp
+    jsr f_get_char_from_screen_mem
     cmp #wall_code
     beq .collision
     cmp #game_wall_top_code
@@ -252,15 +232,11 @@ f_check_laser_collision_with_walls:
 ;    laser_head_y_z: Y coordinate
 ; Output:
 ;    func_output_low_z: 0 if no collision, 1 if collision, 2 if collision == win!
+;    func_output_high_z: 1 if top receptor, 3 if bottom receptor
     subroutine
 f_check_laser_collision_with_receptors:
-    lda laser_head_x_z
-    sta tmp_x_z
-    lda laser_head_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr         ; Convert x, y to screen memory address
-    ldy #0
-    lda (screen_mem_addr_coord_z),y           ; Load the character at this screen memory location
+    jsr f_put_laser_into_temp
+    jsr f_get_char_from_screen_mem
 
     ldx #1
     ; Check if it's a top receptor
@@ -298,13 +274,8 @@ f_check_laser_collision_with_receptors:
 ;    func_output_low_z: 0 if no collision, 1 if collision with reflector 1, 2 if collision with reflector 2
     subroutine
 f_check_laser_collision_with_reflectors:
-    lda laser_head_x_z
-    sta tmp_x_z
-    lda laser_head_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
-    ldy #0
-    lda (screen_mem_addr_coord_z),y
+    jsr f_put_laser_into_temp
+    jsr f_get_char_from_screen_mem
     ldx #1
     cmp #reflector_1_code
     beq .collision
@@ -356,13 +327,8 @@ f_check_laser_collision_with_reflectors:
 ;    func_output_low_z: 0 if no collision, 1 if collision
     subroutine
 f_check_laser_collision_with_portals:
-    lda laser_head_x_z
-    sta tmp_x_z
-    lda laser_head_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
-    ldy #0
-    lda (screen_mem_addr_coord_z),y
+    jsr f_put_laser_into_temp
+    jsr f_get_char_from_screen_mem
     cmp #portal_code
     beq .collision
 

@@ -11,14 +11,6 @@ f_handle_laser_collision_with_wall:
 ;   func_output_high_z: which receptor orientation was hit (1 through 4)
     subroutine
 f_handle_laser_collision_with_receptor:
-    ; ; Load the receptor's coordinates (already set in `laser_head_x_z` and `laser_head_y_z`).
-    ; lda laser_head_x_z              ; Get X coordinate of the receptor
-    ; sta tmp_x_z
-    ; lda laser_head_y_z              ; Get Y coordinate of the receptor
-    ; sta tmp_y_z
-
-    ; jsr f_convert_xy_to_screen_mem_addr ; Convert to screen memory address.
-
     ; Change the sprite
     lda func_output_high_z
     ldx #laser_receptor_t_hit_code
@@ -98,10 +90,7 @@ f_handle_laser_collision_with_reflector:
     stx tmp_char_code_z
 
 .draw_reflector
-    lda laser_head_x_z
-    sta tmp_x_z
-    lda laser_head_y_z
-    sta tmp_y_z
+    jsr f_put_laser_into_temp
     jsr f_draw_char_to_screen_mem           ; draw the updated reflector sprite
 
     rts
@@ -173,10 +162,7 @@ f_handle_laser_collision_with_portal:
 
 .draw_portal_2:
     stx tmp_char_code_z
-    lda laser_head_x_z
-    sta tmp_x_z
-    lda laser_head_y_z
-    sta tmp_y_z
+    jsr f_put_laser_into_temp
     jsr f_draw_char_to_screen_mem
 
     ; colour the portal red

@@ -242,14 +242,10 @@ f_handle_collision_with_interactable_object:
 ; Erase the cursor at its current spot (used before moving it!)
     subroutine
 f_erase_cursor:
-    lda cursor_x_z
-    sta tmp_x_z
-    lda cursor_y_z
-    sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
+    jsr f_put_cursor_into_temp
     lda #empty_character_code
-    ldy #0
-    sta (screen_mem_addr_coord_z),y
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
     rts
 
 ; Erase the covered char from our memory (we moved away from it or picked it up)
@@ -265,13 +261,17 @@ f_clear_covered_char_in_mem:
 ; Draws the cursor at its current spot
     subroutine
 f_draw_cursor:
+    jsr f_put_cursor_into_temp
+    lda #cursor_code
+    sta tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+    rts
+
+; super repetitive thing
+    subroutine
+f_put_cursor_into_temp:
     lda cursor_x_z
     sta tmp_x_z
     lda cursor_y_z
     sta tmp_y_z
-    jsr f_convert_xy_to_screen_mem_addr
-    lda #cursor_code
-    ldy #0
-    sta (screen_mem_addr_coord_z),y
     rts
-

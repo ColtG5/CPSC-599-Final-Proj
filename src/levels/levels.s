@@ -134,6 +134,28 @@ f_draw_char_to_screen_mem:
 
     rts
 
+; just grabs the thing in screen mem at the given x,y
+; Input:
+;    tmp_x_z: X coordinate
+;    tmp_y_z: Y coordinate
+; Output:
+;    screen_mem_addr_coord_z: screen mem address
+    subroutine
+f_get_char_from_screen_mem:
+    jsr f_convert_xy_to_screen_mem_addr
+    ldy #0
+    lda (screen_mem_addr_coord_z),y
+    rts
+
+; incredibly repetitive thing
+    subroutine
+f_put_laser_into_temp:
+    lda laser_head_x_z
+    sta tmp_x_z
+    lda laser_head_y_z
+    sta tmp_y_z
+    rts
+
 ; Draws the covered char back on to the screen when moved off of its location
     subroutine
 f_draw_covered_char_back_into_place:
@@ -250,10 +272,7 @@ f_redraw_lasers:
 ; if we made it here, then we avoided every collision check, so we can draw a regular laser character at this location!
 .draw_laser:
     ; draw a laser chartacter at this location
-    lda laser_head_x_z
-    sta tmp_x_z
-    lda laser_head_y_z
-    sta tmp_y_z
+    jsr f_put_laser_into_temp
 
 ;     ; if a laser character already exists here, then draw the both character!
 ;     lda (screen_mem_addr_coord_z),y
