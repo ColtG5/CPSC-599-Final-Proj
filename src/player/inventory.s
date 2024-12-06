@@ -41,15 +41,19 @@ f_add_char_to_inventory:
 ; removes the char in inventory_item_z from the inventory (by placing it in the level)
     subroutine
 f_place_char_from_inventory:
-    ; placed item starts as covered!
+    ; if we are placing a portal, make sure we are in range of a wall!
     lda inventory_item_z
-    sta covered_char_code_z
-    lda cursor_x_z
-    sta covered_char_x_z
-    lda cursor_y_z
-    sta covered_char_y_z
+    cmp #portal_code
+    bne .can_place_portal
+    jsr f_close_to_wall
+    lda func_output_low_z
+    cmp #1
+    beq .can_place_portal
+    rts
 
-    ; if we are placing a portal, put these new coords into whatevcer portal coords are currently ff
+    
+.can_place_portal
+    ; if succesful, put these new coords into whatevcer portal coords are currently ff
     lda inventory_item_z
     cmp #portal_code
     bne .done
@@ -75,8 +79,15 @@ f_place_char_from_inventory:
     sta portal_2_y_z
     jmp .done
 
-
 .done:
+    ; placed item starts as covered!
+    lda inventory_item_z
+    sta covered_char_code_z
+    lda cursor_x_z
+    sta covered_char_x_z
+    lda cursor_y_z
+    sta covered_char_y_z
+
     ; clear current inventory char
     jsr f_clear_inventory
 

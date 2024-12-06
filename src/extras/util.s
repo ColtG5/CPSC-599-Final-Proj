@@ -64,6 +64,49 @@ f_colour_a_character:
     sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
     rts
 
+; used when trying to place a portal, checks if cursor is neighbouring a wall
+; Output:
+;    func_output_low_z: 0 if not close to wall, 1 if close to wall
+    subroutine
+f_close_to_wall:
+    jsr f_put_cursor_into_temp
+
+    dec tmp_y_z                         ; check above cursor
+    jsr f_get_char_from_screen_mem
+    lda (screen_mem_addr_coord_z),y
+    cmp #wall_code
+    beq .close_to_wall
+
+    inc tmp_x_z                         ; check right of cursor
+    jsr f_get_char_from_screen_mem
+    lda (screen_mem_addr_coord_z),y
+    cmp #wall_code
+    beq .close_to_wall
+
+    inc tmp_y_z                         ; check below cursor
+    inc tmp_y_z
+    jsr f_get_char_from_screen_mem
+    lda (screen_mem_addr_coord_z),y
+    cmp #wall_code
+    beq .close_to_wall
+
+    dec tmp_x_z                         ; check left of cursor
+    dec tmp_x_z
+    jsr f_get_char_from_screen_mem
+    lda (screen_mem_addr_coord_z),y
+    cmp #wall_code
+    beq .close_to_wall
+
+    lda #0
+    sta func_output_low_z
+    rts
+
+.close_to_wall:
+    lda #1
+    sta func_output_low_z
+    rts
+
+
 
 ; Check collision between cursor and walls (game walls + walls inside level)
 ; This means check collision between the character codes of wall_code, wall_top_code,
