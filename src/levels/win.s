@@ -7,6 +7,9 @@
 f_win_screen:
     ; Step 1: Recolor all lasers to green to signify victory
     jsr f_recolor_lasers_green
+    lda #$1D
+    sta $900F       ; Store the updated value, now the background is green, border unchanged
+
 
     ; Step 2: Print "Level Complete! Press E to continue" on screen
     lda #0
@@ -127,6 +130,8 @@ f_win_screen:
     bne .wait_for_e
 
     ; E pressed, return to caller (which should move to next level)
+    lda #24    ; Border = 0 (black), Background = 0 (black)
+    sta $900F
     rts
 
 

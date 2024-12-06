@@ -14,6 +14,8 @@ start:
     lda #0
     sta what_level_tracker_z
     jsr f_set_color_mem_black
+    lda #24    ; Border = 0 (black), Background = 0 (black)
+    sta $900F
     jsr f_draw_titlescreen
 
 .starting_loop:
