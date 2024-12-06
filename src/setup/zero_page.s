@@ -46,6 +46,9 @@ receptors_hit_z                     ds.b 1      ; win condition for a level, num
 tmp_addr_lo_z                       ds.b 1      ; Temporary storage for low byte of adjusted address
 tmp_addr_hi_z                       ds.b 1      ; Temporary storage for high byte of adjusted address
 tmp_counter_z                       ds.b 1      ; Goob printer counter
-
+portal_1_x_z                        ds.b 1      ; x coord of portal 1
+portal_1_y_z                        ds.b 1      ; y coord of portal 1
+portal_2_x_z                        ds.b 1      ; x coord of portal 2
+portal_2_y_z                        ds.b 1      ; y coord of portal 2
 
     seg

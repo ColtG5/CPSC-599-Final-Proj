@@ -41,6 +41,13 @@ f_draw_level_data:
     lda #0
     sta num_of_receptors_in_level_z
 
+    ; reset the coords of the two portals in the level
+    lda #$FF
+    sta portal_1_x_z
+    sta portal_1_y_z
+    sta portal_2_x_z
+    sta portal_2_y_z
+
     ; draw the dynamic level data from the appropriate level bin
 
     lda what_level_tracker_z
@@ -82,6 +89,10 @@ f_draw_level_data:
     cmp #laser_receptor_b_code
     beq .increment_receptors
 
+    ; if this character was a portal, store it into portal_1 coords if theres no portal_1 yet, otherwise portal_2 coords
+    cmp #portal_code
+    beq .store_portal
+
     jmp .loop_draw_level_data
 
 .increment_receptors:
@@ -89,6 +100,26 @@ f_draw_level_data:
     clc
     adc #1
     sta num_of_receptors_in_level_z
+    jmp .loop_draw_level_data
+
+.store_portal:
+    ; check if slot 1 is filled
+    lda portal_1_x_z
+    cmp #$ff
+    bne .store_portal_2
+    ; not filled, store coords here
+    lda tmp_x_z
+    sta portal_1_x_z
+    lda tmp_y_z
+    sta portal_1_y_z
+    jmp .loop_draw_level_data
+
+.store_portal_2:
+    ; slot 1 is filled, store coords here
+    lda tmp_x_z
+    sta portal_2_x_z
+    lda tmp_y_z
+    sta portal_2_y_z
     jmp .loop_draw_level_data
 
 .end_of_data:
@@ -219,9 +250,9 @@ f_redraw_lasers:
     lda func_output_low_z
     cmp #0                                              ; if we didn't hit a portal, then theres no more laser collisions to check!!
     beq .draw_laser
-    ; otherwise, we hit a portal, and we need to handle that!
+    ; otherwise, we hit a portal, and we need to handle that! (move the laser head to the other portal location)
     jsr f_handle_laser_collision_with_portal
-    jmp .draw_laser
+    jmp .loop_draw_laser_path
 
 ; if we made it here, then we avoided every collision check, so we can draw a regular laser character at this location!
 .draw_laser:

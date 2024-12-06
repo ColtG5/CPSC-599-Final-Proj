@@ -395,9 +395,6 @@ f_check_laser_collision_with_portals:
     rts
 
     
-    
-
-
 
 ; Converts an (x, y) coordinate to the corresponding screen memory address.
 ; Input:

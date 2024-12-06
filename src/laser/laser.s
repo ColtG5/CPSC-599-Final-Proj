@@ -21,10 +21,10 @@ f_handle_laser_collision_with_receptor:
 
     ; Change the sprite
     lda func_output_high_z
-    ldx #laser_receptor_t_hit_code
+    ldx #laser_receptor_b_hit_code
     cmp #1
     beq .draw_new_receptor
-    ldx #laser_receptor_b_hit_code
+    ldx #laser_receptor_t_hit_code
     cmp #3
     beq .draw_new_receptor
 
@@ -96,7 +96,80 @@ f_handle_laser_collision_with_reflector:
 ; If the laser collides with a portal, update portal sprite, and update the laser head to the new location of the portal
     subroutine
 f_handle_laser_collision_with_portal:
+    ; before moving laser head, change this portal sprite + colour it
+    lda laser_direction_z
+    ldx #portal_hit_down_code
+    cmp #1
+    beq .draw_portal_1
+    ldx #portal_hit_left_code
+    cmp #2
+    beq .draw_portal_1
+    ldx #portal_hit_up_code
+    cmp #3
+    beq .draw_portal_1
+    ldx #portal_hit_right_code
+    cmp #4
+    beq .draw_portal_1
 
+.draw_portal_1:
+    stx tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
+
+    lda #2                          ; red
+    sta func_arg_1_z
+    jsr f_colour_a_character
+
+    ; now deal with second portal
+
+    lda laser_head_x_z
+    cmp portal_1_x_z
+    bne .not_portal_1
+    lda laser_head_y_z
+    cmp portal_1_y_z
+    bne .not_portal_1
+
+    ; this portal is portal 1, so move the laser head to portal 2
+    lda portal_2_x_z
+    sta laser_head_x_z
+    lda portal_2_y_z
+    sta laser_head_y_z
+    jmp .now_draw_portal
+
+.not_portal_1:
+    ; this protal is portal 2, so move the laser head to portal 1
+    lda portal_1_x_z
+    sta laser_head_x_z
+    lda portal_1_y_z
+    sta laser_head_y_z
+
+.now_draw_portal:
+    ; moved the laser head, now draw proper portal sprite at destination portal
+    lda laser_direction_z
+    ldx #portal_hit_up_code
+    cmp #1
+    beq .draw_portal_2
+    ldx #portal_hit_right_code
+    cmp #2
+    beq .draw_portal_2
+    ldx #portal_hit_down_code
+    cmp #3
+    beq .draw_portal_2
+    ldx #portal_hit_left_code
+    cmp #4
+    beq .draw_portal_2
+
+.draw_portal_2:
+    stx tmp_char_code_z
+    lda laser_head_x_z
+    sta tmp_x_z
+    lda laser_head_y_z
+    sta tmp_y_z
+    jsr f_draw_char_to_screen_mem
+
+    ; colour the portal red
+    lda #2                          ; red
+    sta func_arg_1_z
+    jsr f_colour_a_character
 
     rts
 
@@ -179,6 +252,16 @@ f_clear_all_laser_stuff:
     cmp #laser_receptor_b_hit_code
     beq .reset_char
 
+    ldy #portal_code
+    cmp #portal_hit_up_code
+    beq .reset_char
+    cmp #portal_hit_right_code
+    beq .reset_char
+    cmp #portal_hit_down_code
+    beq .reset_char
+    cmp #portal_hit_left_code
+    beq .reset_char
+
     jmp .next_char_1
 
 .reset_char:
@@ -218,6 +301,16 @@ f_clear_all_laser_stuff:
     beq .reset_char_2
     ldy #laser_receptor_b_code
     cmp #laser_receptor_b_hit_code
+    beq .reset_char_2
+
+    ldy #portal_code
+    cmp #portal_hit_up_code
+    beq .reset_char_2
+    cmp #portal_hit_right_code
+    beq .reset_char_2
+    cmp #portal_hit_down_code
+    beq .reset_char_2
+    cmp #portal_hit_left_code
     beq .reset_char_2
 
     jmp .next_char_2
