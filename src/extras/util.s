@@ -405,39 +405,6 @@ f_convert_xy_to_screen_mem_addr:
 
 	rts
 
-; ; Converts a screen memory address to an (x, y) coordinate.
-; ; Input:
-; ;    screen_mem_addr_coord_z: low_byte
-; ;    screen_mem_addr_coord_z+1: high_byte
-; ; Output:
-; ;    tmp_x_z: X coordinate
-; ;    tmp_y_z: Y coordinate
-;     subroutine
-; f_convert_screen_mem_addr_to_xy:
-;     ; subtract the base address of the screen mem from the screen_mem_addr_coord_z
-;     lda screen_mem_addr_coord_z
-;     sec
-;     sbc #<SCREEN_MEM_1
-;     sta screen_mem_addr_coord_z
-;     lda screen_mem_addr_coord_z+1
-;     sbc #>SCREEN_MEM_1
-;     sta screen_mem_addr_coord_z+1
-
-;     ; divide the result by 22 to get the row
-;     ; load x with 22
-;     lda #22
-;     sta func_arg_1_z
-;     jsr f_divide_by_22
-;     sta tmp_y_z
-
-;     ; the remainder is the column
-;     lda func_output_low_z
-;     sta tmp_x_z
-
-;     rts
-
-
-
 ; perform repeated addition for necessary multiplications
 ; Input:
 ;    func_arg_1_z: number of times to add

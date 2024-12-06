@@ -265,6 +265,11 @@ f_draw_cursor:
     lda #cursor_code
     sta tmp_char_code_z
     jsr f_draw_char_to_screen_mem
+
+    ; force cursors color mem to be black
+    lda #0                              ; black
+    sta func_arg_1_z
+    jsr f_colour_a_character
     rts
 
 ; super repetitive thing
