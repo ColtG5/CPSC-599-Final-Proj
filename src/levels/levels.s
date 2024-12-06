@@ -259,11 +259,10 @@ f_redraw_lasers:
     jmp .loop_draw_laser_path
 
 .no_cursor_here:
-    jsr f_colour_a_laser                ; otherwise, the laser gets its colour
+    lda #2                              ; red
+    sta func_arg_1_z                    ; set colour for colour func
+    jsr f_colour_a_character                ; give laser colour
     jmp .loop_draw_laser_path             ; continue drawing the laser path
-
-
-
 
 .loop_draw_laser_path_done:
     lda receptors_hit_z                 ; Check the number of receptors hit

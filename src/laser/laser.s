@@ -1,5 +1,5 @@
 
-; If the laser collides with the wall, it should stop drawing more lasers afterwards, by setting laser head to none
+; If the laser collides with the wall, it should stop drawing more lasers afterwards
     subroutine
 f_handle_laser_collision_with_wall:
 
@@ -7,6 +7,8 @@ f_handle_laser_collision_with_wall:
     rts
 
 ; If the laser collides wiht a receptor, check if it hit the receptor from the right side. if so, set that this receptor was hit! otherwise, its like a wall
+; Input:
+;   func_output_high_z: which receptor orientation was hit (1 through 4)
     subroutine
 f_handle_laser_collision_with_receptor:
     ; Load the receptor's coordinates (already set in `laser_head_x_z` and `laser_head_y_z`).
@@ -15,21 +17,24 @@ f_handle_laser_collision_with_receptor:
     lda laser_head_y_z              ; Get Y coordinate of the receptor
     sta tmp_y_z
 
-    ; Convert X, Y to the screen memory address.
     jsr f_convert_xy_to_screen_mem_addr ; Convert to screen memory address.
 
-    ; Update the receptor's color to green (color code 5).
-    lda screen_mem_addr_coord_z     ; Get the low byte of the screen address.
-    clc
-    adc #<COLOUR_MEM_1 - <SCREEN_MEM_1 ; Offset for color memory.
-    sta tmp_addr_lo_z
-    lda screen_mem_addr_coord_z+1  ; Get the high byte of the screen address.
-    adc #>COLOUR_MEM_1 - >SCREEN_MEM_1
-    sta tmp_addr_hi_z
+    ; Change the sprite
+    lda func_output_high_z
+    ldx #laser_receptor_t_hit_code
+    cmp #1
+    beq .draw_new_receptor
+    ldx #laser_receptor_b_hit_code
+    cmp #3
+    beq .draw_new_receptor
 
-    lda #5                         ; Green color code.
-    sta (tmp_addr_lo_z),y          ; Update the receptor's color in memory.
+.draw_new_receptor:
+    stx tmp_char_code_z
+    jsr f_draw_char_to_screen_mem
 
+    lda #5                               ; green
+    sta func_arg_1_z
+    jsr f_colour_a_character
     rts
 
 ; If the laser collides with a reflector, update reflector sprite, calculate the new direction of the laser, and update laser head to new location
@@ -40,7 +45,6 @@ f_handle_laser_collision_with_reflector:
     beq .handle_reflector_1
     cmp #2
     beq .handle_reflector_2
-    rts                                     ; should never happen, if we call handle, we should've collided with a refector
 
 .handle_reflector_1:    
     lda laser_direction_z
@@ -139,22 +143,6 @@ f_add_direction_to_laser_location:
     sta laser_head_x_z
     rts
 
-; Colours the laser character at the current laser head location
-    subroutine
-f_colour_a_laser:
-    lda screen_mem_addr_coord_z           ; Load the low byte of the screen address
-    clc
-    adc #<COLOUR_MEM_1 - <SCREEN_MEM_1    ; Calculate the offset for color memory
-    sta tmp_addr_lo_z
-    lda screen_mem_addr_coord_z+1         ; Load the high byte of the screen address
-    adc #>COLOUR_MEM_1 - >SCREEN_MEM_1
-    sta tmp_addr_hi_z
-
-    lda #2                                ; Red color code
-    ldy #0
-    sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
-    rts
-
 
 ; Clears all laser characters from the screen, and reset all characters that are in their "laser form" back to default
     subroutine
@@ -163,32 +151,38 @@ f_clear_all_laser_stuff:
 
 .loop_screen_mem_1:
     lda SCREEN_MEM_1,x 
+    ldy #empty_character_code
     cmp #laser_vertical_code
-    beq .clear_laser
+    beq .reset_char
     cmp #laser_horizontal_code
-    beq .clear_laser
+    beq .reset_char
+
+    ldy #reflector_1_code
     cmp #reflector_1_hit_tr_code
-    beq .reset_reflector_1
+    beq .reset_char
     cmp #reflector_1_hit_bl_code
-    beq .reset_reflector_1
+    beq .reset_char
+    cmp #reflector_1_hit_all_code
+    beq .reset_char
+    ldy #reflector_2_code
     cmp #reflector_2_hit_tl_code
-    beq .reset_reflector_2
+    beq .reset_char
     cmp #reflector_2_hit_br_code
-    beq .reset_reflector_2
+    beq .reset_char
+    cmp #reflector_2_hit_all_code
+    beq .reset_char
+
+    ldy #laser_receptor_t_code
+    cmp #laser_receptor_t_hit_code
+    beq .reset_char
+    ldy #laser_receptor_b_code
+    cmp #laser_receptor_b_hit_code
+    beq .reset_char
+
     jmp .next_char_1
 
-.clear_laser:
-    lda #empty_character_code
-    sta SCREEN_MEM_1,x
-    jmp .next_char_1
-
-.reset_reflector_1:
-    lda #reflector_1_code
-    sta SCREEN_MEM_1,x
-    jmp .next_char_1
-
-.reset_reflector_2:
-    lda #reflector_2_code
+.reset_char:
+    tya
     sta SCREEN_MEM_1,x
     jmp .next_char_1
 
@@ -198,37 +192,42 @@ f_clear_all_laser_stuff:
 
 .loop_screen_mem_2:
     lda SCREEN_MEM_2,x 
+    ldy #empty_character_code
     cmp #laser_vertical_code
-    beq .clear_laser_2
+    beq .reset_char_2
     cmp #laser_horizontal_code
-    beq .clear_laser_2
+    beq .reset_char_2
+
+    ldy #reflector_1_code
     cmp #reflector_1_hit_tr_code
-    beq .reset_reflector_1_2
+    beq .reset_char_2
     cmp #reflector_1_hit_bl_code
-    beq .reset_reflector_1_2
+    beq .reset_char_2
+    cmp #reflector_1_hit_all_code
+    beq .reset_char_2
+    ldy #reflector_2_code
     cmp #reflector_2_hit_tl_code
-    beq .reset_reflector_2_2
+    beq .reset_char_2
     cmp #reflector_2_hit_br_code
-    beq .reset_reflector_2_2
+    beq .reset_char_2
+    cmp #reflector_2_hit_all_code
+    beq .reset_char_2
+
+    ldy #laser_receptor_t_code
+    cmp #laser_receptor_t_hit_code
+    beq .reset_char_2
+    ldy #laser_receptor_b_code
+    cmp #laser_receptor_b_hit_code
+    beq .reset_char_2
+
     jmp .next_char_2
 
-.clear_laser_2:
-    lda #empty_character_code
-    sta SCREEN_MEM_2,x
-    jmp .next_char_2
-
-.reset_reflector_1_2:
-    lda #reflector_1_code
-    sta SCREEN_MEM_2,x
-    jmp .next_char_2
-
-.reset_reflector_2_2:
-    lda #reflector_2_code
+.reset_char_2:
+    tya
     sta SCREEN_MEM_2,x
     jmp .next_char_2
 
 .next_char_2:
     inx
     bne .loop_screen_mem_2
-
     rts

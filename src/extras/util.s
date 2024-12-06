@@ -41,10 +41,27 @@ f_clear_screen:
 f_handle_input:
     jsr f_handle_cursor_movement            ; inputs like WASD, and their possible resulting collisions
     jsr f_handle_cursor_interactions        ; inputs like E and handling the interaction with game objects
-    ; jsr f_clear_all_laser_stuff                  ; clear all lasers from the screen
-    ; jsr f_redraw_lasers                     ; on any input, redraw the lasers being emitted, as the path they take may have changed
-    ; jsr f_draw_cursor                       ; draw the cursor at its new position
 
+    rts
+
+; Colours a character at a position
+; Inputs:
+;   - screen_mem_addr_coord_z: The screen memory address of the character to colour (just call f_convert_xy_to_screen_mem_addr before this)
+;   - func_arg_1_z: The colour to set the character to
+; 
+    subroutine
+f_colour_a_character:
+    lda screen_mem_addr_coord_z           ; Load the low byte of the screen address
+    clc
+    adc #<COLOUR_MEM_1 - <SCREEN_MEM_1    ; Calculate the offset for color memory
+    sta tmp_addr_lo_z
+    lda screen_mem_addr_coord_z+1         ; Load the high byte of the screen address
+    adc #>COLOUR_MEM_1 - >SCREEN_MEM_1
+    sta tmp_addr_hi_z
+
+    lda func_arg_1_z                      ; Load the colour to set
+    ldy #0
+    sta (tmp_addr_lo_z),y                 ; Set the color in the color memory
     rts
 
 
@@ -87,8 +104,8 @@ f_check_cursor_collision_with_walls:
     lda #0
     sta wall_collision_flag_z
     sta func_output_low_z
-
     rts
+
 .collision:
     lda #1
     sta wall_collision_flag_z
@@ -277,7 +294,8 @@ f_check_laser_collision_with_receptors:
 .hit_receptor:
     lda #2                                    ; Collision that counts as a win!
     sta func_output_low_z
-    rts                                       ; Exit
+    stx func_output_high_z                    ; record what type of receptor was hit (to easily get correct sprite for updating receptor later)
+    rts
 
 ; Check if the laser hit a reflector
 ; Input:
