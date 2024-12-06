@@ -33,3 +33,10 @@ laser_receptor_t_code  = 27
 laser_receptor_b_code  = 30
 empty_character_code   = 160
 tmp_pause_duration_z = $D4 ; Reserve a byte for pause duration
+; Timer register definitions for the VIC-20 jiffy clock
+TIMER_LOW = $A0  ; Low byte of jiffy clock
+TIMER_HIGH = $A1 ; High byte of jiffy clock
+tmp_frame_toggle_z       = $FC  ; 1-byte toggle for animation frame
+tmp_animation_counter_z  = $FD  ; 1-byte counter for animation iterations
+tmp_timer_low_z        = $fb
+tmp_timer_high_z       = $fc

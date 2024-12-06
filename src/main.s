@@ -94,6 +94,7 @@ start:
     include "./player/cursor.s"                ; Cursor movement functions
     include "./player/inventory.s"             ; Player inventory functions
     include "./levels/win.s"                   ; Winscreen functions
+    include "./extras/timer.s"                 ; timer for animations and other 
 
 level_pointers_p:
     dc.w $0000 ; pretend this is NOT here

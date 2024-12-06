@@ -48,8 +48,8 @@ tmp_addr_hi_z                       ds.b 1      ; Temporary storage for high byt
 tmp_counter_z                       ds.b 1      ; Goob printer counter
 tmp_frame_toggle_z       = $FC  ; 1-byte toggle for animation frame
 tmp_animation_counter_z  = $FD  ; 1-byte counter for animation iterations
-; Temporary variables for timer
-tmp_timer_low_z      = $FB  ; Zero-page memory address for low byte of the timer
-tmp_timer_high_z     = $FC  ; Zero-page memory address for high byte of the timer
+tmp_timer_low_z        = $fb
+tmp_timer_high_z       = $fc
+
 
     seg

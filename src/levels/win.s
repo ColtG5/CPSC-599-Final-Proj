@@ -1,21 +1,27 @@
 ; File: levels/win.s
-; Simplified win logic: Display 4 Goobs, wait, then transition to the next level.
+; Refactored win logic with timer using jiffy clock ticks.
 
 ; Subroutine: f_win_screen
-; Displays a simple win screen with 4 Goobs and transitions to the next level.
+; Handles the win animation and transition to the next level.
     subroutine
 f_win_screen:
-    ; Step 1: Clear the screen
-    jsr f_clear_screen_win
+    ; Step 1: Highlight receptors in purple
+    jsr f_highlight_receptors
 
-    ; Step 2: Display 4 Goobs
-    jsr f_display_4_goobs
+    ; Step 2: Play Goob animation in the top-left corner
+    jsr f_animate_goob_top_left
 
-    ; Step 3: Wait for 2 seconds (120 jiffies)
-    lda #120                 ; 2 seconds at 60Hz
-    sta tmp_pause_duration_z
-    jsr f_jiffy_pause
+    ; Step 3: Wait for 5 seconds
+    lda #5                    ; Duration in seconds
+    jsr f_set_timer
 
+.wait_for_timer:
+    jsr f_increment_custom_clock ; Update custom clock
+    jsr f_check_timer
+    bcs .timer_done            ; Exit loop when timer expires
+    jmp .wait_for_timer
+
+.timer_done:
     ; Step 4: Clear the screen
     jsr f_clear_screen_win
 
@@ -23,45 +29,65 @@ f_win_screen:
     jsr f_draw_next_level
     rts
 
-; Subroutine: f_display_4_goobs
-; Prints 4 Goobs at fixed positions.
+; Subroutine: f_highlight_receptors
+; Highlights all receptor characters in purple.
     subroutine
-f_display_4_goobs:
-    ; Goob 1 (top-left)
-    lda #5                  ; X coordinate
+f_highlight_receptors:
+    ldx #0
+.loop_highlight:
+    lda SCREEN_MEM_1,x
+    cmp #laser_receptor_t_code
+    beq .set_purple
+    cmp #laser_receptor_b_code
+    beq .set_purple
+    jmp .next_char
+
+.set_purple:
+    lda #5                    ; Purple color code
+    sta COLOUR_MEM_1,x        ; Set color memory
+    jmp .next_char
+
+.next_char:
+    inx
+    bne .loop_highlight       ; Loop until the entire screen is processed
+    rts
+
+; Subroutine: f_animate_goob_top_left
+; Animates a Goob in the top-left corner of the screen for the win animation.
+    subroutine
+f_animate_goob_top_left:
+    ldx #0                    ; Animation frame toggle
+.loop_animation:
+    ; Toggle between Goob facing left and right
+    lda #5                    ; X position
     sta tmp_x_z
-    lda #5                  ; Y coordinate
+    lda #5                    ; Y position
     sta tmp_y_z
     lda #goob_facing_left_code
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
-
-    ; Goob 2 (top-right)
-    lda #15                 ; X coordinate
-    sta tmp_x_z
-    lda #5                  ; Y coordinate
-    sta tmp_y_z
+    cpx #0                    ; Check toggle
+    beq .draw_goob
     lda #goob_facing_right_code
+
+.draw_goob:
     sta tmp_char_code_z
     jsr f_draw_char_to_screen_mem
 
-    ; Goob 3 (bottom-left)
-    lda #5                  ; X coordinate
-    sta tmp_x_z
-    lda #10                 ; Y coordinate
-    sta tmp_y_z
-    lda #goob_facing_left_code
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
+    ; Toggle frame
+    eor #1
+    tax
 
-    ; Goob 4 (bottom-right)
-    lda #15                 ; X coordinate
-    sta tmp_x_z
-    lda #10                 ; Y coordinate
-    sta tmp_y_z
-    lda #goob_facing_right_code
-    sta tmp_char_code_z
-    jsr f_draw_char_to_screen_mem
+    ; Pause for 0.5 seconds
+    lda #1                    ; 1 second for 2 frames (toggle every half-second)
+    jsr f_set_timer
+
+.wait_for_frame:
+    jsr f_increment_custom_clock
+    jsr f_check_timer
+    bcc .wait_for_frame       ; Wait until frame timer expires
+
+    lda tmp_timer_low_z
+    cmp #5                    ; Stop after 5 seconds of animation
+    bcc .loop_animation
 
     rts
 
@@ -79,25 +105,4 @@ f_clear_screen_win:
     sta COLOUR_MEM_2,x
     inx
     bne .loop_clear           ; Continue until the entire screen is cleared
-    rts
-
-; Subroutine: f_jiffy_pause
-; Pauses execution for a specified number of jiffies.
-; Input: tmp_pause_duration_z (number of jiffies to pause)
-; Uses: tmp_timer_low_z, tmp_timer_high_z
-    subroutine
-f_jiffy_pause:
-    lda $A0               ; Read current jiffy clock low byte
-    sta tmp_timer_low_z
-    lda $A1               ; Read current jiffy clock middle byte
-    sta tmp_timer_high_z
-
-.wait_loop:
-    lda $A0               ; Read current jiffy clock low byte
-    sec                   ; Calculate elapsed time
-    sbc tmp_timer_low_z
-    lda $A1               ; Read current jiffy clock middle byte
-    sbc tmp_timer_high_z
-    cmp tmp_pause_duration_z ; Compare elapsed time with duration
-    bcc .wait_loop        ; Wait until the specified duration has passed
     rts
