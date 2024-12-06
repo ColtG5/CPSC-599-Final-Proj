@@ -51,7 +51,10 @@ start:
     cmp num_of_receptors_in_level_z
     bne .game_loop                             ; If all receptors are hit, the player beat the level!!!!! :D otherwise continue game loop
 
-    jmp .next_level
+    ; All receptors hit, player won the level
+    jsr f_win_screen   ; Display win message and wait for 'E'
+    jmp .next_level    ; After returning from f_win_screen, proceed to the next level
+
 
 
 

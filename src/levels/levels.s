@@ -310,12 +310,12 @@ f_redraw_lasers:
     jmp .loop_draw_laser_path             ; continue drawing the laser path
 
 .loop_draw_laser_path_done:
-    lda receptors_hit_z                 ; Check the number of receptors hit
-    cmp num_of_receptors_in_level_z     ; Compare with total receptors in the level
+    ;lda receptors_hit_z                 ; Check the number of receptors hit
+    ;cmp num_of_receptors_in_level_z     ; Compare with total receptors in the level
 ;    beq f_win_screen                    ; If all receptors are hit, jump to the win screen logic
-    bne .skip_win_screen
-    jmp f_win_screen
-.skip_win_screen:
+    ;bne .skip_win_screen
+    ;jmp f_win_screen
+;.skip_win_screen:
     jmp .loop_top_find_next_laser_shooter ; Otherwise, continue with the next laser shooter
 
 .no_more_shooters:
