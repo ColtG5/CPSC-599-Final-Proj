@@ -52,7 +52,7 @@ ADDRESS_HIGH = $01
     bne .clear_screen_mem_2
     
     
-	lda #laser_receptor_code
+	lda #laser_receptor_t_hit_code
 	sta $1e0d
 	lda #laser_vertical_code
 	sta $1e23
@@ -80,7 +80,7 @@ ADDRESS_HIGH = $01
 	sta $1e37
 	lda #laser_horizontal_code
 	sta $1e38
-	lda #reflector_2_code
+	lda #reflector_2_hit_tl_code
 	sta $1e39
 	lda #goob_1_code
 	sta $1e7b
@@ -252,13 +252,13 @@ ADDRESS_HIGH = $01
 	sta $1fb3
 	lda #laser_horizontal_code
 	sta $1fb4
-	lda #reflector_1_code
+	lda #reflector_1_hit_bl_code
 	sta $1fb5
 	lda #laser_vertical_code
 	sta $1fcb
 	lda #laser_vertical_code
 	sta $1fe1
-	lda #laser_shooter_code
+	lda #laser_shooter_b_code
 	sta $1ff7
 
 loop:

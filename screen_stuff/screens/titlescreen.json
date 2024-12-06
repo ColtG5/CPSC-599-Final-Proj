@@ -14,7 +14,7 @@
             "_empty_character",
             "_empty_character",
             "_empty_character",
-            "laser_receptor",
+            "laser_receptor_t_hit",
             "_empty_character",
             "_empty_character",
             "_empty_character",
@@ -62,7 +62,7 @@
             "laser_horizontal",
             "laser_horizontal",
             "laser_horizontal",
-            "reflector_2",
+            "reflector_2_hit_tl",
             "_empty_character",
             "_empty_character",
             "_empty_character",
@@ -476,7 +476,7 @@
             "laser_horizontal",
             "laser_horizontal",
             "laser_horizontal",
-            "reflector_1",
+            "reflector_1_hit_bl",
             "_empty_character",
             "_empty_character"
         ],
@@ -548,7 +548,7 @@
             "_empty_character",
             "_empty_character",
             "_empty_character",
-            "laser_shooter",
+            "laser_shooter_b",
             "_empty_character",
             "_empty_character"
         ]
