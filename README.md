@@ -69,3 +69,35 @@ Workflows for different parts of development:
     3. Save the level data to a spot (e.g. `/screen_stuff/level_bins/`)
     4. Copy/paste the .bin file into the `/src/levels/` folder
     5. Ensure that `/src/main/s` is loading the correct level name
+
+Known bugs:
+1. Portal Handling
+      Multiple Lasers Entering a Portal:
+
+      Issue: When two lasers simultaneously enter a portal, the portal may get erased from the map unexpectedly.
+      Likely Cause: The logic for updating portal states doesn't handle concurrent laser interactions properly.
+      Possible Fix: Add a state-check mechanism for portal occupancy and prioritize laser handling in sequential order.
+
+      Portals on Crossing Lasers:
+
+      Issue: Placing a portal on the crossing point of two lasers may cause unpredictable behavior or result in the portal disappearing.
+      Likely Cause: Inadequate handling of laser collisions with active portal tiles.
+      Possible Fix: Improve collision detection for portals and consider edge cases where lasers intersect before interacting with the portal.
+
+2. Reflector Bugs:
+      Multiple Lasers Hitting a Reflector:
+
+      Issue: When a reflector is hit from multiple directions simultaneously, it may not display the correct reflection behavior or stop reflecting entirely.
+      Likely Cause: Reflector state update logic doesn't account for simultaneous interactions effectively.
+      Possible Fix: Add a queue system for processing laser interactions with reflectors sequentially.
+
+      More Than Two Lasers at a Reflector:
+
+      Issue: Reflectors may fail to reflect one or more lasers if more than two lasers are directed at it simultaneously.
+      Likely Cause: Insufficient logic to handle more than two concurrent inputs at a reflector.
+      Possible Fix: Extend the reflection logic to support dynamic laser counts and ensure proper direction assignments.
+
+3. Title Screen Music
+      Issue: The title screen music occasionally stalls and does not play as expected.
+      Likely Cause: sound-handling subroutine conflicts during input collection since it implments a system delay.
+      Possible Fix: overhauling pausing using timers instead of program pauses.
