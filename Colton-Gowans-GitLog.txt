@@ -1,0 +1,689 @@
+commit ffe4b8bca505b6b276796b36f4086aac6b6d6976
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 23:13:33 2024 -0700
+
+    fixed reflector 2 not shooting lasers in both directions (i think)
+
+commit 184f4fa0725baa1ae45166c60eec7132a23a1f9d
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 22:50:37 2024 -0700
+
+    fixed level 3 and 7
+
+commit 83bfca788e4dedec6dfc61f6df36b22b7852bed3
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 22:39:36 2024 -0700
+
+    changed/added levels 1-7
+
+commit 9befcdc90b560989d1b1bd994e7e9ed620eff99b
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 22:05:23 2024 -0700
+
+    deleted unused screens folder
+
+commit ca508f7e66e4ce7ef666bed09e74921ba361d47a
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 17:17:52 2024 -0700
+
+    fixed placing portals beside walls
+
+commit 2b5fd2da64ad58cf17787bb1e41aeefdf1f3d5ae
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 16:51:55 2024 -0700
+
+    portals only place beside walls
+
+commit 063f8354a791281d0eb0b189ef20a98a7086f3d9
+Merge: aeb84f8 d3460bb
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 12:58:58 2024 -0700
+
+    Merge branch 'main' of https://github.com/ColtG5/CPSC-599-Final-Proj
+
+commit aeb84f8d51c24ac90d0a6a138c2cec55d82bfad1
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 12:58:15 2024 -0700
+
+    load continue text from encoded bin saving space
+
+commit 2fe0785d98e5e1c2001cc10e689c3bb2bb88ab7f
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 12:41:00 2024 -0700
+
+    everything hit by laser turns green when level won!
+
+commit 86266a5b01aa9d0abdd920c9c124bf6a365db249
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 12:19:06 2024 -0700
+
+    portal are working???
+
+commit 10331390a476e416cab0b5a5c9fbd7be38212d82
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 06:23:27 2024 -0700
+
+    cursor has color prio over everytihng now
+
+commit 49906b989efa0edff3454d6e7a89c74e0a1f535d
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 06:03:53 2024 -0700
+
+    more bytes saved
+
+commit 65d898eceec49270e5faf928e3f8f807de4b1130
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 05:48:23 2024 -0700
+
+    fixed receptor being flipped for no good reason when hit
+
+commit 153705643653020c1be557080fe402c653e14f86
+Merge: 23cbc2f 7c20d74
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 05:18:45 2024 -0700
+
+    Merge branch 'main' of https://github.com/ColtG5/CPSC-599-Final-Proj
+
+commit 23cbc2f31d3bddbf8790802f975d2c7f0910da4b
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 05:17:40 2024 -0700
+
+    fixed optimized cursor wall collision func
+
+commit 94a674d2a3f92fafe2574e15318263e1980a1773
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 04:15:17 2024 -0700
+
+    fixed lasers shoot9ing at eachother drawing both laser character for every spot
+
+commit 6d34eeff85bb4c91d840904497f328d523e82841
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 03:48:32 2024 -0700
+
+    reducing memory footprint of obese functions
+
+commit 092bc4cc4191d5e2d555f5cd58cc7dbbb7d719ce
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 03:14:05 2024 -0700
+
+    reflectors can visually reflect off both sides at once!
+
+commit ff1b776cb775d5ceb195f0496a317dd3c311c280
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 02:58:00 2024 -0700
+
+    lasers can visually criss cross
+
+commit d241e317233a0a7f57d0931616e35130d20b28cc
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 02:47:30 2024 -0700
+
+    portal sprites update when hit
+
+commit 072f01d9e1a09a2197d9815a0529aa7e3577ba54
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 01:01:17 2024 -0700
+
+    added portal hit sprites
+
+commit 72dd1ba02c95ad47c5ae1053b4bf4896d78cf400
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 01:01:03 2024 -0700
+
+    cleaned up laser stuff clearing/redrawing, added receptor hit sprite
+
+commit 74ada962491e593d98c92770b088f26703ae51d4
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Thu Dec 5 22:00:53 2024 -0700
+
+    updated titlescreen
+
+commit d8fb5abe1588c4d1ab2cd06e6091bc3172c84b6f
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Thu Dec 5 21:06:14 2024 -0700
+
+    added more collision characters
+
+commit 980ebaa4a2dd447e0aa96a5ce2b24a879cae97a8
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Thu Dec 5 20:57:46 2024 -0700
+
+    refactored drawing laser code, cursor also stays black
+
+commit 41ffa241fe062a7f5fa8c84da58e2e71bf235a93
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Thu Dec 5 15:48:10 2024 -0700
+
+    hell yeah
+
+commit 441d61a281338d30e8b383d8de22c8ae59e81fc3
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Dec 4 22:05:50 2024 -0700
+
+    need to get multiple laser shooters working
+
+commit 471bb3609be64176ff38e1c2f3bbc87f695e39db
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Dec 4 20:09:02 2024 -0700
+
+    you can pick up reflectors currently in use!!!
+
+commit 7151fe5b829698c55694e76d2c15f545076f8202
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Dec 4 16:28:53 2024 -0700
+
+    lasers are getting reflected for the most part!!!!
+
+commit 059de04c0d66d04914e4665f99f60cb8b72d525f
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Dec 4 04:10:32 2024 -0700
+
+    very close to reflectors working
+
+commit 4baac6eb08dd6ce746a74a679b7d405116481657
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Dec 4 02:52:49 2024 -0700
+
+    covered reflectors still get checked in laser detection
+
+commit 6d11e95d51d51ac9874d83befe54429ddf9326de
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Dec 4 02:31:24 2024 -0700
+
+    clear and redraw lasers every frame, draw cursor after (and by extension on top)
+
+commit ff6a0839bbe67df66a7e0f5426f0722b4ebf47d1
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Dec 4 02:26:07 2024 -0700
+
+    i mean its doing something!!!
+
+commit 4029eade3556b5e4b3d190d33ab0a156a8fce419
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Tue Dec 3 15:19:48 2024 -0700
+
+    tons of laser drawing logic (not tested)
+
+commit 552959c6dbe36e0b9f78cab34f990456da150341
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Tue Dec 3 00:45:53 2024 -0700
+
+    setting up methods some methods that will help draw lasers
+
+commit 7212c416a10cf9bc6756883a89e4ff2ce54d7ee9
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Dec 2 02:47:18 2024 -0700
+
+    added running game steps to documentation
+
+commit 65d751f7eae91729c8961ac7eb75bf8a2992f244
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Dec 2 02:36:40 2024 -0700
+
+    added top/bottom laser receptors/shooters
+
+commit 17ab00ce505174a2e9427e41525f467b3c6efe66
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Dec 2 02:34:35 2024 -0700
+
+    added documentation for the niche workflows of using the python scripts!
+
+commit 22fab19f810df81c4add0b4b1ee0e779a18e0268
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Dec 2 01:38:26 2024 -0700
+
+    switched order of ROM chars and custom chars in charset and table
+
+commit 9e50656c00296820580a781344a284815a3237c7
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Dec 2 01:16:31 2024 -0700
+
+    fixed stub
+
+commit 497b2541f21eeade9b3c321f7f3c183325443097
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Dec 2 00:56:38 2024 -0700
+
+    this is so hype
+
+commit 08d8b3f39527f457c9f20996c6af178b115c036b
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Dec 2 00:12:10 2024 -0700
+
+    i think everything but levels converted to using ROM chars
+
+commit b2c17138de3313c65d8276c86ce9859ceb8b82b7
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Dec 1 23:34:49 2024 -0700
+
+    titlescreen gets drawn with custom + internal chars!!
+
+commit fb15137760b686621f8a6236d507c6f35421b346
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Dec 1 22:35:25 2024 -0700
+
+    removing char image directory (big! and always generated locally)
+
+commit 30beea22d1bf4244729839b6661c35d4cbfde330
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Dec 1 22:33:46 2024 -0700
+
+    drew up to every char we need from ROM char table, added to current char table
+
+commit 97bb13ba6ec6941652427e5678f9cea0f7770528
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Dec 1 19:36:32 2024 -0700
+
+    learned how to use ROM character table... gonna try to change screen editor
+
+commit 73663cf24a6f71e004eb74fde588df528e8bd9c6
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Dec 1 19:06:12 2024 -0700
+
+    inv char is shown on screen!
+
+commit 99f25cebd0a2d4b3fc250a90e42197af6acf923b
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Dec 1 18:13:17 2024 -0700
+
+    can pick up and place level objects!!!
+
+commit e533c67bd330751ca3042b6581e0cb69f351d673
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Dec 1 17:57:37 2024 -0700
+
+    can move over level objects and they get drawn behind you!
+
+commit 52628a242457fbcdd485901abe39be5dc55d8c14
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Thu Nov 28 16:57:29 2024 -0700
+
+    working on picking up level objects
+
+commit d13a0a0cc6624de66400e8ffd06a5aa56a70f66a
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Thu Nov 28 11:43:50 2024 -0700
+
+    init funcs for collision with interactable objects and laser beams
+
+commit edfc7c91b3fa593e4179ae52958f159729bf0ae0
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Wed Nov 27 17:05:45 2024 -0700
+
+    skeletons for each collision func
+
+commit 0684a3c4b22eaf664ba3b9621f3cebe10d9d1df0
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Wed Nov 27 15:41:07 2024 -0700
+
+    added laser shooter/receptor to collision detection
+
+commit 742975b315cf93a2c8c7d818a872a318151ce907
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 25 17:17:45 2024 -0700
+
+    collision code for cursor with walls!!!
+
+commit b7b78b053e9f1937770b2dd052b251624e799b20
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 25 16:37:41 2024 -0700
+
+    cursor draws to screen
+
+commit 3d9b8ce6f0ed81bdda77af4502960f4a4105e2f9
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 25 15:36:39 2024 -0700
+
+    made realish levels 1-4
+
+commit bc0ff5b43bafd36731e2643ca3b1d9f428d9e776
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 25 13:07:02 2024 -0700
+
+    deleting old level_stuff folder
+
+commit 9637d30b907161fc4c28949573ac707a243bc436
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Nov 24 15:50:19 2024 -0700
+
+    level data can now draw the level num in top right too!
+
+commit 314dedd2ae054f033a31fed98b855cbd26841bea
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Nov 24 15:46:10 2024 -0700
+
+    fixed high byte not being captured in mul func
+
+commit 0077008d8eed2024ac7c154c7992dcdb77637af0
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Nov 24 15:37:35 2024 -0700
+
+    CAN LOAD LEVELS DYNAMICALLY WITH X,Y COORDS
+
+commit 19699c6ebf64400c6adf60c2b6b2aae3b19e9b12
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sat Nov 23 23:50:01 2024 -0700
+
+    refactoring lots
+
+commit 798f8f9ed3e80b6730c7cc74e1c05a02f679b52d
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Tue Nov 19 17:47:24 2024 -0700
+
+    bulletproof level drawing code (havent ran any code in hours)
+
+commit db66aaf808402381f0048744a09225940e810f4b
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Tue Nov 19 17:17:53 2024 -0700
+
+    in theory, can dynamically calculate data addrs for level binaries
+
+commit d73805d608f3e27d3b7ca5e3582fb6f7f8afabf5
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Tue Nov 19 17:17:10 2024 -0700
+
+    dont do optimized wall encoding for now
+
+commit 13aa8da5e76fafed941435e6ca37b87619fafb8b
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Tue Nov 19 16:28:28 2024 -0700
+
+    starting to refactor movement code to include collision, etc.
+
+commit cd4eac688b849d5f6aba0af0c925a82e76eef692
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Tue Nov 19 16:28:09 2024 -0700
+
+    export level data added to screen editor!
+
+commit ac18a6cccb888966fdd09d3d5b94cdc0e50c9b07
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Nov 13 17:56:05 2024 -0700
+
+    cursor and portal sprites drawing fixed
+
+commit 193ef49d10c1aed8a27cf355680962a78e75568d
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Nov 13 17:30:27 2024 -0700
+
+    new titlescreen + level template draw in game!!!
+
+commit ca986ef7d1f3329d6b54e5eaf001b0750afdf0b5
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Nov 13 10:13:30 2024 -0700
+
+    tweaks all around to screen editor, made new title screen, made a level template
+
+commit 5f4562ea9493165888d248805a6f5064f454e779
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Nov 13 08:34:20 2024 -0700
+
+    fixed screen editor not loading in last char from char table
+
+commit 3a6c9e4d90eec1432ef3ad33c1b696089df3aa73
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Tue Nov 12 00:36:53 2024 -0700
+
+    exported asm code can draw the screen from screen editor!
+
+commit 009970c6bb41e38ea60f6f6e5951fa5fd3ce72fe
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 18:21:05 2024 -0700
+
+    working on exporting as asm code
+
+commit 912219d9b9886642778968ff90f9b826f1d5aa47
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 17:07:25 2024 -0700
+
+    script that adds character codes to char table (hopefully this is better approach for asm code!!!)
+
+commit 2a717343fa5924f8a7c1688a43a6db7457a6ebcc
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 16:25:40 2024 -0700
+
+    caught case where level data might have unknown character
+
+commit b5ed36de0e291835f6abf0c24542f93f8b07796d
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 16:19:20 2024 -0700
+
+    screen_editor can export/import from a common level json format
+
+commit b0a03e283f4e1928f25a9ad9a836b55db2edeb75
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 16:01:38 2024 -0700
+
+    renamed folder
+
+commit 95e897c179a0453075f1ec73c570d003a0447fd3
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 15:58:38 2024 -0700
+
+    screen_editor loads in all characters from the char_table
+
+commit 908c914a3ac0824c9c4c12a10d1caa3cd53e0594
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 15:03:48 2024 -0700
+
+    gonna try to make the level editor hype
+
+commit ae1a6005bb630073b1f32fa90598ce6d11a8db02
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 14:57:28 2024 -0700
+
+    moving everything into zero page/constants files
+
+commit 885f22f2e1000cb25442ffe4a3a529c811ac4728
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 14:08:43 2024 -0700
+
+    zero page + constants files
+
+commit d0f301c35fd9fe93cc08e49c53163e98aeee0c1b
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Mon Nov 11 11:58:35 2024 -0700
+
+    fixed tempalte drawing!!!
+
+commit 0fce7aabb3875ad9b5e0ff2526029b33a61ef65d
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Nov 10 23:20:50 2024 -0700
+
+    trying to fix level template drawing (broken rn)
+
+commit f6b04fffaf8b80bab0eab0b76580040619a10e99
+Merge: b363d6a 0ad8c71
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Sun Nov 10 12:25:03 2024 -0700
+
+    Merge pull request #3 from ColtG5/fam-final-branch
+    
+    Fam final branch
+
+commit 0ad8c710f20c00e5966b7d8f2c88a11a439b1c32
+Merge: 870e3d3 b363d6a
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Sun Nov 10 12:24:52 2024 -0700
+
+    Merge branch 'main' into fam-final-branch
+
+commit 870e3d31511db0b4895a403a9928875bea1a3355
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Wed Nov 6 16:07:48 2024 -0700
+
+    finished my comments and readme notes
+
+commit 120af7160a54e9a6ebb79692a43c46f6c5a9d6f1
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Wed Nov 6 15:13:16 2024 -0700
+
+    commented my python scripts
+
+commit ac14545ac7c5e8a9767d06ee9141b7296779e9cf
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Wed Nov 6 15:03:49 2024 -0700
+
+    formatting stuff for submission + editing readme
+
+commit 9debe0358c794630380da177bc443118f54d988b
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Nov 6 09:26:10 2024 -0700
+
+    fixed enough to be able to record video
+
+commit 1d0b285a7bcf732152b8394c0632a48323f0f32a
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Nov 6 01:03:22 2024 -0700
+
+    3 levels all complete, loops back to title screen too after last level
+
+commit e44f15147faaa5ae33e0eda198fe036635b8589d
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Nov 6 00:02:14 2024 -0700
+
+    shakira shakira
+
+commit 95911541d1ae2c4f36ab27aa4e646f88dbfd4997
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Wed Nov 6 00:00:40 2024 -0700
+
+    can use spacebar to go to next level
+
+commit 71a9e23982ae45f54784c385ba6e28bfea40b424
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Tue Nov 5 23:13:21 2024 -0700
+
+    dynamic level label text in top right
+
+commit a68c95d068346b86bcb6d0a2a5ba78dc138656ab
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Tue Nov 5 22:28:13 2024 -0700
+
+    level data gets drawn
+
+commit 073387f36d0627b335185e3a226b5074cf674a37
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Tue Nov 5 21:36:03 2024 -0700
+
+    level template drawn
+
+commit 2440895766be7680c1c95958d9ffed947fef82ea
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Tue Nov 5 19:57:30 2024 -0700
+
+    very basic level bin creator
+
+commit e1a6652782d981ea6183a3063e54fb83e856d3c7
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Tue Nov 5 19:24:22 2024 -0700
+
+    yurrr
+
+commit 660a42ee338c80f88fc254921def4865c640963a
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Tue Nov 5 16:33:58 2024 -0700
+
+    game time
+
+commit a2832e824c85839535da69be6eb6b5388206a799
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 4 17:28:44 2024 -0700
+
+    ported level stuff + title screen fixed
+
+commit 62f0f836029f85815455b912e90153efae52060e
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 4 16:41:24 2024 -0700
+
+    Create custom_chars_title_screen.txt
+
+commit 285dc0e17ead8165293ec179cbef55a1fa7d9fa5
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 4 16:39:54 2024 -0700
+
+    Update level_editor.py
+
+commit fa89961cffcb0675b5dc7a20485a918b6ed5fd42
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 4 16:38:37 2024 -0700
+
+    hell yeah
+
+commit 27236beaf088733145453db598640581c645f2fb
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 4 15:45:27 2024 -0700
+
+    dont commit makefile anymore
+
+commit 1a265ea3627dd96c65f3af5f4f9f0ca7eacffc66
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 4 15:45:03 2024 -0700
+
+    fixed makefile
+
+commit 3d62067189cf59aaa9976f3490434e6949009c48
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 4 15:29:55 2024 -0700
+
+    hit key to start game clears screen!
+
+commit fecda8fde132e7db82533961d7a7452c2018c707
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 4 15:08:50 2024 -0700
+
+    compiles
+
+commit 17ead061e672307b00e84c365409bdc0e299586e
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Mon Nov 4 14:29:48 2024 -0700
+
+    setting up infrastructure to draw start of level
+
+commit e510581ee1cb3d650226dabbfbb7a3841ff97567
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Nov 3 21:44:16 2024 -0700
+
+    game loads title screen off rip
+
+commit 7871a92f22096af50d4c2313afcf60a5f92603fa
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Nov 3 19:13:59 2024 -0700
+
+    better gitignore
+
+commit d86eab9586fa21288cb6243be9e6c55d1d096de6
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Sun Nov 3 19:13:22 2024 -0700
+
+    deleting build files
+
+commit 22ef20c80274d175c3650c9bf61a1016e62700a9
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Sun Nov 3 19:13:09 2024 -0700
+
+    deleting build files
+
+commit e991a5b98679b0e05e773f37509f305fcbcb2a8a
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Nov 3 19:11:06 2024 -0700
+
+    main runs!
+
+commit 9d7ee5b01f23c74e8f6ea3bd0a0120856d589fa8
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Nov 3 18:57:56 2024 -0700
+
+    adding some python files from a1 for characters/levels
+
+commit d32e3847ad9492e3d0475a43a482d958a74e9ae0
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Sun Nov 3 18:07:08 2024 -0700
+
+    small init
+
+commit 1ba68c73f31396ede21babf21b757b8adabb3bdb
+Author: Colton Gowans <100043529+ColtG5@users.noreply.github.com>
+Date:   Sun Nov 3 13:10:54 2024 -0700
+
+    Initial commit
