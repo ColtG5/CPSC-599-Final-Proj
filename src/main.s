@@ -58,8 +58,6 @@ start:
     jmp .next_level    ; After returning from f_win_screen, proceed to the next level
 
 
-
-
 ; Transition to the next level
 .next_level:
     lda what_level_tracker_z
@@ -113,6 +111,8 @@ level_pointers_p:
     dc.w level_4_data_start_p
     dc.w level_5_data_start_p
     dc.w level_6_data_start_p    
+    dc.w level_7_data_start_p
+
 
 encoded_title_screen_data_start_p:
     incbin "./titlescreen/titlescreen-rle-encoded.bin"
@@ -120,7 +120,22 @@ encoded_title_screen_data_start_p:
 level_template_data_start_p:
     incbin "./levels/level_template-rle-encoded.bin"
 
-level_1_data_start_p:
+level_5_data_start_p:
+    incbin "./levels/level_5.bin"
+
+level_6_data_start_p:
+    incbin "./levels/level_6.bin"
+
+level_7_data_start_p:
+    incbin "./levels/level_7.bin"
+    
+continue_text_data_start_p:
+    incbin "./extras/continue_text-rle-encoded.bin"
+
+    org CUSTOM_CHAR_MEM
+    include "./extras/character_table.s"
+
+level_1_data_start_p:                                  ; placed these levels in the empty space at the end of the custom char table (blessed be to using ROM characters too)
     incbin "./levels/level_1.bin"
 
 level_2_data_start_p:
@@ -132,14 +147,5 @@ level_3_data_start_p:
 level_4_data_start_p:
     incbin "./levels/level_4.bin"
 
-level_5_data_start_p:
-    incbin "./levels/level_5.bin"
-
-level_6_data_start_p:
-    incbin "./levels/level_6.bin"
-    
-continue_text_data_start_p:
-    incbin "./extras/continue_text-rle-encoded.bin"
-
-    org CUSTOM_CHAR_MEM
-    include "./extras/character_table.s"
+end_of_code:    ; This is the end of the code
+    rts                                                 ; just so i can see how far down the lst file stretches to (1df4 as of writing this!)
