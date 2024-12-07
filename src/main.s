@@ -112,6 +112,9 @@ level_pointers_p:
     dc.w level_5_data_start_p
     dc.w level_6_data_start_p    
     dc.w level_7_data_start_p
+    dc.w level_8_data_start_p
+    dc.w level_9_data_start_p
+    dc.w level_10_data_start_p
 
 
 encoded_title_screen_data_start_p:
@@ -128,6 +131,15 @@ level_6_data_start_p:
 
 level_7_data_start_p:
     incbin "./levels/level_7.bin"
+
+level_8_data_start_p:
+    incbin "./levels/level_8.bin"
+
+level_9_data_start_p:
+    incbin "./levels/level_9.bin"
+
+level_10_data_start_p:
+    incbin "./levels/level_10.bin"
     
 continue_text_data_start_p:
     incbin "./extras/continue_text-rle-encoded.bin"
