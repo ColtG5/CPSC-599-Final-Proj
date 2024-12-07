@@ -159,5 +159,4 @@ level_3_data_start_p:
 level_4_data_start_p:
     incbin "./levels/level_4.bin"
 
-end_of_code:    ; This is the end of the code
-    rts                                                 ; just so i can see how far down the lst file stretches to (1df4 as of writing this!)
+end_of_code:                                                 ; just so i can see how far down the lst file stretches to
