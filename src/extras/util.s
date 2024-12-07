@@ -83,14 +83,12 @@ f_close_to_wall:
 
     jsr f_put_cursor_into_temp
     inc tmp_y_z                         ; check below cursor
-    ; inc tmp_y_z
     jsr f_get_char_from_screen_mem
     cmp #wall_code
     beq .close_to_wall
 
     jsr f_put_cursor_into_temp
     dec tmp_x_z                         ; check left of cursor
-    ; dec tmp_x_z
     jsr f_get_char_from_screen_mem
     cmp #wall_code
     beq .close_to_wall
