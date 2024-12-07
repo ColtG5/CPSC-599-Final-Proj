@@ -70,8 +70,16 @@ Workflows for different parts of development:
     4. Copy/paste the .bin file into the `/src/levels/` folder
     5. Ensure that `/src/main/s` is loading the correct level name
 
-Known bugs:
-1. Portal Handling
+Known bugs/issues:
+1. The terrible redraw of the lasers every movement!!!!
+      The flicker seen whenever moving
+
+      Issue: Every time the player moves, it triggers a clear of all laser and a redraw of the path, creating a terribly awful flicker effect (worse with more laser shooters!!)
+      Possible Fix: This was our first approach to correctly drawing a constantly emitting laser beam, and it works perfectly. But, the time between clearing all the lasers and redrawing them
+      is too great, and was planned to be changed later in development. A fix would be to only clear and redraw lasers whenever the player picks up or places an object, but this requires moving lots of
+      functionality out of the redraw_laser func, which became too coupled with lots of other parts of the game, leading to it being too complicated for us to accomplish at the end of our development as more
+      pressing concerns existed. This one hurts to not have fixed, but oh well! 
+2. Portal Handling
       Multiple Lasers Entering a Portal:
 
       Issue: When two lasers simultaneously enter a portal, the portal may get erased from the map unexpectedly.
@@ -84,7 +92,7 @@ Known bugs:
       Likely Cause: Inadequate handling of laser collisions with active portal tiles.
       Possible Fix: Improve collision detection for portals and consider edge cases where lasers intersect before interacting with the portal.
 
-2. Reflector Bugs:
+3. Reflector Bugs:
       Multiple Lasers Hitting a Reflector:
 
       Issue: When a reflector is hit from multiple directions simultaneously, it may not display the correct reflection behavior or stop reflecting entirely.
@@ -97,7 +105,7 @@ Known bugs:
       Likely Cause: Insufficient logic to handle more than two concurrent inputs at a reflector.
       Possible Fix: Extend the reflection logic to support dynamic laser counts and ensure proper direction assignments.
 
-3. Title Screen Music
+4. Title Screen Music
       Issue: The title screen music occasionally stalls and does not play as expected.
       Likely Cause: sound-handling subroutine conflicts during input collection since it implments a system delay.
       Possible Fix: overhauling pausing using timers instead of program pauses.
