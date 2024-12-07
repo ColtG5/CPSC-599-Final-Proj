@@ -1,3 +1,21 @@
+commit ecf27b7ecf4ad8012af4c1f6ac829ffdc14a3968
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 23:48:22 2024 -0700
+
+    Update README.md
+
+commit db89c623c9444a06f2e6236cbaea0a3e4bd476a4
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 23:36:13 2024 -0700
+
+    Create Colton-Gowans-Time-Log.pdf
+
+commit 5d09374a46d7fa2e7c3694ce007ae36d69b6b69e
+Author: ColtG5 <colton.gowans@ucalgary.ca>
+Date:   Fri Dec 6 23:35:13 2024 -0700
+
+    Create Colton-Gowans-GitLog.txt
+
 commit ffe4b8bca505b6b276796b36f4086aac6b6d6976
 Author: ColtG5 <colton.gowans@ucalgary.ca>
 Date:   Fri Dec 6 23:13:33 2024 -0700
