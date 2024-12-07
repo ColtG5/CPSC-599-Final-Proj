@@ -70,30 +70,28 @@ f_colour_a_character:
     subroutine
 f_close_to_wall:
     jsr f_put_cursor_into_temp
-
     dec tmp_y_z                         ; check above cursor
     jsr f_get_char_from_screen_mem
-    lda (screen_mem_addr_coord_z),y
     cmp #wall_code
     beq .close_to_wall
 
+    jsr f_put_cursor_into_temp
     inc tmp_x_z                         ; check right of cursor
     jsr f_get_char_from_screen_mem
-    lda (screen_mem_addr_coord_z),y
     cmp #wall_code
     beq .close_to_wall
 
+    jsr f_put_cursor_into_temp
     inc tmp_y_z                         ; check below cursor
-    inc tmp_y_z
+    ; inc tmp_y_z
     jsr f_get_char_from_screen_mem
-    lda (screen_mem_addr_coord_z),y
     cmp #wall_code
     beq .close_to_wall
 
+    jsr f_put_cursor_into_temp
     dec tmp_x_z                         ; check left of cursor
-    dec tmp_x_z
+    ; dec tmp_x_z
     jsr f_get_char_from_screen_mem
-    lda (screen_mem_addr_coord_z),y
     cmp #wall_code
     beq .close_to_wall
 

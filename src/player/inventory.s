@@ -44,7 +44,7 @@ f_place_char_from_inventory:
     ; if we are placing a portal, make sure we are in range of a wall!
     lda inventory_item_z
     cmp #portal_code
-    bne .can_place_portal
+    bne .done
     jsr f_close_to_wall
     lda func_output_low_z
     cmp #1
